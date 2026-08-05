@@ -3,14 +3,17 @@ import {
   Navbar, Hero, Intro, WhyBook, FeaturedMoments, Services, PastEvents, MyWorks,
   Testimonials, ContactCta, Footer, FloatingCall,
 } from "@/components/site/Sections";
+import { ContentProvider, ThemeStyle } from "@/components/site/ContentContext";
+import { getPublishedContent } from "@/lib/content.functions";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
+  loader: () => getPublishedContent(),
+  head: ({ loaderData }) => ({
     meta: [
-      { title: "Sayanti Banerjee — Anchor, Actor & Influencer" },
-      { name: "description", content: "Book Sayanti Banerjee, a premium event anchor with 900+ shows across India & abroad — corporate conferences, celebrity events, weddings and live shows." },
-      { property: "og:title", content: "Sayanti Banerjee — Anchor, Actor & Influencer" },
-      { property: "og:description", content: "Premium event anchoring for corporate conferences, celebrity events, product launches and destination weddings." },
+      { title: loaderData?.settings.seo.title ?? "Sayanti Banerjee — Anchor, Actor & Influencer" },
+      { name: "description", content: loaderData?.settings.seo.description ?? "Premium event anchoring across India & abroad." },
+      { property: "og:title", content: loaderData?.settings.seo.title ?? "Sayanti Banerjee — Anchor, Actor & Influencer" },
+      { property: "og:description", content: loaderData?.settings.seo.description ?? "Premium event anchoring across India & abroad." },
       { property: "og:type", content: "profile" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -19,22 +22,26 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const content = Route.useLoaderData();
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <main>
-        <Hero />
-        <Intro />
-        <WhyBook />
-        <FeaturedMoments />
-        <Services />
-        <PastEvents />
-        <MyWorks />
-        <Testimonials />
-        <ContactCta />
-      </main>
-      <Footer />
-      <FloatingCall />
-    </div>
+    <ContentProvider value={content}>
+      <ThemeStyle content={content} />
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <main>
+          <Hero />
+          <Intro />
+          <WhyBook />
+          <FeaturedMoments />
+          <Services />
+          <PastEvents />
+          <MyWorks />
+          <Testimonials />
+          <ContactCta />
+        </main>
+        <Footer />
+        <FloatingCall />
+      </div>
+    </ContentProvider>
   );
 }
