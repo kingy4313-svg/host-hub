@@ -199,7 +199,7 @@ export function MyWorks() {
       <div className="mx-auto mt-12 max-w-6xl">
         <h3 className="font-display text-sm font-bold uppercase tracking-wide">{tab}</h3>
         <div className="mt-6 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {works[tab].map((w) => (
+          {(works[tab] ?? []).map((w) => (
             <article key={w.title}>
               <div className="relative overflow-hidden rounded-lg border border-border">
                 <img src={w.img} alt={w.title} loading="lazy" width={720} height={1080} className="h-48 w-full object-cover" />
