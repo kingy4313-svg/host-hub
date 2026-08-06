@@ -1,4 +1,7 @@
-import { newId, type SiteContent } from "@/content/site-content";
+import type { ReactElement } from "react";
+import type { SiteContent } from "@/content/site-content";
+
+const newId = (p: string) => `${p}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
 import { TextField, AreaField, SwitchField, MediaField, IconPicker, ListEditor, VideoField, Field } from "./fields";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -416,7 +419,7 @@ export type AdminSection = {
   key: string;
   label: string;
   icon: string;
-  Editor: (props: EditorProps) => JSX.Element;
+  Editor: (props: EditorProps) => ReactElement;
 };
 
 export const ADMIN_SECTIONS: AdminSection[] = [
