@@ -188,7 +188,7 @@ export const DEFAULT_CONTENT: SiteContent = {
     contactHref: "#contact",
     showLogin: true,
     loginText: "Login",
-    loginHref: "/auth",
+    loginHref: "/login",
   },
   hero: {
     mediaUrl: heroImg,
