@@ -1,7 +1,10 @@
 import { useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, ArrowUp, Play, MessageCircle, Mail, Phone } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUp, Play, MessageCircle, Mail, Phone, X } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useContent, Icon } from "./ContentContext";
+import { ScrollReveal, ScrollRevealGroup, RevealItem, CountUp } from "./ScrollReveal";
+import { AnimatedIconGrid } from "./AnimatedIconGrid";
+import { VideoPlayer } from "./VideoPlayer";
 
 const mailto = (email: string) => `mailto:${email}`;
 const telHref = (phone: string) => `tel:${phone.replace(/[^\d+]/g, "")}`;
