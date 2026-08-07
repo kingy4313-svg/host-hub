@@ -59,6 +59,58 @@ function Media({
   );
 }
 
+function TestimonialModal({ onClose, onSubmit }: { onClose: () => void; onSubmit: (data: any) => void }) {
+  const [name, setName] = useState("");
+  const [role, setRole] = useState("");
+  const [eventType, setEventType] = useState("");
+  const [rating, setRating] = useState(5);
+  const [text, setText] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+
+  function submit() {
+    if (!name || !text) return;
+    onSubmit({ name, role, eventType, rating, text, email, phone, createdAt: new Date().toISOString() });
+  }
+
+  return (
+    <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/75 p-4" role="dialog" aria-modal="true">
+      <div className="w-full max-w-2xl rounded-2xl bg-background p-6">
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="font-display text-lg font-bold">Share Your Experience</h3>
+          <button onClick={onClose} aria-label="Close" className="text-muted-foreground hover:text-gold"><X className="size-5" /></button>
+        </div>
+        <div className="grid gap-3 md:grid-cols-2">
+          <input placeholder="Your full name" value={name} onChange={(e) => setName(e.target.value)} className="input" />
+          <input placeholder="Your title or role" value={role} onChange={(e) => setRole(e.target.value)} className="input" />
+          <select value={eventType} onChange={(e) => setEventType(e.target.value)} className="input col-span-2">
+            <option value="">Select event type</option>
+            <option>Corporate</option>
+            <option>Wedding</option>
+            <option>Celebrity</option>
+            <option>Other</option>
+          </select>
+          <div className="col-span-2 flex items-center gap-3">
+            <div className="flex items-center gap-1">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <button key={i} onClick={() => setRating(i + 1)} className={`text-${i < rating ? "gold" : "muted-foreground"}`}>★</button>
+              ))}
+            </div>
+            <div className="text-sm text-muted-foreground">({rating}/5)</div>
+          </div>
+          <textarea placeholder="Share your experience working with Sayanti..." value={text} onChange={(e) => setText(e.target.value)} className="input col-span-2 h-28" />
+          <input placeholder="your@email.com" value={email} onChange={(e) => setEmail(e.target.value)} className="input" />
+          <input placeholder="Your phone number" value={phone} onChange={(e) => setPhone(e.target.value)} className="input" />
+        </div>
+        <div className="mt-4 flex justify-end gap-3">
+          <button onClick={onClose} className="btn-sm">Cancel</button>
+          <button onClick={submit} className="btn-gold">Submit Testimonial</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function Navbar() {
   const { navbar, settings } = useContent();
   return (
@@ -484,6 +536,24 @@ export function MyWorks() {
 export function Testimonials() {
   const { testimonials } = useContent();
   const items = testimonials.items;
+  const [showModal, setShowModal] = useState(false);
+  const [pending, setPending] = useState<any[]>([]);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("pending_testimonials");
+      setPending(raw ? JSON.parse(raw) : []);
+    } catch {
+      setPending([]);
+    }
+  }, []);
+
+  function savePending(next: any[]) {
+    try {
+      localStorage.setItem("pending_testimonials", JSON.stringify(next));
+    } catch {}
+    setPending(next);
+  }
   const size = Math.max(1, Math.ceil(items.length / 3));
   const rows = [items.slice(0, size), items.slice(size, size * 2), items.slice(size * 2)];
   return (
@@ -501,6 +571,11 @@ export function Testimonials() {
         </div>
       ) : null}
       <div className="mt-12 space-y-6">
+        <div className="mt-6 text-center">
+          <button onClick={() => setShowModal(true)} className="btn-gold inline-block rounded-md px-6 py-2 text-sm">
+            Share Your Experience
+          </button>
+        </div>
         {rows.map((row, idx) =>
           row.length ? (
             <div key={idx} className="overflow-hidden">
@@ -526,6 +601,38 @@ export function Testimonials() {
           ) : null,
         )}
       </div>
+
+      {/* Pending submissions shown below the marquee */}
+      {pending.length ? (
+        <div className="mx-auto mt-8 max-w-6xl">
+          <h3 className="font-display mb-4 text-lg font-bold">Pending Reviews (Under review)</h3>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {pending.map((t) => (
+              <article key={t.id} className="luxe-card p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-display text-sm font-bold">{t.name}</h4>
+                    <p className="text-xs text-gold">{t.role} • {t.eventType}</p>
+                  </div>
+                  <span className="rounded-md bg-yellow-600/20 px-2 py-1 text-xs text-yellow-300">Under review</span>
+                </div>
+                <p className="mt-3 text-sm text-muted-foreground">{t.text}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      ) : null}
+
+      {showModal ? (
+        <TestimonialModal
+          onClose={() => setShowModal(false)}
+          onSubmit={(data: any) => {
+            const next = [{ ...data, id: `local_${Date.now()}` }, ...pending];
+            savePending(next);
+            setShowModal(false);
+          }}
+        />
+      ) : null}
     </section>
   );
 }
