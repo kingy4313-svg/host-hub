@@ -185,50 +185,68 @@ export function Services() {
   const { services } = useContent();
   return (
     <section id="services" className="px-6 py-20">
-      <h2 className="text-center font-display text-4xl font-bold md:text-5xl">
-        {services.headingWhite} <span className="text-gold-gradient">{services.headingGold}</span>
-      </h2>
-      <span className="gold-divider mt-5" />
-      <div className="mx-auto mt-14 grid max-w-6xl grid-cols-2 gap-8 sm:grid-cols-4 lg:grid-cols-8">
-        {services.items.map((s) => {
-          const inner = (
-            <>
-              <span className="flex size-12 items-center justify-center rounded-full" style={{ background: "var(--gradient-gold)" }}>
-                {s.iconImageUrl ? <img src={s.iconImageUrl} alt="" className="size-5" /> : <Icon name={s.icon} className="size-5 text-primary-foreground" />}
-              </span>
-              <span className="font-display text-sm">{s.label}</span>
-            </>
-          );
-          return s.href ? (
-            <a key={s.id} href={s.href} className="flex flex-col items-center gap-3 text-center">{inner}</a>
+      <ScrollReveal>
+        <h2 className="text-center font-display text-4xl font-bold md:text-5xl">
+          {services.headingWhite} <span className="text-gold-gradient">{services.headingGold}</span>
+        </h2>
+        <span className="gold-divider mt-5" />
+      </ScrollReveal>
+      <AnimatedIconGrid
+        filled
+        stagger={0.09}
+        className="mx-auto mt-14 grid max-w-6xl grid-cols-2 gap-8 sm:grid-cols-4 lg:grid-cols-8"
+        itemClassName="service-tile flex flex-col items-center gap-3 text-center"
+        items={services.items.map((s) => ({
+          id: s.id,
+          badge: s.iconImageUrl ? (
+            <img src={s.iconImageUrl} alt="" className="size-5" />
           ) : (
-            <div key={s.id} className="flex flex-col items-center gap-3 text-center">{inner}</div>
-          );
-        })}
-      </div>
-      {services.trustLine ? <p className="mt-14 text-center text-sm text-muted-foreground">{services.trustLine}</p> : null}
+            <Icon name={s.icon} className="size-5 text-primary-foreground" />
+          ),
+          label: s.href ? (
+            <a href={s.href} className="font-display text-sm">{s.label}</a>
+          ) : (
+            <span className="font-display text-sm">{s.label}</span>
+          ),
+        }))}
+      />
+      {services.trustLine ? (
+        <ScrollReveal>
+          <p className="mt-14 text-center text-sm text-muted-foreground">{services.trustLine}</p>
+        </ScrollReveal>
+      ) : null}
     </section>
   );
 }
 
 export function PastEvents() {
   const { pastEvents } = useContent();
+  const href = pastEvents.buttonHref && pastEvents.buttonHref !== "#works" ? pastEvents.buttonHref : "/past-events";
+  const internal = href.startsWith("/");
   return (
     <section id="past-events" className="px-6 py-20 text-center">
-      <h2 className="font-display text-4xl font-bold md:text-5xl">
-        {pastEvents.headingWhite} <span className="text-gold-gradient">{pastEvents.headingGold}</span>
-      </h2>
-      <span className="gold-divider mt-5" />
-      <p className="mx-auto mt-8 max-w-2xl font-display text-muted-foreground">{pastEvents.description}</p>
-      <div className="relative mx-auto mt-12 w-full max-w-md">
-        <div className="absolute inset-x-6 -bottom-3 h-6 rounded-b-2xl bg-card/60" />
-        <div className="absolute inset-x-3 -bottom-1.5 h-6 rounded-b-2xl bg-card/80" />
-        <figure className="relative overflow-hidden rounded-2xl border border-border">
-          <Media url={pastEvents.mediaUrl} type={pastEvents.mediaType} alt={pastEvents.headingGold} className="h-64 w-full object-cover" />
-        </figure>
-      </div>
+      <ScrollReveal>
+        <h2 className="font-display text-4xl font-bold md:text-5xl">
+          {pastEvents.headingWhite} <span className="text-gold-gradient">{pastEvents.headingGold}</span>
+        </h2>
+        <span className="gold-divider mt-5" />
+        <p className="mx-auto mt-8 max-w-2xl font-display text-muted-foreground">{pastEvents.description}</p>
+      </ScrollReveal>
+      <ScrollReveal delay={0.1}>
+        <div className="relative mx-auto mt-12 w-full max-w-md">
+          <div className="absolute inset-x-6 -bottom-3 h-6 rounded-b-2xl bg-card/60" />
+          <div className="absolute inset-x-3 -bottom-1.5 h-6 rounded-b-2xl bg-card/80" />
+          <figure className="relative overflow-hidden rounded-2xl border border-border">
+            <Media url={pastEvents.mediaUrl} type={pastEvents.mediaType} alt={pastEvents.headingGold} className="h-64 w-full object-cover" />
+          </figure>
+        </div>
+      </ScrollReveal>
       {pastEvents.buttonText ? (
-        <a href={pastEvents.buttonHref} className="btn-gold mt-12 inline-block rounded-md px-8 py-3 font-display">{pastEvents.buttonText}</a>
+        internal ? (
+          <Link to={href} className="btn-gold mt-12 inline-block rounded-md px-8 py-3 font-display">{pastEvents.buttonText}</Link>
+        ) : (
+          <a href={href} className="btn-gold mt-12 inline-block rounded-md px-8 py-3 font-display">{pastEvents.buttonText}</a>
+        )
       ) : null}
     </section>
   );
@@ -237,11 +255,14 @@ export function PastEvents() {
 export function MyWorks() {
   const { works } = useContent();
   const [tabId, setTabId] = useState<string>(works.tabs[0]?.id ?? "");
+  const [playing, setPlaying] = useState<{ url: string; title: string } | null>(null);
   const active = works.tabs.find((t) => t.id === tabId) ?? works.tabs[0];
   return (
     <section id="works" className="px-6 py-20">
-      <h2 className="text-center font-display text-4xl font-bold md:text-5xl">{works.heading}</h2>
-      <span className="gold-divider mt-5" />
+      <ScrollReveal>
+        <h2 className="text-center font-display text-4xl font-bold md:text-5xl">{works.heading}</h2>
+        <span className="gold-divider mt-5" />
+      </ScrollReveal>
       <div className="mt-10 flex flex-wrap justify-center gap-8">
         {works.tabs.map((t) => (
           <button key={t.id} onClick={() => setTabId(t.id)}
@@ -253,7 +274,7 @@ export function MyWorks() {
       </div>
       <div className="mx-auto mt-12 max-w-6xl">
         <h3 className="font-display text-sm font-bold uppercase tracking-wide">{active?.name}</h3>
-        <div className="mt-6 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <ScrollRevealGroup key={active?.id} className="mt-6 grid gap-8 sm:grid-cols-2 lg:grid-cols-3" stagger={0.08} amount={0.15}>
           {(active?.items ?? []).map((w) => {
             const card = (
               <>
@@ -266,14 +287,42 @@ export function MyWorks() {
                 <p className="text-xs text-gold">{w.category || active?.name}</p>
               </>
             );
-            return w.videoUrl ? (
-              <a key={w.id} href={w.videoUrl} target={w.openNewTab ? "_blank" : undefined} rel="noreferrer" className="block">{card}</a>
-            ) : (
-              <article key={w.id}>{card}</article>
+            return (
+              <RevealItem key={w.id}>
+                {w.videoUrl ? (
+                  <button
+                    type="button"
+                    onClick={() => setPlaying({ url: w.videoUrl, title: w.title })}
+                    className="block w-full text-left"
+                  >
+                    {card}
+                  </button>
+                ) : (
+                  <article>{card}</article>
+                )}
+              </RevealItem>
             );
           })}
-        </div>
+        </ScrollRevealGroup>
       </div>
+      {playing ? (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/85 p-4"
+          role="dialog"
+          aria-modal="true"
+          onClick={() => setPlaying(null)}
+        >
+          <div className="w-full max-w-3xl" onClick={(e) => e.stopPropagation()}>
+            <div className="mb-3 flex items-center justify-between gap-4">
+              <p className="font-display text-sm text-gold">{playing.title}</p>
+              <button onClick={() => setPlaying(null)} aria-label="Close video" className="text-muted-foreground hover:text-gold">
+                <X className="size-5" />
+              </button>
+            </div>
+            <VideoPlayer url={playing.url} title={playing.title} autoPlay />
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }
