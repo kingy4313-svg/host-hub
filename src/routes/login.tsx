@@ -103,17 +103,20 @@ function LoginPage() {
 
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="space-y-1.5">
-            <label htmlFor="email" className="text-xs uppercase tracking-widest text-muted-foreground">Email</label>
+            <label htmlFor="email" className="text-xs uppercase tracking-widest text-muted-foreground">
+              {mode === "login" ? "Email or username" : "Email"}
+            </label>
             <input
               id="email"
-              type="email"
+              type={mode === "login" ? "text" : "email"}
               required
-              autoComplete="email"
+              autoComplete={mode === "login" ? "username" : "email"}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-lg border border-[color:var(--gold)]/25 bg-black/50 px-4 py-3 text-sm text-foreground outline-none focus:border-[color:var(--gold)]"
             />
           </div>
+
 
           <div className="space-y-1.5">
             <label htmlFor="password" className="text-xs uppercase tracking-widest text-muted-foreground">Password</label>
