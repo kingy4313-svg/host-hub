@@ -346,11 +346,13 @@ export function Testimonials() {
   const rows = [items.slice(0, size), items.slice(size, size * 2), items.slice(size * 2)];
   return (
     <section className="py-20">
-      <h2 className="text-center font-display text-4xl font-bold md:text-5xl">
-        {testimonials.headingWhite} <span className="text-gold-gradient">{testimonials.headingGold}</span>
-      </h2>
-      {testimonials.subtext ? <p className="mt-4 text-center text-sm text-muted-foreground">{testimonials.subtext}</p> : null}
-      {testimonials.showHoverNote ? <p className="mt-2 text-center text-xs text-gold">{testimonials.hoverNote}</p> : null}
+      <ScrollReveal>
+        <h2 className="text-center font-display text-4xl font-bold md:text-5xl">
+          {testimonials.headingWhite} <span className="text-gold-gradient">{testimonials.headingGold}</span>
+        </h2>
+        {testimonials.subtext ? <p className="mt-4 text-center text-sm text-muted-foreground">{testimonials.subtext}</p> : null}
+        {testimonials.showHoverNote ? <p className="mt-2 text-center text-xs text-gold">{testimonials.hoverNote}</p> : null}
+      </ScrollReveal>
       {testimonials.buttonText ? (
         <div className="mt-6 text-center">
           <a href={testimonials.buttonHref} className="btn-gold inline-block rounded-md px-6 py-2 text-sm">{testimonials.buttonText}</a>
