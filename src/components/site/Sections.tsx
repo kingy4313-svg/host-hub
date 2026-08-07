@@ -23,7 +23,7 @@ export function Navbar() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 backdrop-blur-md bg-background/40">
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <a href="#top" className="flex items-center gap-3 font-display text-xl font-bold tracking-wide">
+        <a href="#top" className="logo-glow flex items-center gap-3 font-display text-xl font-bold tracking-wide">
           {settings.logoUrl ? <img src={settings.logoUrl} alt={navbar.logoText} className="h-9 w-auto" /> : null}
           {navbar.logoText}
         </a>
