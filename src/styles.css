@@ -141,3 +141,67 @@
     display: none;
   }
 }
+
+/* ------------------------------------------------- hover glow interactions */
+
+@utility logo-glow {
+  transition:
+    filter 0.3s ease-in-out,
+    transform 0.3s ease-in-out;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      filter: drop-shadow(0 0 10px rgba(201, 162, 75, 0.8)) drop-shadow(0 0 22px rgba(201, 162, 75, 0.5));
+      transform: scale(1.05);
+    }
+  }
+}
+
+@utility icon-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--gold) 50%, transparent);
+  transition:
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      box-shadow: 0 0 15px rgba(201, 162, 75, 0.6);
+      transform: scale(1.08);
+    }
+  }
+}
+
+@utility icon-badge-filled {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  background: var(--gradient-gold);
+  transition:
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      box-shadow: 0 0 18px rgba(201, 162, 75, 0.55);
+      transform: scale(1.1);
+    }
+  }
+}
+
+@utility icon-grid-label {
+  transition: color 0.25s ease;
+}
+
+@utility service-tile {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover .icon-grid-label {
+      color: var(--gold);
+    }
+  }
+}
