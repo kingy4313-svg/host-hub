@@ -125,7 +125,7 @@ function LoginPage() {
                 id="password"
                 type={show ? "text" : "password"}
                 required
-                autoComplete="current-password"
+                autoComplete={mode === "login" ? "current-password" : "new-password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full rounded-lg border border-[color:var(--gold)]/25 bg-black/50 px-4 py-3 pr-11 text-sm text-foreground outline-none focus:border-[color:var(--gold)]"
@@ -141,24 +141,34 @@ function LoginPage() {
             </div>
           </div>
 
-          <label className="flex items-center gap-2 text-sm text-muted-foreground">
-            <input
-              type="checkbox"
-              checked={remember}
-              onChange={(e) => setRemember(e.target.checked)}
-              className="h-4 w-4 accent-[color:var(--gold)]"
-            />
-            Remember me
-          </label>
+          {mode === "login" ? (
+            <label className="flex items-center gap-2 text-sm text-muted-foreground">
+              <input
+                type="checkbox"
+                checked={remember}
+                onChange={(e) => setRemember(e.target.checked)}
+                className="h-4 w-4 accent-[color:var(--gold)]"
+              />
+              Remember me
+            </label>
+          ) : null}
 
           <button type="submit" disabled={loading} className="btn-gold flex w-full items-center justify-center rounded-full px-6 py-3 text-sm disabled:opacity-70">
             {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-            {loading ? "Signing in..." : "Login"}
+            {loading ? "Please wait..." : mode === "login" ? "Login" : "Create Account"}
           </button>
 
           {error ? <p className="text-center text-sm text-red-400">{error}</p> : null}
+          {notice ? <p className="text-center text-sm text-[color:var(--gold)]">{notice}</p> : null}
+          {mode === "login" ? (
+            <p className="text-center text-xs text-muted-foreground">
+              Temporary access: username <span className="text-[color:var(--gold)]">admin</span> / password{" "}
+              <span className="text-[color:var(--gold)]">admin</span>
+            </p>
+          ) : null}
         </form>
       </div>
     </div>
   );
+
 }
