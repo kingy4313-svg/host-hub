@@ -78,29 +78,42 @@ export function Intro() {
   const { intro } = useContent();
   return (
     <section id="about" className="px-6 py-20 text-center">
-      <h1 className="font-display text-4xl font-bold md:text-6xl">
-        {intro.heading.split("★").map((part, i, arr) => (
-          <span key={i}>
-            {part}
-            {i < arr.length - 1 ? <span className="text-gold">★</span> : null}
-          </span>
+      <ScrollRevealGroup stagger={0.12}>
+        <RevealItem>
+          <h1 className="font-display text-4xl font-bold md:text-6xl">
+            {intro.heading.split("★").map((part, i, arr) => (
+              <span key={i}>
+                {part}
+                {i < arr.length - 1 ? <span className="text-gold">★</span> : null}
+              </span>
+            ))}
+          </h1>
+        </RevealItem>
+        {intro.taglines.map((t) => (
+          <RevealItem key={t.id}>
+            <p className="mx-auto mt-4 max-w-3xl font-display text-lg text-muted-foreground">{t.text}</p>
+          </RevealItem>
         ))}
-      </h1>
-      {intro.taglines.map((t) => (
-        <p key={t.id} className="mx-auto mt-4 max-w-3xl font-display text-lg text-muted-foreground">{t.text}</p>
-      ))}
-      <div className="mx-auto mt-14 grid max-w-3xl grid-cols-3 gap-y-12">
-        {intro.stats.map((s) => (
-          <div key={s.id} className="flex flex-col items-center gap-3">
-            <span className="flex size-14 items-center justify-center rounded-full border border-gold/50">
-              {s.iconImageUrl ? <img src={s.iconImageUrl} alt="" className="size-6" /> : <Icon name={s.icon} className="size-6 text-gold" />}
-            </span>
+      </ScrollRevealGroup>
+      <AnimatedIconGrid
+        className="mx-auto mt-14 grid max-w-3xl grid-cols-3 gap-y-12"
+        itemClassName="flex flex-col items-center gap-3"
+        items={intro.stats.map((s) => ({
+          id: s.id,
+          badge: s.iconImageUrl ? (
+            <img src={s.iconImageUrl} alt="" className="size-6" />
+          ) : (
+            <Icon name={s.icon} className="size-6 text-gold" />
+          ),
+          label: (
             <span className="font-display text-sm font-bold tracking-wide text-gold">
-              {[s.value, s.label].filter(Boolean).join(" ")}
+              {s.value ? <CountUp value={s.value} /> : null}
+              {s.value && s.label ? " " : null}
+              {s.label}
             </span>
-          </div>
-        ))}
-      </div>
+          ),
+        }))}
+      />
     </section>
   );
 }
