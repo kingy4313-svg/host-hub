@@ -157,10 +157,12 @@ export function FeaturedMoments() {
   const scroll = (dir: number) => ref.current?.scrollBy({ left: dir * 340, behavior: "smooth" });
   return (
     <section className="py-20">
-      <h2 className="text-center font-display text-4xl font-bold md:text-5xl">
-        {featured.headingWhite} <span className="text-gold-gradient">{featured.headingGold}</span>
-      </h2>
-      <span className="gold-divider mt-5" />
+      <ScrollReveal>
+        <h2 className="text-center font-display text-4xl font-bold md:text-5xl">
+          {featured.headingWhite} <span className="text-gold-gradient">{featured.headingGold}</span>
+        </h2>
+        <span className="gold-divider mt-5" />
+      </ScrollReveal>
       {featured.showArrows ? (
         <div className="mx-auto mt-10 flex max-w-6xl justify-between px-6">
           <button onClick={() => scroll(-1)} aria-label="Previous" className="flex size-11 items-center justify-center rounded-full border border-gold/40 text-gold">
