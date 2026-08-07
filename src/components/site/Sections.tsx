@@ -54,18 +54,28 @@ export function Hero() {
       <Media url={hero.mediaUrl} type={hero.mediaType} alt={`${hero.line1} ${hero.line2}`}
         className="absolute inset-0 h-full w-full object-cover object-top" />
       <div className="absolute inset-0 flex items-start justify-center pt-24">
-        <div className="text-center">
-          <span className="block font-display text-[14vw] leading-[0.85] font-bold text-gold-soft/60 md:text-[10rem]">{hero.line1}</span>
-          <span className="-mt-4 block translate-x-[18%] font-display text-[9vw] leading-[0.9] font-bold text-gold-soft/70 md:text-[6rem]">{hero.line2}</span>
-          {hero.subheading ? <p className="mt-6 font-display text-lg text-foreground/90">{hero.subheading}</p> : null}
-          {hero.buttons.length ? (
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
-              {hero.buttons.map((b) => (
-                <a key={b.id} href={b.href} className="btn-gold rounded-md px-7 py-3 font-display">{b.text}</a>
-              ))}
-            </div>
+        <ScrollRevealGroup className="text-center" stagger={0.14} amount={0.1}>
+          <RevealItem>
+            <span className="block font-display text-[14vw] leading-[0.85] font-bold text-gold-soft/60 md:text-[10rem]">{hero.line1}</span>
+          </RevealItem>
+          <RevealItem>
+            <span className="-mt-4 block translate-x-[18%] font-display text-[9vw] leading-[0.9] font-bold text-gold-soft/70 md:text-[6rem]">{hero.line2}</span>
+          </RevealItem>
+          {hero.subheading ? (
+            <RevealItem>
+              <p className="mt-6 font-display text-lg text-foreground/90">{hero.subheading}</p>
+            </RevealItem>
           ) : null}
-        </div>
+          {hero.buttons.length ? (
+            <RevealItem>
+              <div className="mt-8 flex flex-wrap justify-center gap-4">
+                {hero.buttons.map((b) => (
+                  <a key={b.id} href={b.href} className="btn-gold rounded-md px-7 py-3 font-display">{b.text}</a>
+                ))}
+              </div>
+            </RevealItem>
+          ) : null}
+        </ScrollRevealGroup>
       </div>
       <div className="absolute inset-x-0 bottom-0 h-40" style={{ background: "linear-gradient(to top, var(--background), transparent)" }} />
       <div className="absolute inset-x-0 bottom-0 h-28"
