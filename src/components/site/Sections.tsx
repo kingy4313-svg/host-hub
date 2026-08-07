@@ -122,17 +122,21 @@ export function WhyBook() {
   const { whyBook } = useContent();
   return (
     <section className="px-6 py-20">
-      <h2 className="text-center font-display text-4xl font-bold md:text-5xl">{whyBook.heading}</h2>
-      {whyBook.showDivider ? <span className="gold-divider mt-5" /> : null}
-      <div className="mx-auto mt-12 grid max-w-6xl gap-8 md:grid-cols-3">
+      <ScrollReveal>
+        <h2 className="text-center font-display text-4xl font-bold md:text-5xl">{whyBook.heading}</h2>
+        {whyBook.showDivider ? <span className="gold-divider mt-5" /> : null}
+      </ScrollReveal>
+      <ScrollRevealGroup className="mx-auto mt-12 grid max-w-6xl gap-8 md:grid-cols-3" stagger={0.13} amount={0.2}>
         {whyBook.cards.map((r) => (
-          <article key={r.id} className="luxe-card p-8 text-center transition-shadow hover:shadow-[0_0_40px_-10px_var(--gold-deep)]">
-            <span className="mx-auto block h-[3px] w-14" style={{ background: "var(--gradient-gold)" }} />
-            <h3 className={`mt-7 font-display text-2xl ${r.goldTitle ? "text-gold" : "text-foreground"}`}>{r.title}</h3>
-            <p className="mt-4 font-display text-muted-foreground">{r.text}</p>
-          </article>
+          <RevealItem key={r.id}>
+            <article className="luxe-card h-full p-8 text-center transition-shadow hover:shadow-[0_0_40px_-10px_var(--gold-deep)]">
+              <span className="mx-auto block h-[3px] w-14" style={{ background: "var(--gradient-gold)" }} />
+              <h3 className={`mt-7 font-display text-2xl ${r.goldTitle ? "text-gold" : "text-foreground"}`}>{r.title}</h3>
+              <p className="mt-4 font-display text-muted-foreground">{r.text}</p>
+            </article>
+          </RevealItem>
         ))}
-      </div>
+      </ScrollRevealGroup>
     </section>
   );
 }
