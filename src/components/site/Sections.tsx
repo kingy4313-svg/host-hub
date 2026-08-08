@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, ArrowUp, Play, MessageCircle, Mail, Phone, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUp, Play, MessageCircle, Mail, Phone, X, Upload } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useContent, Icon } from "./ContentContext";
 import { ScrollReveal, ScrollRevealGroup, RevealItem, CountUp } from "./ScrollReveal";
@@ -60,52 +60,87 @@ function Media({
 }
 
 function TestimonialModal({ onClose, onSubmit }: { onClose: () => void; onSubmit: (data: any) => void }) {
-  const [name, setName] = useState("");
-  const [role, setRole] = useState("");
-  const [eventType, setEventType] = useState("");
-  const [rating, setRating] = useState(5);
-  const [text, setText] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [form, setForm] = useState({ name: "", role: "", eventType: "", text: "" });
 
-  function submit() {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const name = form.name.trim();
+    const text = form.text.trim();
     if (!name || !text) return;
-    onSubmit({ name, role, eventType, rating, text, email, phone, createdAt: new Date().toISOString() });
+
+    onSubmit({
+      name,
+      role: form.role.trim() || "Client",
+      eventType: form.eventType.trim() || "Event",
+      text,
+    });
   }
 
   return (
-    <div className="fixed inset-0 z-60 flex items-center justify-center bg-black/75 p-4" role="dialog" aria-modal="true">
-      <div className="w-full max-w-2xl rounded-2xl bg-background p-6">
-        <div className="mb-4 flex items-center justify-between">
-          <h3 className="font-display text-lg font-bold">Share Your Experience</h3>
-          <button onClick={onClose} aria-label="Close" className="text-muted-foreground hover:text-gold"><X className="size-5" /></button>
-        </div>
-        <div className="grid gap-3 md:grid-cols-2">
-          <input placeholder="Your full name" value={name} onChange={(e) => setName(e.target.value)} className="input" />
-          <input placeholder="Your title or role" value={role} onChange={(e) => setRole(e.target.value)} className="input" />
-          <select value={eventType} onChange={(e) => setEventType(e.target.value)} className="input col-span-2">
-            <option value="">Select event type</option>
-            <option>Corporate</option>
-            <option>Wedding</option>
-            <option>Celebrity</option>
-            <option>Other</option>
-          </select>
-          <div className="col-span-2 flex items-center gap-3">
-            <div className="flex items-center gap-1">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <button key={i} onClick={() => setRating(i + 1)} className={`text-${i < rating ? "gold" : "muted-foreground"}`}>★</button>
-              ))}
-            </div>
-            <div className="text-sm text-muted-foreground">({rating}/5)</div>
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 px-4 py-8" onClick={onClose}>
+      <div className="w-full max-w-xl rounded-2xl border border-border bg-background p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h3 className="font-display text-2xl font-bold">Share Your Experience</h3>
+            <p className="mt-2 text-sm text-muted-foreground">Tell us about your event and how Sayanti made it special.</p>
           </div>
-          <textarea placeholder="Share your experience working with Sayanti..." value={text} onChange={(e) => setText(e.target.value)} className="input col-span-2 h-28" />
-          <input placeholder="your@email.com" value={email} onChange={(e) => setEmail(e.target.value)} className="input" />
-          <input placeholder="Your phone number" value={phone} onChange={(e) => setPhone(e.target.value)} className="input" />
+          <button type="button" onClick={onClose} className="rounded-full border border-border p-2 text-muted-foreground hover:text-foreground">
+            <X className="size-4" />
+          </button>
         </div>
-        <div className="mt-4 flex justify-end gap-3">
-          <button onClick={onClose} className="btn-sm">Cancel</button>
-          <button onClick={submit} className="btn-gold">Submit Testimonial</button>
-        </div>
+
+        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label className="mb-1 block text-sm font-medium">Your name</label>
+              <input
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                className="w-full rounded-md border border-border bg-background/70 px-3 py-2 text-sm outline-none ring-0"
+                placeholder="Enter your name"
+                required
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium">Your role</label>
+              <input
+                value={form.role}
+                onChange={(e) => setForm({ ...form, role: e.target.value })}
+                className="w-full rounded-md border border-border bg-background/70 px-3 py-2 text-sm outline-none ring-0"
+                placeholder="e.g. Event Manager"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-medium">Event type</label>
+            <input
+              value={form.eventType}
+              onChange={(e) => setForm({ ...form, eventType: e.target.value })}
+              className="w-full rounded-md border border-border bg-background/70 px-3 py-2 text-sm outline-none ring-0"
+              placeholder="e.g. Wedding, Conference, Launch"
+            />
+          </div>
+
+          <div>
+            <label className="mb-1 block text-sm font-medium">Your experience</label>
+            <textarea
+              value={form.text}
+              onChange={(e) => setForm({ ...form, text: e.target.value })}
+              className="min-h-28 w-full rounded-md border border-border bg-background/70 px-3 py-2 text-sm outline-none ring-0"
+              placeholder="Share what made the experience memorable"
+              required
+            />
+          </div>
+
+          <div className="flex flex-wrap justify-end gap-3 pt-2">
+            <button type="button" onClick={onClose} className="rounded-md border border-border px-4 py-2 text-sm">Cancel</button>
+            <button type="submit" className="bg-gradient-to-b from-yellow-400 via-amber-300 to-yellow-500 text-black font-semibold rounded-full px-6 py-2 hover:opacity-90 shadow-md flex items-center gap-2">
+              <Upload className="w-4 h-4" />
+              Submit
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
@@ -430,6 +465,89 @@ export function PastEvents() {
   const { pastEvents } = useContent();
   const href = pastEvents.buttonHref && pastEvents.buttonHref !== "#works" ? pastEvents.buttonHref : "/past-events";
   const internal = href.startsWith("/");
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const autoPlayRef = useRef<NodeJS.Timeout>();
+
+  const items = pastEvents.items || [];
+  const itemCount = items.length;
+  const pointerStart = useRef<{ x: number; y: number } | null>(null);
+
+  useEffect(() => {
+    if (!isHovered && !isDragging && itemCount > 0) {
+      autoPlayRef.current = setInterval(() => {
+        setCurrentIndex((prev) => (prev + 1) % itemCount);
+      }, 4200);
+    }
+    return () => {
+      if (autoPlayRef.current) clearInterval(autoPlayRef.current);
+    };
+  }, [isHovered, isDragging, itemCount]);
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    pointerStart.current = { x: e.clientX, y: e.clientY };
+    setIsDragging(true);
+    setDragStart({ x: e.clientX, y: e.clientY });
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!pointerStart.current) {
+      setIsDragging(false);
+      return;
+    }
+    setIsDragging(false);
+    const diffX = pointerStart.current.x - e.clientX;
+    pointerStart.current = null;
+    if (Math.abs(diffX) > 50 && itemCount > 0) {
+      if (diffX > 0) {
+        setCurrentIndex((prev) => (prev + 1) % itemCount);
+      } else {
+        setCurrentIndex((prev) => (prev - 1 + itemCount) % itemCount);
+      }
+    }
+    e.currentTarget.releasePointerCapture(e.pointerId);
+  };
+
+  const handlePointerCancel = (e: React.PointerEvent<HTMLDivElement>) => {
+    setIsDragging(false);
+    pointerStart.current = null;
+    e.currentTarget.releasePointerCapture(e.pointerId);
+  };
+
+  const getItemStyle = (index: number) => {
+    const diff = (index - currentIndex + itemCount) % itemCount;
+    const position = diff === 0 ? 0 : diff > itemCount / 2 ? diff - itemCount : diff;
+
+    let zIndex = 10 - Math.abs(position);
+    let scale = 1 - Math.abs(position) * 0.08;
+    let opacity = 1 - Math.abs(position) * 0.2;
+    let rotateY = position * 8;
+    let rotateX = position * 2;
+    let translateX = position * 80;
+    let translateZ = -Math.abs(position) * 120;
+
+    scale = Math.max(0.7, scale);
+    opacity = Math.max(0.2, opacity);
+
+    return {
+      transform: `
+        perspective(1000px)
+        translateX(${translateX}px)
+        translateZ(${translateZ}px)
+        rotateY(${rotateY}deg)
+        rotateX(${rotateX}deg)
+        scale(${scale})
+      `,
+      opacity,
+      zIndex,
+      transition: isDragging ? "none" : "all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)",
+    };
+  };
+
   return (
     <section id="past-events" className="px-6 py-20 text-center">
       <ScrollReveal>
@@ -439,21 +557,95 @@ export function PastEvents() {
         <span className="gold-divider mt-5" />
         <p className="mx-auto mt-8 max-w-2xl font-display text-muted-foreground">{pastEvents.description}</p>
       </ScrollReveal>
-      <ScrollReveal delay={0.1}>
-        <div className="relative mx-auto mt-12 w-full max-w-md">
-          <div className="absolute inset-x-6 -bottom-3 h-6 rounded-b-2xl bg-card/60" />
-          <div className="absolute inset-x-3 -bottom-1.5 h-6 rounded-b-2xl bg-card/80" />
-          <figure className="relative overflow-hidden rounded-2xl border border-border">
-            <Media url={pastEvents.mediaUrl} type={pastEvents.mediaType} alt={pastEvents.headingGold} className="h-64 w-full object-cover" />
-          </figure>
-        </div>
-      </ScrollReveal>
+
+      {itemCount > 0 ? (
+        <ScrollReveal delay={0.1}>
+          <div
+            ref={carouselRef}
+            className="relative mx-auto mt-12 h-[28rem] w-full max-w-4xl perspective"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onPointerDown={handlePointerDown}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerCancel}
+            style={{ perspective: "1100px", cursor: isDragging ? "grabbing" : "grab" }}
+          >
+            <div className="relative h-full w-full" style={{ transformStyle: "preserve-3d" }}>
+              {items.map((item, index) => {
+                const itemStyle = getItemStyle(index);
+                return (
+                  <div
+                    key={item.id || index}
+                    className="absolute inset-0 flex items-center justify-center"
+                    style={{
+                      ...itemStyle,
+                      transformStyle: "preserve-3d",
+                    }}
+                  >
+                    <div
+                      className="relative w-full max-w-sm rounded-xl overflow-hidden shadow-2xl"
+                      style={{
+                        backdropFilter: "blur(10px)",
+                        boxShadow: "0 20px 60px rgba(255, 215, 0, 0.15), 0 0 40px rgba(255, 215, 0, 0.08)",
+                      }}
+                    >
+                      <div className="aspect-video overflow-hidden bg-black">
+                        <img
+                          src={item.mediaUrl}
+                          alt={item.label}
+                          loading="lazy"
+                          className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                        />
+                      </div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60" />
+                      <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                        <h3 className="font-display text-lg font-bold">{item.label}</h3>
+                        {item.caption && <p className="text-sm text-gray-200 mt-1">{item.caption}</p>}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {itemCount > 1 && (
+            <div className="mt-8 flex items-center justify-center gap-2">
+              {items.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentIndex(index)}
+                  className={`h-2 rounded-full transition-all ${
+                    index === currentIndex
+                      ? "w-8 bg-gold"
+                      : "w-2 bg-gray-500 hover:bg-gray-400"
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
+            </div>
+          )}
+        </ScrollReveal>
+      ) : null}
+
       {pastEvents.buttonText ? (
-        internal ? (
-          <Link to={href} className="btn-gold mt-12 inline-block rounded-md px-8 py-3 font-display">{pastEvents.buttonText}</Link>
-        ) : (
-          <a href={href} className="btn-gold mt-12 inline-block rounded-md px-8 py-3 font-display">{pastEvents.buttonText}</a>
-        )
+        <ScrollReveal delay={0.2}>
+          {internal ? (
+            <Link
+              to={href}
+              className="btn-gold mt-12 inline-block rounded-full px-8 py-3 font-display font-semibold text-black transition-all hover:scale-105 hover:shadow-lg"
+            >
+              {pastEvents.buttonText}
+            </Link>
+          ) : (
+            <a
+              href={href}
+              className="btn-gold mt-12 inline-block rounded-full px-8 py-3 font-display font-semibold text-black transition-all hover:scale-105 hover:shadow-lg"
+            >
+              {pastEvents.buttonText}
+            </a>
+          )}
+        </ScrollReveal>
       ) : null}
     </section>
   );
@@ -565,17 +757,12 @@ export function Testimonials() {
         {testimonials.subtext ? <p className="mt-4 text-center text-sm text-muted-foreground">{testimonials.subtext}</p> : null}
         {testimonials.showHoverNote ? <p className="mt-2 text-center text-xs text-gold">{testimonials.hoverNote}</p> : null}
       </ScrollReveal>
-      {testimonials.buttonText ? (
-        <div className="mt-6 text-center">
-          <a href={testimonials.buttonHref} className="btn-gold inline-block rounded-md px-6 py-2 text-sm">{testimonials.buttonText}</a>
-        </div>
-      ) : null}
+      <div className="mt-6 text-center">
+        <button type="button" onClick={() => setShowModal(true)} className="btn-gold inline-block rounded-md px-6 py-2 text-sm">
+          {testimonials.buttonText || "Share Your Experience"}
+        </button>
+      </div>
       <div className="mt-12 space-y-6">
-        <div className="mt-6 text-center">
-          <button onClick={() => setShowModal(true)} className="btn-gold inline-block rounded-md px-6 py-2 text-sm">
-            Share Your Experience
-          </button>
-        </div>
         {rows.map((row, idx) =>
           row.length ? (
             <div key={idx} className="overflow-hidden">

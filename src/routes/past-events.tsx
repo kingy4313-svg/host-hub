@@ -1,9 +1,9 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { ContentProvider, ThemeStyle, useContent } from "@/components/site/ContentContext";
 import { Navbar, Footer, FloatingCall, ContactCta } from "@/components/site/Sections";
-import { ScrollReveal, ScrollRevealGroup, RevealItem } from "@/components/site/ScrollReveal";
+import { ScrollReveal, RevealItem } from "@/components/site/ScrollReveal";
 import { getPublishedContent } from "@/lib/content.functions";
 
 export const Route = createFileRoute("/past-events")({
@@ -28,8 +28,7 @@ export const Route = createFileRoute("/past-events")({
 });
 
 function Gallery() {
-  const { featured, works, pastEvents } = useContent();
-  const workItems = works.tabs.flatMap((t) => t.items.map((i) => ({ ...i, tab: t.name })));
+  const { pastEvents } = useContent();
   function GalleryCard({ item }: { item: typeof pastEvents.items[0] }) {
     const [imgFailed, setImgFailed] = useState(false);
     const isVideo = item.mediaType === "video" || /\.(mp4|webm|mov|m4v)(\?|$)/i.test(item.mediaUrl);
@@ -74,10 +73,6 @@ function Gallery() {
           <ArrowLeft className="size-4" /> Back to home
         </Link>
         <div className="relative">
-          <span className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 -translate-y-8 font-display text-[14vw] leading-[0.85] font-bold text-gold-soft/20 md:text-[10rem]">
-            {pastEvents.headingGold}
-          </span>
-
           <h1 className="relative z-10 mt-8 text-center font-display text-4xl font-bold md:text-6xl">
             {pastEvents.headingWhite} <span className="text-gold-gradient">{pastEvents.headingGold}</span>
           </h1>
@@ -98,38 +93,6 @@ function Gallery() {
           ))}
         </div>
       </ScrollReveal>
-
-      <ScrollReveal>
-        <h2 className="mt-24 text-center font-display text-3xl font-bold md:text-4xl">Event Archive</h2>
-        <span className="gold-divider mt-5" />
-      </ScrollReveal>
-      <ScrollRevealGroup className="mx-auto mt-12 grid max-w-6xl gap-8 sm:grid-cols-2 lg:grid-cols-4" stagger={0.07} amount={0.15}>
-        {pastEvents.archiveItems && pastEvents.archiveItems.length ? (
-          pastEvents.archiveItems.map((a) => (
-            <RevealItem key={a.id}>
-              <article>
-                {a.mediaType === "video" || /\.(mp4|webm|mov|m4v)(\?|$)/i.test(a.mediaUrl) ? (
-                  <video src={a.mediaUrl} className="h-44 w-full rounded-lg border border-border object-cover" muted playsInline controls={false} />
-                ) : (
-                  <img src={a.mediaUrl} alt={a.caption} loading="lazy" className="h-44 w-full rounded-lg border border-border object-cover" />
-                )}
-                <h3 className="mt-3 font-display text-sm font-bold">{a.label}</h3>
-                <p className="text-xs text-gold">{a.caption}</p>
-              </article>
-            </RevealItem>
-          ))
-        ) : (
-          workItems.map((w) => (
-            <RevealItem key={w.id}>
-              <article>
-                <img src={w.thumbUrl} alt={w.title} loading="lazy" className="h-44 w-full rounded-lg border border-border object-cover" />
-                <h3 className="mt-3 font-display text-sm font-bold">{w.title}</h3>
-                <p className="text-xs text-gold">{w.category || w.tab}</p>
-              </article>
-            </RevealItem>
-          ))
-        )}
-      </ScrollRevealGroup>
 
       <ContactCta />
     </main>

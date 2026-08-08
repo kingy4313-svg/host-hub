@@ -19,6 +19,8 @@ export type MomentItem = {
   mediaType: MediaType;
   label: string;
   caption: string;
+  date?: string;
+  eventUrl?: string;
   overlayIcon: string;
   overlayLink: string;
 };
@@ -78,6 +80,7 @@ export type SiteContent = {
   };
   services: { headingWhite: string; headingGold: string; items: ServiceItem[]; trustLine: string };
   pastEvents: {
+    archiveItems: any;
     headingWhite: string;
     headingGold: string;
     description: string;
@@ -86,7 +89,6 @@ export type SiteContent = {
     buttonText: string;
     buttonHref: string;
     items: MomentItem[];
-    archiveItems: MomentItem[];
   };
   works: { heading: string; tabs: WorkTab[] };
   testimonials: {
@@ -171,7 +173,7 @@ export const DEFAULT_CONTENT: SiteContent = {
     whatsapp: "https://wa.me/919702334193",
     email: "anchorsayantibanerjee@gmail.com",
     phone: "+91 97023 34193",
-    socials: [{ id: uid("s1"), platform: "Instagram", url: "https://instagram.com" }],
+    socials: [{ id: uid("s1"), platform: "Instagram", url: "https://www.instagram.com/anchorsayantibanerjee?igsh=eDkxZnJuZWVnMzZ5" }],
     seo: {
       title: "Sayanti Banerjee — Anchor, Actor & Influencer",
       description:
@@ -308,44 +310,13 @@ export const DEFAULT_CONTENT: SiteContent = {
     buttonText: "Explore More",
     buttonHref: "#works",
     items: [
-      { id: "pe1", posterUrl: undefined, mediaUrl: "https://i.ibb.co/M5fWpkWg.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe2", posterUrl: undefined, mediaUrl: "https://i.ibb.co/sfBdwWm.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe3", posterUrl: undefined, mediaUrl: "https://i.ibb.co/20wsjcXH.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe4", posterUrl: undefined, mediaUrl: "https://i.ibb.co/k2cYGQHh.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe5", posterUrl: undefined, mediaUrl: "https://i.ibb.co/VcP3967P.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe6", posterUrl: undefined, mediaUrl: "https://i.ibb.co/KjxzbM7J.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe7", posterUrl: undefined, mediaUrl: "https://i.ibb.co/DHSnfcV9.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe8", posterUrl: undefined, mediaUrl: "https://i.ibb.co/DSxKhHv.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe9", posterUrl: undefined, mediaUrl: "https://i.ibb.co/20c3mz8v.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe10", posterUrl: undefined, mediaUrl: "https://i.ibb.co/gM5N0jNv.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe11", posterUrl: undefined, mediaUrl: "https://i.ibb.co/S4Q9DXn3.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe12", posterUrl: undefined, mediaUrl: "https://i.ibb.co/3m8mXZC8.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe13", posterUrl: undefined, mediaUrl: "https://i.ibb.co/PZXK2Vx9.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe14", posterUrl: undefined, mediaUrl: "https://i.ibb.co/4nDZpq9k.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe15", posterUrl: undefined, mediaUrl: "https://i.ibb.co/YTNthjgs.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe16", posterUrl: undefined, mediaUrl: "https://i.ibb.co/hF9vLJxN.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe17", posterUrl: undefined, mediaUrl: "https://i.ibb.co/HLS8tRr2.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe18", posterUrl: undefined, mediaUrl: "https://i.ibb.co/PvSDX222.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe19", posterUrl: undefined, mediaUrl: "https://i.ibb.co/rfMm04Vz.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe20", posterUrl: undefined, mediaUrl: "https://i.ibb.co/84NRPx5B.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe21", posterUrl: undefined, mediaUrl: "https://i.ibb.co/ds6RBg6J.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe22", posterUrl: undefined, mediaUrl: "https://i.ibb.co/QF5ys3td.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe23", posterUrl: undefined, mediaUrl: "https://i.ibb.co/4RDyQBmy.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe24", posterUrl: undefined, mediaUrl: "https://i.ibb.co/MyQKzVPP.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe25", posterUrl: undefined, mediaUrl: "https://i.ibb.co/bRbCrMjk.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe26", posterUrl: undefined, mediaUrl: "https://i.ibb.co/tpj4nK0Z.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe27", posterUrl: undefined, mediaUrl: "https://i.ibb.co/rKkVdXk8.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe28", posterUrl: undefined, mediaUrl: "https://i.ibb.co/Zzc226bQ.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe29", posterUrl: undefined, mediaUrl: "https://i.ibb.co/pr6pT5QH.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-      { id: "pe30", posterUrl: undefined, mediaUrl: "https://i.ibb.co/Zz3Sqv5S.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
+      { id: "pe1", posterUrl: undefined, mediaUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhjsnkK7QXGWFomKYSmAZej16UxpzNEAAPIQxaF7TPNg&s=10", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
+      { id: "pe2", posterUrl: undefined, mediaUrl: "https://ibb.co/sfBdwWm", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
+      { id: "pe3", posterUrl: undefined, mediaUrl: "https://ibb.co/20wsjcXH", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
       { id: "pe31", posterUrl: undefined, mediaUrl: "https://i.ibb.co/pjsWy6dT.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
       { id: "pe32", posterUrl: undefined, mediaUrl: "https://i.ibb.co/KgJwwpZ.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
       { id: "pe33", posterUrl: undefined, mediaUrl: "https://i.ibb.co/67JRBC07.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
       { id: "pe34", posterUrl: undefined, mediaUrl: "https://i.ibb.co/Wpggpmkv.jpg", mediaType: "image", label: "Past Event", caption: "", overlayIcon: "", overlayLink: "" },
-    ],
-    archiveItems: [
-      { id: "ar1", posterUrl: undefined, mediaUrl: eventCorporate, mediaType: "image", label: "Corporate Highlights", caption: "Corporate conferences and workshops.", overlayIcon: "", overlayLink: "" },
-      { id: "ar2", posterUrl: undefined, mediaUrl: eventAwards, mediaType: "image", label: "Award Nights", caption: "Award ceremonies and gala evenings.", overlayIcon: "", overlayLink: "" },
     ],
   },
   works: {
@@ -401,7 +372,7 @@ export const DEFAULT_CONTENT: SiteContent = {
     hoverNote: "Hover over testimonials to pause scrolling",
     showHoverNote: true,
     buttonText: "Share Your Experience",
-    buttonHref: "#contact",
+    buttonHref: "",
     rowSpeeds: [45, 55, 50],
     items: [
       { id: "ts1", name: "Arjun Reddy", role: "Product Launch Manager", photoUrl: "", text: "Our product launch was elevated to a whole new level with Sayanti's exceptional hosting skills." },

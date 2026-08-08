@@ -116,7 +116,7 @@ function HeroEditor({ content, patch }: EditorProps) {
       <MediaField label="Hero background (image or video)" value={h.mediaUrl} onChange={(v) => patch("hero", { mediaUrl: v })} />
       <Field label="Media type">
         <select
-          className="h-9 w-full rounded-md border bg-background px-2 text-sm"
+          className="h-9 w-full rounded-md border border-gray-300 bg-white px-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           value={h.mediaType}
           onChange={(e) => patch("hero", { mediaType: e.target.value as "image" | "video" })}
         >
@@ -263,14 +263,18 @@ function PastEventsEditor({ content, patch }: EditorProps) {
         <ListEditor
           items={p.items}
           onChange={(items) => patch("pastEvents", { items })}
-          create={() => ({ id: newId("pe"), posterUrl: undefined, mediaUrl: "", mediaType: "image" as const, label: "", caption: "", overlayIcon: "", overlayLink: "" })}
+          create={() => ({ id: newId("pe"), posterUrl: undefined, mediaUrl: "", mediaType: "image" as const, label: "", caption: "", date: "", eventUrl: "", overlayIcon: "", overlayLink: "" })}
           addLabel="Add media"
           render={(item, update) => (
             <div className="space-y-3">
-              <MediaField label="Image or video" value={item.mediaUrl} onChange={(v) => update({ mediaUrl: v })} />
+              <MediaField label="Image or video" value={item.mediaUrl} onChange={(v) => update({ mediaUrl: v })} accept=".webp,image/*,video/*" />
               <div className="grid gap-3 sm:grid-cols-2">
-                <TextField label="Label" value={item.label} onChange={(v) => update({ label: v })} />
-                <TextField label="Caption" value={item.caption} onChange={(v) => update({ caption: v })} />
+                <TextField label="Title" value={item.label} onChange={(v) => update({ label: v })} />
+                <TextField label="Date" value={item.date ?? ""} onChange={(v) => update({ date: v })} />
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <TextField label="Description" value={item.caption} onChange={(v) => update({ caption: v })} />
+                <TextField label="Event URL" value={item.eventUrl ?? ""} onChange={(v) => update({ eventUrl: v })} />
               </div>
             </div>
           )}
@@ -280,23 +284,6 @@ function PastEventsEditor({ content, patch }: EditorProps) {
         <TextField label="Button text" value={p.buttonText} onChange={(v) => patch("pastEvents", { buttonText: v })} />
         <TextField label="Button link" value={p.buttonHref} onChange={(v) => patch("pastEvents", { buttonHref: v })} />
       </div>
-      <Field label="Event Archive items">
-        <ListEditor
-          items={p.archiveItems}
-          onChange={(archiveItems) => patch("pastEvents", { archiveItems })}
-          create={() => ({ id: newId("ar"), posterUrl: undefined, mediaUrl: "", mediaType: "image" as const, label: "", caption: "", overlayIcon: "", overlayLink: "" })}
-          addLabel="Add archive item"
-          render={(item, update) => (
-            <div className="space-y-3">
-              <MediaField label="Image or video" value={item.mediaUrl} onChange={(v) => update({ mediaUrl: v })} />
-              <div className="grid gap-3 sm:grid-cols-2">
-                <TextField label="Label" value={item.label} onChange={(v) => update({ label: v })} />
-                <TextField label="Caption" value={item.caption} onChange={(v) => update({ caption: v })} />
-              </div>
-            </div>
-          )}
-        />
-      </Field>
     </div>
   );
 }
@@ -384,6 +371,23 @@ function TestimonialsEditor({ content, patch }: EditorProps) {
         <TextField label="Heading (gold)" value={t.headingGold} onChange={(v) => patch("testimonials", { headingGold: v })} />
       </div>
       <TextField label="Subtext" value={t.subtext} onChange={(v) => patch("testimonials", { subtext: v })} />
+      <SwitchField
+        label="Show hover note"
+        checked={t.showHoverNote}
+        onChange={(v) => patch("testimonials", { showHoverNote: v })}
+      />
+      {t.showHoverNote ? (
+        <TextField label="Hover note" value={t.hoverNote} onChange={(v) => patch("testimonials", { hoverNote: v })} />
+      ) : null}
+      <div className="grid gap-3 sm:grid-cols-3">
+        <TextField label="Row 1 speed (45)" value={String(t.rowSpeeds[0])} onChange={(v) => patch("testimonials", { rowSpeeds: [Number(v) || 45, t.rowSpeeds[1], t.rowSpeeds[2]] })} />
+        <TextField label="Row 2 speed (55)" value={String(t.rowSpeeds[1])} onChange={(v) => patch("testimonials", { rowSpeeds: [t.rowSpeeds[0], Number(v) || 55, t.rowSpeeds[2]] })} />
+        <TextField label="Row 3 speed (50)" value={String(t.rowSpeeds[2])} onChange={(v) => patch("testimonials", { rowSpeeds: [t.rowSpeeds[0], t.rowSpeeds[1], Number(v) || 50] })} />
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2">
+        <TextField label="CTA button text" value={t.buttonText} onChange={(v) => patch("testimonials", { buttonText: v })} />
+        <TextField label="CTA button link" value={t.buttonHref} onChange={(v) => patch("testimonials", { buttonHref: v })} />
+      </div>
       <ListEditor
         items={t.items}
         onChange={(items) => patch("testimonials", { items })}
