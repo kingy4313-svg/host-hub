@@ -56,6 +56,9 @@ export const saveDraft = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const ctx = context as any;
     await assertAdmin(ctx);
+    console.log("server.saveDraft: received content for saveDraft (truncated):", {
+      keys: Object.keys((data.content ?? {}) as Record<string, unknown>),
+    });
     const { error } = await ctx.supabase
       .from("site_content")
       .upsert({ id: "draft", data: data.content, updated_at: new Date().toISOString(), updated_by: ctx.userId });
@@ -76,6 +79,9 @@ export const publishContent = createServerFn({ method: "POST" })
     const ctx = context as any;
     await assertAdmin(ctx);
     const now = new Date().toISOString();
+    console.log("server.publishContent: publishing content (truncated):", {
+      keys: Object.keys((data.content ?? {}) as Record<string, unknown>),
+    });
     const { error } = await ctx.supabase
       .from("site_content")
       .upsert({ id: "published", data: data.content, updated_at: now, updated_by: ctx.userId });

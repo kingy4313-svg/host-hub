@@ -21,6 +21,13 @@ export type MomentItem = {
   overlayIcon: string;
   overlayLink: string;
 };
+export type PastEventItem = {
+  id: string;
+  mediaUrl: string;
+  mediaType: MediaType;
+  label: string;
+  caption: string;
+};
 export type ServiceItem = { id: string; icon: string; iconImageUrl?: string; label: string; href: string };
 export type WorkItem = {
   id: string;
@@ -61,6 +68,15 @@ export type SiteContent = {
   hero: {
     mediaUrl: string;
     mediaType: MediaType;
+    mediaPositionX: number;
+    mediaPositionY: number;
+    mediaZoom: number;
+    mediaPositionXDesktop: number;
+    mediaPositionYDesktop: number;
+    mediaZoomDesktop: number;
+    mediaPositionXMobile: number;
+    mediaPositionYMobile: number;
+    mediaZoomMobile: number;
     line1: string;
     line2: string;
     subheading: string;
@@ -84,6 +100,7 @@ export type SiteContent = {
     mediaType: MediaType;
     buttonText: string;
     buttonHref: string;
+    items: PastEventItem[];
   };
   works: { heading: string; tabs: WorkTab[] };
   testimonials: {
@@ -193,8 +210,18 @@ export const DEFAULT_CONTENT: SiteContent = {
   hero: {
     mediaUrl: heroImg,
     mediaType: "image",
-    line1: "Anchor",
-    line2: "Sayanti",
+    mediaPositionX: 50,
+    mediaPositionY: 50,
+    mediaZoom: 1.05,
+    // explicit desktop/mobile overrides (kept in sync with the above by default)
+    mediaPositionXDesktop: 50,
+    mediaPositionYDesktop: 50,
+    mediaZoomDesktop: 1.05,
+    mediaPositionXMobile: 50,
+    mediaPositionYMobile: 50,
+    mediaZoomMobile: 1.05,
+    line1: "",
+    line2: "",
     subheading: "",
     buttons: [],
   },
@@ -205,11 +232,11 @@ export const DEFAULT_CONTENT: SiteContent = {
       { id: "t2", text: "I bring stories to life on stage — with poise, spontaneity, and presence that holds the attention." },
     ],
     stats: [
-      { id: "st1", icon: "Clock", value: "9+", label: "YRS" },
+      { id: "st1", icon: "Clock", value: "1+", label: "YRS" },
       { id: "st2", icon: "Globe", value: "", label: "INDIA & ABROAD" },
-      { id: "st3", icon: "Mic", value: "900+", label: "EVENTS" },
-      { id: "st4", icon: "Instagram", value: "36K+", label: "FAMILY" },
-      { id: "st5", icon: "Users", value: "1000+", label: "HAPPY CLIENTS" },
+      { id: "st3", icon: "Mic", value: "3+", label: "EVENTS" },
+      { id: "st4", icon: "Instagram", value: "1+", label: "FAMILY" },
+      { id: "st5", icon: "Users", value: "11+", label: "HAPPY CLIENTS" },
       { id: "st6", icon: "Globe2", value: "", label: "GOOGLE PAGE" },
     ],
   },
@@ -228,11 +255,35 @@ export const DEFAULT_CONTENT: SiteContent = {
     showArrows: true,
     autoplayMs: 0,
     items: [
-      { id: "f1", mediaUrl: eventCorporate, mediaType: "image", label: "Corporate Conference", caption: "Why Women Should Always Support Women Entrepreneurs", overlayIcon: "Instagram", overlayLink: "https://instagram.com" },
-      { id: "f2", mediaUrl: eventCelebrity, mediaType: "image", label: "CELEBRITY EVENTS", caption: "Film premiere red carpet hosting", overlayIcon: "Instagram", overlayLink: "https://instagram.com" },
-      { id: "f3", mediaUrl: eventAwards, mediaType: "image", label: "TTK Healthcare", caption: "Doctor's Day Celebration 2025", overlayIcon: "Instagram", overlayLink: "https://instagram.com" },
-      { id: "f4", mediaUrl: eventWedding, mediaType: "image", label: "Destination Weddings", caption: "Sangeet night in Goa", overlayIcon: "Instagram", overlayLink: "https://instagram.com" },
-      { id: "f5", mediaUrl: eventCelebrity, mediaType: "image", label: "CELEBRITY EVENTS", caption: "In conversation with Ram Gopal Sir", overlayIcon: "Instagram", overlayLink: "https://instagram.com" },
+      {
+        id: "f1", mediaUrl: eventCorporate, label: "Corporate Conference", caption: "Why Women Should Always Support Women Entrepreneurs", overlayIcon: "Instagram", overlayLink: "https://instagram.com",
+        mediaType: "image"
+      },
+      {
+        id: "f2", mediaUrl: eventCelebrity, label: "CELEBRITY EVENTS", caption: "Film premiere red carpet hosting", overlayIcon: "Instagram", overlayLink: "https://instagram.com",
+        mediaType: "image"
+      },
+      {
+        id: "f3", mediaUrl: eventAwards, label: "TTK Healthcare", caption: "Doctor's Day Celebration 2025", overlayIcon: "Instagram", overlayLink: "https://instagram.com",
+        mediaType: "image"
+      },
+      {
+        id: "f4", mediaUrl: eventWedding, label: "Destination Weddings", caption: "Sangeet night in Goa", overlayIcon: "Instagram", overlayLink: "https://instagram.com",
+        mediaType: "image"
+      },
+      {
+        id: "f5", mediaUrl: eventCelebrity, label: "CELEBRITY EVENTS", caption: "In conversation with Ram Gopal Sir", overlayIcon: "Instagram", overlayLink: "https://instagram.com",
+        mediaType: "image"
+      },
+      {
+        id: "f6",
+        mediaUrl: "https://www.youtube.com/watch?v=BdvIeVgWNRk",
+        label: "Baby Shower Mumbai",
+        caption: "Baby Shower Mumbai emcee highlights",
+        overlayIcon: "",
+        overlayLink: "",
+        mediaType: "video"
+      },
     ],
   },
   services: {
@@ -259,6 +310,7 @@ export const DEFAULT_CONTENT: SiteContent = {
     mediaType: "image",
     buttonText: "Explore More",
     buttonHref: "#works",
+    items: [],
   },
   works: {
     heading: "My Works",

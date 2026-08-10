@@ -1,12 +1,12 @@
 import type { ReactElement } from "react";
 import type { SiteContent } from "@/content/site-content";
-
-const newId = (p: string) => `${p}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
-import { TextField, AreaField, SwitchField, MediaField, IconPicker, ListEditor, VideoField, Field } from "./fields";
+import { TextField, AreaField, SwitchField, MediaField, IconPicker, ListEditor, VideoField, Field, RangeField } from "./fields";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, Trash2 } from "lucide-react";
+
+const newId = (p: string) => `${p}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
 
 export type EditorProps = {
   content: SiteContent;
@@ -28,7 +28,7 @@ function SettingsEditor({ content, patch }: EditorProps) {
             <div className="flex gap-2">
               <input
                 type="color"
-                className="h-9 w-12 rounded border bg-background"
+                className="h-9 w-12 rounded border border-blue-200 bg-white"
                 value={s.colors[k]}
                 onChange={(e) => patch("settings", { colors: { ...s.colors, [k]: e.target.value } })}
               />
@@ -111,12 +111,36 @@ function NavbarEditor({ content, patch }: EditorProps) {
 
 function HeroEditor({ content, patch }: EditorProps) {
   const h = content.hero;
+  const mediaX = h.mediaPositionX ?? 50;
+  const mediaY = h.mediaPositionY ?? 50;
+  const objectPosition = `${mediaX}% ${mediaY}%`;
+  const mediaStyle = {
+    objectPosition,
+    transform: `scale(${h.mediaZoom ?? 1})`,
+    transformOrigin: `${mediaX}% ${mediaY}%`,
+  } as const;
+
+  const mediaXDesktop = (h as any).mediaPositionXDesktop ?? mediaX;
+  const mediaYDesktop = (h as any).mediaPositionYDesktop ?? mediaY;
+  const mediaStyleDesktop = {
+    objectPosition: `${mediaXDesktop}% ${mediaYDesktop}%`,
+    transform: `scale(${(h as any).mediaZoomDesktop ?? h.mediaZoom ?? 1})`,
+    transformOrigin: `${mediaXDesktop}% ${mediaYDesktop}%`,
+  } as const;
+
+  const mediaXMobile = (h as any).mediaPositionXMobile ?? mediaX;
+  const mediaYMobile = (h as any).mediaPositionYMobile ?? mediaY;
+  const mediaStyleMobile = {
+    objectPosition: `${mediaXMobile}% ${mediaYMobile}%`,
+    transform: `scale(${(h as any).mediaZoomMobile ?? h.mediaZoom ?? 1})`,
+    transformOrigin: `${mediaXMobile}% ${mediaYMobile}%`,
+  } as const;
   return (
     <div className="space-y-4">
       <MediaField label="Hero background (image or video)" value={h.mediaUrl} onChange={(v) => patch("hero", { mediaUrl: v })} />
       <Field label="Media type">
         <select
-          className="h-9 w-full rounded-md border bg-background px-2 text-sm"
+          className="h-9 w-full rounded-xl border border-blue-200 bg-white px-2 text-sm text-slate-700 shadow-sm"
           value={h.mediaType}
           onChange={(e) => patch("hero", { mediaType: e.target.value as "image" | "video" })}
         >
@@ -129,6 +153,120 @@ function HeroEditor({ content, patch }: EditorProps) {
         <TextField label="Heading line 2" value={h.line2} onChange={(v) => patch("hero", { line2: v })} />
       </div>
       <TextField label="Subheading" value={h.subheading} onChange={(v) => patch("hero", { subheading: v })} />
+      {/* Desktop/mobile controls below — top generic sliders removed (redundant). */}
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div className="rounded-xl border border-blue-200 bg-white p-3">
+          <p className="mb-2 text-sm font-medium">Desktop controls</p>
+          <RangeField
+            label="Image position X (desktop)"
+            value={(h as any).mediaPositionXDesktop ?? h.mediaPositionX}
+            min={0}
+            max={100}
+            step={1}
+            displayValue={`${((h as any).mediaPositionXDesktop ?? h.mediaPositionX)}%`}
+            onChange={(v) => patch("hero", { mediaPositionXDesktop: v })}
+          />
+          <RangeField
+            label="Image position Y (desktop)"
+            value={(h as any).mediaPositionYDesktop ?? h.mediaPositionY}
+            min={0}
+            max={100}
+            step={1}
+            displayValue={`${((h as any).mediaPositionYDesktop ?? h.mediaPositionY)}%`}
+            onChange={(v) => patch("hero", { mediaPositionYDesktop: v })}
+          />
+          <RangeField
+            label="Image zoom (desktop)"
+            value={(h as any).mediaZoomDesktop ?? h.mediaZoom}
+            min={1}
+            max={2}
+            step={0.01}
+            displayValue={`${(((h as any).mediaZoomDesktop ?? h.mediaZoom) as number).toFixed(2)}x`}
+            onChange={(v) => patch("hero", { mediaZoomDesktop: v })}
+          />
+        </div>
+        <div className="rounded-xl border border-blue-200 bg-white p-3">
+          <p className="mb-2 text-sm font-medium">Mobile controls</p>
+          <RangeField
+            label="Image position X (mobile)"
+            value={(h as any).mediaPositionXMobile ?? h.mediaPositionX}
+            min={0}
+            max={100}
+            step={1}
+            displayValue={`${((h as any).mediaPositionXMobile ?? h.mediaPositionX)}%`}
+            onChange={(v) => patch("hero", { mediaPositionXMobile: v })}
+          />
+          <RangeField
+            label="Image position Y (mobile)"
+            value={(h as any).mediaPositionYMobile ?? h.mediaPositionY}
+            min={0}
+            max={100}
+            step={1}
+            displayValue={`${((h as any).mediaPositionYMobile ?? h.mediaPositionY)}%`}
+            onChange={(v) => patch("hero", { mediaPositionYMobile: v })}
+          />
+          <RangeField
+            label="Image zoom (mobile)"
+            value={(h as any).mediaZoomMobile ?? h.mediaZoom}
+            min={1}
+            max={2}
+            step={0.01}
+            displayValue={`${(((h as any).mediaZoomMobile ?? h.mediaZoom) as number).toFixed(2)}x`}
+            onChange={(v) => patch("hero", { mediaZoomMobile: v })}
+          />
+        </div>
+      </div>
+      <div className="rounded-3xl border border-blue-200 bg-white p-4 shadow-sm">
+        <p className="mb-3 text-sm font-semibold text-blue-700">Hero media preview</p>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <p className="mb-2 text-xs font-medium text-muted-foreground">Desktop preview</p>
+            <div className="relative overflow-hidden rounded-2xl bg-slate-50 pb-[56.25%]">
+              {h.mediaType === "video" ? (
+                <video
+                  src={h.mediaUrl}
+                  className="absolute inset-0 h-full w-full object-cover"
+                  style={mediaStyleDesktop}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                />
+              ) : (
+                <img
+                  src={h.mediaUrl}
+                  alt={`${h.line1} ${h.line2}`}
+                  className="absolute inset-0 h-full w-full object-cover"
+                  style={mediaStyleDesktop}
+                />
+              )}
+            </div>
+          </div>
+          <div>
+            <p className="mb-2 text-xs font-medium text-muted-foreground">Mobile preview</p>
+            <div className="relative overflow-hidden rounded-2xl bg-slate-50 mx-auto w-[260px] pb-[177%]">
+              {h.mediaType === "video" ? (
+                <video
+                  src={h.mediaUrl}
+                  className="absolute inset-0 h-full w-full object-cover"
+                  style={mediaStyleMobile}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                />
+              ) : (
+                <img
+                  src={h.mediaUrl}
+                  alt={`${h.line1} ${h.line2}`}
+                  className="absolute inset-0 h-full w-full object-cover"
+                  style={mediaStyleMobile}
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -158,8 +296,13 @@ function IntroEditor({ content, patch }: EditorProps) {
           render={(item, update) => (
             <div className="grid gap-3 sm:grid-cols-3">
               <IconPicker label="Icon" value={item.icon} onChange={(v) => update({ icon: v })} />
-              <TextField label="Value" value={item.value} onChange={(v) => update({ value: v })} />
-              <TextField label="Label" value={item.label} onChange={(v) => update({ label: v })} />
+              <TextField
+                label="Value"
+                value={item.value}
+                onChange={(v) => update({ value: v })}
+                placeholder="e.g. 500+, 10K+, 99%, 4.9/5"
+              />
+              <TextField label="Label" value={item.label} onChange={(v) => update({ label: v })} placeholder="YRS" />
             </div>
           )}
         />
@@ -204,15 +347,12 @@ function FeaturedEditor({ content, patch }: EditorProps) {
       <ListEditor
         items={f.items}
         onChange={(items) => patch("featured", { items })}
-        create={() => ({ id: newId("f"), mediaUrl: "", mediaType: "image" as const, label: "", caption: "", overlayIcon: "Instagram", overlayLink: "" })}
+        create={() => ({ id: newId("f"), mediaUrl: "", mediaType: "image" as const, label: "", caption: "", overlayIcon: "", overlayLink: "" })}
         addLabel="Add moment"
         render={(item, update) => (
           <div className="space-y-3">
             <MediaField label="Image or video" value={item.mediaUrl} onChange={(v) => update({ mediaUrl: v })} />
-            <div className="grid gap-3 sm:grid-cols-2">
-              <TextField label="Category label" value={item.label} onChange={(v) => update({ label: v })} />
-              <TextField label="Link" value={item.overlayLink} onChange={(v) => update({ overlayLink: v })} />
-            </div>
+            <TextField label="Category label" value={item.label} onChange={(v) => update({ label: v })} />
             <AreaField label="Caption" value={item.caption} onChange={(v) => update({ caption: v })} rows={2} />
           </div>
         )}
@@ -259,7 +399,36 @@ function PastEventsEditor({ content, patch }: EditorProps) {
         <TextField label="Heading (gold)" value={p.headingGold} onChange={(v) => patch("pastEvents", { headingGold: v })} />
       </div>
       <AreaField label="Description" value={p.description} onChange={(v) => patch("pastEvents", { description: v })} />
-      <MediaField label="Featured image or video" value={p.mediaUrl} onChange={(v) => patch("pastEvents", { mediaUrl: v })} />
+      <div className="rounded-3xl border border-blue-200 bg-white p-4 shadow-sm">
+        <p className="mb-3 text-sm font-semibold text-blue-700">Past event items</p>
+        <ListEditor
+          items={p.items}
+          onChange={(items) => patch("pastEvents", { items })}
+          create={() => ({ id: newId("pe"), mediaUrl: "", mediaType: "image" as const, label: "", caption: "" })}
+          addLabel="Add past event"
+          render={(item, update) => (
+            <div className="space-y-3">
+              <MediaField label="Image or video" value={item.mediaUrl} onChange={(v) => update({ mediaUrl: v })} />
+              <div className="grid gap-3 sm:grid-cols-2">
+                <TextField label="Title" value={item.label} onChange={(v) => update({ label: v })} />
+                <Field label="Media type">
+                  <div className="rounded-xl border border-blue-200 bg-white p-1 shadow-sm">
+                    <select
+                      className="h-9 w-full rounded-lg border-0 bg-white px-3 text-sm text-slate-700 outline-none"
+                      value={item.mediaType}
+                      onChange={(e) => update({ mediaType: e.target.value as "image" | "video" })}
+                    >
+                      <option value="image">Image</option>
+                      <option value="video">Video</option>
+                    </select>
+                  </div>
+                </Field>
+              </div>
+              <AreaField label="Caption" value={item.caption} onChange={(v) => update({ caption: v })} rows={2} />
+            </div>
+          )}
+        />
+      </div>
       <div className="grid gap-3 sm:grid-cols-2">
         <TextField label="Button text" value={p.buttonText} onChange={(v) => patch("pastEvents", { buttonText: v })} />
         <TextField label="Button link" value={p.buttonHref} onChange={(v) => patch("pastEvents", { buttonHref: v })} />
@@ -297,8 +466,15 @@ function WorksEditor({ content, patch }: EditorProps) {
                     onChange={(v) => setTabs(tabs.map((t) => (t.id === tab.id ? { ...t, name: v } : t)))}
                   />
                 </div>
-                <Button type="button" variant="ghost" size="icon" aria-label="Delete tab" onClick={() => setTabs(tabs.filter((t) => t.id !== tab.id))}>
-                  <Trash2 className="h-4 w-4 text-destructive" />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  className="rounded-xl border border-red-200 bg-white text-red-500 shadow-sm"
+                  aria-label="Delete tab"
+                  onClick={() => setTabs(tabs.filter((t) => t.id !== tab.id))}
+                >
+                  <Trash2 className="h-4 w-4" />
                 </Button>
               </div>
 
@@ -332,6 +508,7 @@ function WorksEditor({ content, patch }: EditorProps) {
         type="button"
         variant="outline"
         size="sm"
+        className="rounded-xl border border-blue-200 bg-white px-5 py-2.5 text-blue-600 shadow-sm"
         onClick={() => setTabs([...tabs, { id: newId("tb"), name: "New tab", items: [] }])}
       >
         <Plus className="mr-1 h-4 w-4" /> Add tab

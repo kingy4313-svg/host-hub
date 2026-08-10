@@ -69,33 +69,8 @@ export function RevealItem({ children, className }: { children: React.ReactNode;
   );
 }
 
-/** Counts numbers up from 0 when scrolled into view (once). Keeps prefixes/suffixes static. */
-export function CountUp({ value, duration = 1800 }: { value: string; duration?: number }) {
+/** Render value exactly as provided by admin (no automatic counting). */
+export function CountUp({ value }: { value: string }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.4 });
-  const match = value.match(/^(\D*)(\d[\d,.]*)(.*)$/);
-  const target = match ? Number(match[2]!.replace(/[,.]/g, "")) : 0;
-  const [n, setN] = useState(0);
-
-  useEffect(() => {
-    if (!inView || !match) return;
-    let raf = 0;
-    const start = performance.now();
-    const tick = (t: number) => {
-      const p = Math.min(1, (t - start) / duration);
-      setN(Math.round(target * (1 - Math.pow(1 - p, 3))));
-      if (p < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [inView, target, duration, match]);
-
-  if (!match) return <span ref={ref}>{value}</span>;
-  return (
-    <span ref={ref}>
-      {match[1]}
-      {n}
-      {match[3]}
-    </span>
-  );
+  return <span ref={ref}>{value}</span>;
 }

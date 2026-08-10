@@ -29,9 +29,9 @@ function mimeFor(url: string) {
   return "video/mp4";
 }
 
-function Shell({ children }: { children: React.ReactNode }) {
+function Shell({ children, aspectClass }: { children: React.ReactNode; aspectClass: string }) {
   return (
-    <div className="relative aspect-video w-full overflow-hidden rounded-xl border border-border bg-black">
+    <div className={`relative ${aspectClass} w-full overflow-hidden rounded-xl border border-border bg-black`}>
       {children}
     </div>
   );
@@ -108,16 +108,19 @@ export function VideoPlayer({
   title,
   autoPlay,
   className,
+  ratio,
 }: {
   url: string;
   poster?: string;
   title?: string;
   autoPlay?: boolean;
   className?: string;
+  ratio?: string;
 }) {
   const [attempt, setAttempt] = useState(0);
   const [state, setState] = useState<"loading" | "ready" | "error">("loading");
   const { kind, id } = detectVideo(url);
+  const aspectClass = ratio ?? "aspect-video";
 
   useEffect(() => {
     setState("loading");
@@ -146,7 +149,7 @@ export function VideoPlayer({
         : `https://player.vimeo.com/video/${id}${autoPlay ? "?autoplay=1" : ""}`;
     return (
       <div className={className}>
-        <Shell>
+        <Shell aspectClass={aspectClass}>
           {state === "loading" ? <Loading /> : null}
           <iframe
             key={attempt}
@@ -175,7 +178,7 @@ export function VideoPlayer({
 
   return (
     <div className={className}>
-      <Shell>
+      <Shell aspectClass={aspectClass}>
         {state === "loading" ? <Loading /> : null}
         {state === "error" ? (
           <ErrorState message="This video failed to load. The file may be missing or blocked." onRetry={() => setAttempt((a) => a + 1)} />

@@ -4,21 +4,32 @@ import { supabase } from "@/integrations/supabase/client";
 export async function uploadMedia(file: File): Promise<string> {
   const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
   const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${safeName}`;
+  try {
+    const res = await supabase.storage
+      .from("media")
+      .upload(path, file, { contentType: file.type || "application/octet-stream", upsert: false });
+    if (res.error) {
+      console.error("Supabase storage upload error:", res.error);
+      throw new Error(res.error.message || "Upload failed");
+    }
 
-  const { error } = await supabase.storage
-    .from("media")
-    .upload(path, file, { contentType: file.type || "application/octet-stream", upsert: false });
-  if (error) throw new Error(error.message);
-
-  const url = `/api/public/media/${path}`;
-  await supabase.from("media_assets").insert({
-    url,
-    path,
-    name: file.name,
-    mime_type: file.type || null,
-    size: file.size,
-  });
-  return url;
+    const url = `/api/public/media/${path}`;
+    const insertRes = await supabase.from("media_assets").insert({
+      url,
+      path,
+      name: file.name,
+      mime_type: file.type || null,
+      size: file.size,
+    });
+    if (insertRes.error) {
+      console.warn("Warning: media_assets insert failed:", insertRes.error);
+    }
+    console.log("uploadMedia: uploaded file, path=", path, "publicUrl=", url);
+    return url;
+  } catch (err) {
+    console.error("uploadMedia error:", err);
+    throw err;
+  }
 }
 
 /** Best-effort thumbnail for a pasted video link. */

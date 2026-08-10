@@ -55,13 +55,19 @@ function AdminPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [draftOnly, setDraftOnly] = useState(false);
+  const [publishedUpdatedAt, setPublishedUpdatedAt] = useState<string | null>(null);
+  const [draftUpdatedAt, setDraftUpdatedAt] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
     getAdminContent()
       .then((res) => {
-        if (!cancelled) setContent(res.draft);
+        if (!cancelled) {
+          setContent(res.draft);
+          setDraftUpdatedAt(res.draftUpdatedAt);
+          setPublishedUpdatedAt(res.publishedUpdatedAt);
+        }
       })
       .catch(() => toast.error("Could not load content"))
       .finally(() => !cancelled && setLoading(false));
@@ -78,7 +84,9 @@ function AdminPage() {
   async function save() {
     setSaving(true);
     try {
-      await saveDraft({ data: { content, section: section.label } });
+      console.log("admin.save: saving content (preview to console)", content);
+      const res = await saveDraft({ data: { content, section: section.label } });
+      console.log("admin.save: saveDraft response", res);
       if (!draftOnly) await publishContent({ data: { content } });
       toast.success(draftOnly ? "Draft saved" : "Saved — live on the site");
     } catch (err) {
@@ -102,7 +110,11 @@ function AdminPage() {
       <header className="sticky top-0 z-30 flex items-center gap-3 border-b bg-white px-4 py-3">
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
           <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="md:hidden" aria-label="Open menu">
+            <Button
+              variant="outline"
+              className="md:hidden rounded-xl border border-blue-300 bg-white px-5 py-2.5 text-blue-600 shadow-sm"
+              aria-label="Open menu"
+            >
               <Lucide.Menu className="h-4 w-4" />
             </Button>
           </SheetTrigger>
@@ -115,14 +127,29 @@ function AdminPage() {
         <h1 className="text-base font-semibold">Content Dashboard</h1>
 
         <div className="ml-auto flex items-center gap-2">
-          <label className="hidden items-center gap-2 text-xs text-neutral-600 sm:flex">
-            <input type="checkbox" checked={draftOnly} onChange={(e) => setDraftOnly(e.target.checked)} />
-            Save as draft only
-          </label>
-          <Button asChild variant="outline" size="sm">
+          <div className="hidden flex-col gap-1 text-xs text-neutral-600 sm:flex">
+            <label className="inline-flex items-center gap-2">
+              <input type="checkbox" checked={draftOnly} onChange={(e) => setDraftOnly(e.target.checked)} />
+              Save as draft only
+            </label>
+            <p className="text-[11px] text-neutral-500">
+              When checked, changes are saved in draft only and will not update the live site until you save with this box unchecked.
+            </p>
+          </div>
+          <Button
+            asChild
+            variant="outline"
+            size="sm"
+            className="rounded-xl border border-blue-300 bg-white px-5 py-2.5 text-blue-600 shadow-sm"
+          >
             <Link to="/admin/preview">Preview</Link>
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => void logout()}>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="rounded-xl border border-blue-300 bg-white px-5 py-2.5 text-blue-600 shadow-sm"
+            onClick={() => void logout()}
+          >
             <Lucide.LogOut className="mr-1 h-4 w-4" /> Logout
           </Button>
         </div>

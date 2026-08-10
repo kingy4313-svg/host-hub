@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import {
   Navbar, Hero, Intro, WhyBook, FeaturedMoments, Services, PastEvents, MyWorks,
   Testimonials, ContactCta, Footer, FloatingCall,
@@ -24,6 +24,7 @@ export const Route = createFileRoute("/_authenticated/admin_/preview")({
 });
 
 function PreviewPage() {
+  const navigate = useNavigate();
   const [content, setContent] = useState<SiteContent | null>(null);
 
   useEffect(() => {
@@ -38,9 +39,15 @@ function PreviewPage() {
     <ContentProvider value={content}>
       <ThemeStyle content={content} />
       <div className="min-h-screen bg-background">
-        <div className="sticky top-0 z-50 flex items-center justify-between bg-[color:var(--gold)] px-4 py-2 text-xs font-medium text-black">
+        <div className="sticky top-0 z-[100] flex items-center justify-between bg-[color:var(--gold)] px-4 py-2 text-xs font-medium text-black shadow-sm">
           <span>Draft preview — not published yet</span>
-          <Link to="/admin" className="underline">Back to dashboard</Link>
+          <button
+            type="button"
+            className="rounded-md border border-black/20 bg-white/80 px-3 py-1.5 font-semibold underline underline-offset-2"
+            onClick={() => void navigate({ to: "/admin", replace: true })}
+          >
+            Back to dashboard
+          </button>
         </div>
         <Navbar />
         <main>
