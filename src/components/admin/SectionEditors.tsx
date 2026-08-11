@@ -135,9 +135,31 @@ function HeroEditor({ content, patch }: EditorProps) {
     transform: `scale(${(h as any).mediaZoomMobile ?? h.mediaZoom ?? 1})`,
     transformOrigin: `${mediaXMobile}% ${mediaYMobile}%`,
   } as const;
+
+  // Preview styles without zoom transform (show clear unzoomed image)
+  const previewStyleDesktop = {
+    objectPosition: `${mediaXDesktop}% ${mediaYDesktop}%`,
+    transform: `scale(${(h as any).mediaZoomDesktop ?? h.mediaZoom ?? 1})`,
+    transformOrigin: `${mediaXDesktop}% ${mediaYDesktop}%`,
+  } as React.CSSProperties;
+
+  const previewStyleMobile = {
+    objectPosition: `${mediaXMobile}% ${mediaYMobile}%`,
+    transform: `scale(${(h as any).mediaZoomMobile ?? h.mediaZoom ?? 1})`,
+    transformOrigin: `${mediaXMobile}% ${mediaYMobile}%`,
+  } as React.CSSProperties;
   return (
     <div className="space-y-4">
-      <MediaField label="Hero background (image or video)" value={h.mediaUrl} onChange={(v) => patch("hero", { mediaUrl: v })} />
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div>
+          <MediaField label="Hero background desktop" value={(h as any).mediaUrlDesktop || h.mediaUrl} onChange={(v) => patch("hero", { mediaUrlDesktop: v })} />
+          <p className="mt-1 text-xs text-muted-foreground">Recommended: 1920 × 1080 px (16:9)</p>
+        </div>
+        <div>
+          <MediaField label="Hero background mobile" value={(h as any).mediaUrlMobile || h.mediaUrl} onChange={(v) => patch("hero", { mediaUrlMobile: v })} />
+          <p className="mt-1 text-xs text-muted-foreground">Recommended: 1080 × 1920 px (9:16)</p>
+        </div>
+      </div>
       <Field label="Media type">
         <select
           className="h-9 w-full rounded-xl border border-blue-200 bg-white px-2 text-sm text-slate-700 shadow-sm"
@@ -220,13 +242,13 @@ function HeroEditor({ content, patch }: EditorProps) {
         <p className="mb-3 text-sm font-semibold text-blue-700">Hero media preview</p>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <p className="mb-2 text-xs font-medium text-muted-foreground">Desktop preview</p>
+            <p className="mb-2 text-xs font-medium text-muted-foreground">Desktop preview (16:9)</p>
             <div className="relative overflow-hidden rounded-2xl bg-slate-50 pb-[56.25%]">
               {h.mediaType === "video" ? (
                 <video
-                  src={h.mediaUrl}
-                  className="absolute inset-0 h-full w-full object-cover"
-                  style={mediaStyleDesktop}
+                  src={(h as any).mediaUrlDesktop || h.mediaUrl}
+                  className="absolute inset-0 h-full w-full object-contain"
+                  style={previewStyleDesktop}
                   autoPlay
                   muted
                   loop
@@ -234,35 +256,37 @@ function HeroEditor({ content, patch }: EditorProps) {
                 />
               ) : (
                 <img
-                  src={h.mediaUrl}
+                  src={(h as any).mediaUrlDesktop || h.mediaUrl}
                   alt={`${h.line1} ${h.line2}`}
-                  className="absolute inset-0 h-full w-full object-cover"
-                  style={mediaStyleDesktop}
+                  className="absolute inset-0 h-full w-full object-contain"
+                  style={previewStyleDesktop}
                 />
               )}
             </div>
           </div>
           <div>
-            <p className="mb-2 text-xs font-medium text-muted-foreground">Mobile preview</p>
-            <div className="relative overflow-hidden rounded-2xl bg-slate-50 mx-auto w-[260px] pb-[177%]">
-              {h.mediaType === "video" ? (
-                <video
-                  src={h.mediaUrl}
-                  className="absolute inset-0 h-full w-full object-cover"
-                  style={mediaStyleMobile}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                />
-              ) : (
-                <img
-                  src={h.mediaUrl}
-                  alt={`${h.line1} ${h.line2}`}
-                  className="absolute inset-0 h-full w-full object-cover"
-                  style={mediaStyleMobile}
-                />
-              )}
+            <p className="mb-2 text-xs font-medium text-muted-foreground">Mobile preview (9:16)</p>
+            <div className="mx-auto w-[260px]">
+              <div className="relative rounded-2xl bg-slate-50 pb-[177%] overflow-hidden">
+                {h.mediaType === "video" ? (
+                  <video
+                    src={(h as any).mediaUrlMobile || h.mediaUrl}
+                    className="absolute inset-0 h-full w-full object-cover"
+                    style={previewStyleMobile}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                  />
+                ) : (
+                  <img
+                    src={(h as any).mediaUrlMobile || h.mediaUrl}
+                    alt={`${h.line1} ${h.line2}`}
+                    className="absolute inset-0 h-full w-full object-cover"
+                    style={previewStyleMobile}
+                  />
+                )}
+              </div>
             </div>
           </div>
         </div>

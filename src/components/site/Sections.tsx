@@ -7,6 +7,7 @@ import { ScrollReveal, ScrollRevealGroup, RevealItem, CountUp } from "./ScrollRe
 import { AnimatedIconGrid } from "./AnimatedIconGrid";
 import { VideoPlayer, detectVideo } from "./VideoPlayer";
 import { Media } from "./Media";
+import { ResponsiveHeroImage } from "./ResponsiveHeroImage";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 
@@ -330,21 +331,34 @@ export function Hero() {
     transform: `scale(${zoomMobile})`,
     transformOrigin: `${mediaXMobile}% ${mediaYMobile}%`,
   } as React.CSSProperties;
-  const isMobile = useIsMobile();
-  const heroMediaStyle = isMobile ? mediaStyleMobile : mediaStyleDesktop;
+
+  // Use responsive image loading via picture element
+  // Desktop (16:9) and Mobile (9:16) images are selected by browser based on viewport width
+  const desktopImageUrl = (hero as any).mediaUrlDesktop || hero.mediaUrl;
+  const mobileImageUrl = (hero as any).mediaUrlMobile || hero.mediaUrl;
 
   return (
     <section id="top" className="relative w-full overflow-hidden bg-black text-white">
       <div className="absolute inset-0">
-        <Media
-          url={hero.mediaUrl}
-          type={hero.mediaType}
-          alt={`${hero.line1} ${hero.line2}`}
-          className="h-full w-full object-cover"
-          style={heroMediaStyle}
-          priority
-          fetchPriority="high"
-        />
+        {hero.mediaType === "video" ? (
+          <Media
+            url={desktopImageUrl}
+            type={hero.mediaType}
+            alt={`${hero.line1} ${hero.line2}`}
+            className="h-full w-full object-contain"
+            style={mediaStyleDesktop}
+            priority
+            fetchPriority="high"
+          />
+        ) : (
+          <ResponsiveHeroImage
+            desktopUrl={desktopImageUrl}
+            mobileUrl={mobileImageUrl}
+            alt={`${hero.line1} ${hero.line2}`}
+            className="h-full w-full object-contain"
+            style={mediaStyleDesktop}
+          />
+        )}
       </div>
       <div className="absolute inset-0 bg-black/40" />
 
@@ -359,22 +373,22 @@ export function Hero() {
             </span>
           ) : null}
 
-          <div className="relative z-10 flex w-full max-w-4xl flex-col items-center gap-6 px-4 sm:px-0">
-            <div className="flex flex-col items-center gap-3">
+          <div className="relative z-10 flex w-full max-w-4xl flex-col items-center gap-6 px-4 sm:px-6 md:px-4">
+            <div className="w-full flex flex-col items-center gap-3">
               {hero.line1 ? (
-                <h1 className="font-display text-5xl font-black uppercase leading-[0.95] text-white sm:text-6xl md:text-7xl lg:text-8xl">
+                <h1 className="w-full font-display font-black uppercase leading-tight text-white text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl break-words">
                   {hero.line1}
                 </h1>
               ) : null}
               {hero.line2 ? (
-                <h2 className="font-display text-4xl font-black uppercase leading-[0.95] text-white sm:text-5xl md:text-6xl lg:text-7xl">
+                <h2 className="w-full font-display font-black uppercase leading-tight text-white text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl break-words">
                   {hero.line2}
                 </h2>
               ) : null}
             </div>
 
             {hero.subheading ? (
-              <p className="max-w-3xl text-base leading-7 text-white/85 sm:text-lg md:text-xl">
+              <p className="w-full max-w-3xl text-base leading-relaxed text-white/85 sm:text-lg md:text-xl break-words">
                 {hero.subheading}
               </p>
             ) : null}

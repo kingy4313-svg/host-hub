@@ -67,6 +67,8 @@ export type SiteContent = {
   };
   hero: {
     mediaUrl: string;
+    mediaUrlDesktop: string;
+    mediaUrlMobile: string;
     mediaType: MediaType;
     mediaPositionX: number;
     mediaPositionY: number;
@@ -209,6 +211,8 @@ export const DEFAULT_CONTENT: SiteContent = {
   },
   hero: {
     mediaUrl: heroImg,
+    mediaUrlDesktop: "",
+    mediaUrlMobile: "",
     mediaType: "image",
     mediaPositionX: 50,
     mediaPositionY: 50,
