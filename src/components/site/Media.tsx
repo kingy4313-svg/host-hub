@@ -41,6 +41,7 @@ export function Media({
   controls = false,
   autoPlay = false,
   onError,
+  onLoad,
 }: MediaProps) {
   const effectiveLoading = priority ? "eager" : loading;
   const [failed, setFailed] = useState(false);
