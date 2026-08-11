@@ -205,3 +205,76 @@
     }
   }
 }
+
+/* ------------------------------------------- fluid typography (admin text) */
+
+@utility fluid-hero-ghost-1 {
+  font-size: clamp(2.75rem, 13vw, 10.5rem);
+  line-height: 1;
+}
+
+@utility fluid-hero-ghost-2 {
+  font-size: clamp(2.25rem, 11vw, 9rem);
+  line-height: 1;
+}
+
+@utility fluid-hero-1 {
+  font-size: clamp(1.85rem, 7.5vw, 6rem);
+  line-height: 1.08;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+@utility fluid-hero-2 {
+  font-size: clamp(1.5rem, 6vw, 5rem);
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+@utility fluid-h1 {
+  font-size: clamp(1.65rem, 1rem + 3.2vw, 3.75rem);
+  line-height: 1.15;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+
+@utility fluid-h2 {
+  font-size: clamp(1.5rem, 0.9rem + 2.6vw, 3rem);
+  line-height: 1.18;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+
+@utility fluid-h3 {
+  font-size: clamp(1.1rem, 0.85rem + 0.9vw, 1.6rem);
+  line-height: 1.25;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+
+@utility fluid-lead {
+  font-size: clamp(0.98rem, 0.85rem + 0.55vw, 1.3rem);
+  line-height: 1.65;
+  overflow-wrap: break-word;
+  text-wrap: pretty;
+}
+
+@utility fluid-body {
+  font-size: clamp(0.9rem, 0.82rem + 0.35vw, 1.05rem);
+  line-height: 1.7;
+  overflow-wrap: break-word;
+  text-wrap: pretty;
+}
+
+@utility fluid-small {
+  font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.95rem);
+  line-height: 1.6;
+  overflow-wrap: break-word;
+}
+
+@utility fluid-btn-label {
+  font-size: clamp(0.78rem, 0.72rem + 0.25vw, 0.95rem);
+  line-height: 1.3;
+  overflow-wrap: break-word;
+}
