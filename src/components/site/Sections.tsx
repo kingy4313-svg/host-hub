@@ -364,11 +364,11 @@ export function Hero() {
 
       <div className="relative mx-auto flex min-h-[85vh] max-w-[1300px] flex-col items-center justify-center px-4 py-6 sm:px-6 lg:min-h-[100vh]">
         <div className="relative flex w-full flex-col items-center justify-center gap-6 text-center">
-          <span className="pointer-events-none absolute inset-x-0 top-10 mx-auto block max-w-[calc(100%-2rem)] text-6xl font-display font-black uppercase tracking-[0.2em] text-white/15 sm:text-[7rem] md:text-[8.5rem] lg:text-[10.5rem]">
+          <span className="pointer-events-none absolute inset-x-0 top-10 mx-auto block max-w-[calc(100%-2rem)] fluid-hero-ghost-1 font-display font-black uppercase tracking-[0.2em] text-white/15">
             {hero.line1 || ""}
           </span>
           {hero.line2 ? (
-            <span className="pointer-events-none absolute inset-x-0 top-[28%] mx-auto block max-w-[calc(100%-2rem)] text-5xl font-display font-black uppercase tracking-[0.25em] text-white/20 sm:text-[6rem] md:text-[7.5rem] lg:text-[9rem]">
+            <span className="pointer-events-none absolute inset-x-0 top-[28%] mx-auto block max-w-[calc(100%-2rem)] fluid-hero-ghost-2 font-display font-black uppercase tracking-[0.25em] text-white/20">
               {hero.line2}
             </span>
           ) : null}
@@ -376,19 +376,19 @@ export function Hero() {
           <div className="relative z-10 flex w-full max-w-4xl flex-col items-center gap-6 px-4 sm:px-6 md:px-4">
             <div className="w-full flex flex-col items-center gap-3">
               {hero.line1 ? (
-                <h1 className="w-full font-display font-black uppercase leading-tight text-white text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl break-words">
+                <h1 className="w-full font-display font-black uppercase text-white fluid-hero-1">
                   {hero.line1}
                 </h1>
               ) : null}
               {hero.line2 ? (
-                <h2 className="w-full font-display font-black uppercase leading-tight text-white text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl break-words">
+                <h2 className="w-full font-display font-black uppercase text-white fluid-hero-2">
                   {hero.line2}
                 </h2>
               ) : null}
             </div>
 
             {hero.subheading ? (
-              <p className="w-full max-w-3xl text-base leading-relaxed text-white/85 sm:text-lg md:text-xl break-words">
+              <p className="w-full max-w-[60ch] fluid-lead text-white/85">
                 {hero.subheading}
               </p>
             ) : null}
@@ -399,7 +399,7 @@ export function Hero() {
               <a
                 key={button.id}
                 href={button.href}
-                className="rounded-full bg-black/70 px-6 py-3 text-sm font-semibold uppercase tracking-[0.15em] text-white transition hover:bg-black"
+                className="max-w-full rounded-full bg-black/70 px-6 py-3 fluid-btn-label font-semibold uppercase tracking-[0.15em] text-white transition hover:bg-black"
               >
                 {button.text}
               </a>
@@ -417,7 +417,7 @@ export function Intro() {
     <section id="about" className="px-6 py-20 text-center">
       <ScrollRevealGroup stagger={0.12}>
         <RevealItem>
-          <h1 className="font-display text-2xl font-bold md:text-6xl tracking-tight whitespace-nowrap overflow-hidden">
+          <h1 className="mx-auto max-w-[24ch] font-display fluid-h1 font-bold tracking-tight">
             {intro.heading.split("★").map((part, i, arr) => (
               <span key={i}>
                 {part}
@@ -428,7 +428,7 @@ export function Intro() {
         </RevealItem>
         {intro.taglines.map((t) => (
           <RevealItem key={t.id}>
-            <p className="mx-auto mt-4 max-w-3xl font-display text-lg text-muted-foreground">{t.text}</p>
+            <p className="mx-auto mt-4 max-w-[65ch] font-display fluid-lead text-muted-foreground">{t.text}</p>
           </RevealItem>
         ))}
       </ScrollRevealGroup>
@@ -460,7 +460,7 @@ export function WhyBook() {
   return (
     <section className="px-6 py-20">
       <ScrollReveal>
-        <h2 className="text-center font-display text-3xl font-bold sm:text-4xl md:text-5xl">{whyBook.heading}</h2>
+        <h2 className="mx-auto max-w-[22ch] text-center font-display fluid-h2 font-bold">{whyBook.heading}</h2>
         {whyBook.showDivider ? <span className="gold-divider mt-5" /> : null}
       </ScrollReveal>
       <ScrollRevealGroup className="mx-auto mt-12 grid max-w-6xl gap-8 md:grid-cols-3" stagger={0.13} amount={0.2}>
@@ -468,8 +468,8 @@ export function WhyBook() {
           <RevealItem key={r.id}>
             <article className="luxe-card h-full p-8 text-center transition-shadow hover:shadow-[0_0_40px_-10px_var(--gold-deep)]">
               <span className="mx-auto block h-[3px] w-14" style={{ background: "var(--gradient-gold)" }} />
-              <h3 className={`mt-7 font-display text-2xl ${r.goldTitle ? "text-gold" : "text-foreground"}`}>{r.title}</h3>
-              <p className="mt-4 font-display text-muted-foreground">{r.text}</p>
+              <h3 className={`mt-7 font-display fluid-h3 ${r.goldTitle ? "text-gold" : "text-foreground"}`}>{r.title}</h3>
+              <p className="mt-4 font-display fluid-body text-muted-foreground">{r.text}</p>
             </article>
           </RevealItem>
         ))}
@@ -485,7 +485,7 @@ export function FeaturedMoments() {
   return (
     <section className="py-20">
       <ScrollReveal>
-        <h2 className="text-center font-display text-4xl font-bold md:text-5xl">
+        <h2 className="mx-auto max-w-[22ch] text-center font-display fluid-h2 font-bold">
           {featured.headingWhite} <span className="text-gold-gradient">{featured.headingGold}</span>
         </h2>
         <span className="gold-divider mt-5" />
@@ -504,7 +504,7 @@ export function FeaturedMoments() {
         {featured.items.map((m) => (
           <figure key={m.id} className="flex min-w-[85vw] md:min-w-[300px] shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-border bg-muted md:rounded-[1.5rem]">
             <div className="px-4 py-3 text-center">
-              <span className="font-display text-sm font-bold uppercase tracking-[0.18em] text-white">
+              <span className="font-display fluid-small font-bold uppercase tracking-[0.18em] text-white [overflow-wrap:anywhere]">
                 {m.label}
               </span>
             </div>
@@ -512,7 +512,7 @@ export function FeaturedMoments() {
               <FeaturedMedia url={m.mediaUrl} type={m.mediaType} label={m.label} className="absolute inset-0 h-full w-full object-cover" />
             </div>
             <div className="px-4 py-3 text-center">
-              <p className="text-xs font-medium text-muted-foreground">{m.caption}</p>
+              <p className="fluid-small font-medium text-muted-foreground [overflow-wrap:anywhere]">{m.caption}</p>
             </div>
           </figure>
         ))}
@@ -526,7 +526,7 @@ export function Services() {
   return (
     <section id="services" className="px-6 py-20">
       <ScrollReveal>
-        <h2 className="text-center font-display text-4xl font-bold md:text-5xl">
+        <h2 className="mx-auto max-w-[22ch] text-center font-display fluid-h2 font-bold">
           {services.headingWhite} <span className="text-gold-gradient">{services.headingGold}</span>
         </h2>
         <span className="gold-divider mt-5" />
@@ -620,11 +620,11 @@ export function PastEvents() {
   return (
     <section id="past-events" className="px-6 py-20 text-center">
       <ScrollReveal>
-        <h2 className="font-display text-4xl font-bold md:text-5xl">
+        <h2 className="mx-auto max-w-[22ch] font-display fluid-h2 font-bold">
           {pastEvents.headingWhite} <span className="text-gold-gradient">{pastEvents.headingGold}</span>
         </h2>
         <span className="gold-divider mt-5" />
-        <p className="mx-auto mt-8 max-w-2xl font-display text-muted-foreground">{pastEvents.description}</p>
+        <p className="mx-auto mt-8 max-w-[60ch] font-display fluid-body text-muted-foreground">{pastEvents.description}</p>
       </ScrollReveal>
       <ScrollReveal delay={0.1}>
         <div className="relative mx-auto mt-12 w-full max-w-md">
@@ -691,7 +691,7 @@ export function MyWorks() {
   return (
     <section id="works" className="px-6 py-20">
       <ScrollReveal>
-        <h2 className="text-center font-display text-4xl font-bold md:text-5xl">{works.heading}</h2>
+        <h2 className="mx-auto max-w-[22ch] text-center font-display fluid-h2 font-bold">{works.heading}</h2>
         <span className="gold-divider mt-5" />
       </ScrollReveal>
       <div className="mt-10 flex flex-wrap justify-center gap-8">
@@ -718,8 +718,8 @@ export function MyWorks() {
                   {w.duration ? <span className="absolute bottom-2 right-2 rounded bg-background/85 px-2 py-0.5 text-xs">{w.duration}</span> : null}
                   <Play className="absolute inset-0 m-auto size-10 text-gold opacity-80" />
                 </div>
-                <h4 className="mt-3 font-display text-sm font-bold">{w.title}</h4>
-                <p className="text-xs text-gold">{w.category || active?.name}</p>
+                <h4 className="mt-3 font-display fluid-small font-bold [overflow-wrap:anywhere]">{w.title}</h4>
+                <p className="fluid-small text-gold [overflow-wrap:anywhere]">{w.category || active?.name}</p>
               </>
             );
             return (
@@ -779,7 +779,7 @@ export function Testimonials() {
   return (
     <section className="py-20">
       <ScrollReveal>
-        <h2 className="text-center font-display text-4xl font-bold md:text-5xl">
+        <h2 className="mx-auto max-w-[22ch] text-center font-display fluid-h2 font-bold">
           {testimonials.headingWhite} <span className="text-gold-gradient">{testimonials.headingGold}</span>
         </h2>
         {testimonials.subtext ? <p className="mt-4 text-center text-sm text-muted-foreground">{testimonials.subtext}</p> : null}
@@ -800,15 +800,15 @@ export function Testimonials() {
                   ...(idx % 2 === 1 ? { animationDirection: "reverse" as const } : {}),
                 }}>
                 {[...row, ...row, ...(localItems.length ? localItems : [])].map((t, i) => (
-                  <article key={`${t.id}-${i}`} className="luxe-card w-[300px] shrink-0 p-5">
+                  <article key={`${t.id}-${i}`} className="luxe-card flex w-[300px] max-w-[85vw] shrink-0 flex-col p-5">
                     <div className="flex items-center gap-3">
                       {t.photoUrl ? <img src={t.photoUrl} alt={t.name} className="size-10 rounded-full object-cover" /> : null}
-                      <div>
-                        <h4 className="font-display text-sm font-bold">{t.name}</h4>
-                        <p className="text-xs text-gold">{t.role}</p>
+                      <div className="min-w-0">
+                        <h4 className="font-display fluid-small font-bold [overflow-wrap:anywhere]">{t.name}</h4>
+                        <p className="fluid-small text-gold [overflow-wrap:anywhere]">{t.role}</p>
                       </div>
                     </div>
-                    <p className="mt-4 font-display text-sm text-muted-foreground">{t.text}</p>
+                    <p className="mt-4 font-display fluid-small text-muted-foreground">{t.text}</p>
                   </article>
                 ))}
               </div>
@@ -844,11 +844,11 @@ export function ContactCta() {
     <section id="contact" className="relative overflow-hidden px-6 py-24 text-center">
       <span className="absolute left-[8%] top-1/3 size-1.5 rounded-full bg-gold" />
       <span className="absolute right-[10%] top-1/2 size-1 rounded-full bg-gold/70" />
-      <h2 className="font-display text-4xl font-bold leading-tight md:text-6xl">
+      <h2 className="mx-auto max-w-[20ch] font-display fluid-h1 font-bold">
         {contact.headingWhite}<br /><span className="text-gold-gradient">{contact.headingGold}</span>
       </h2>
       <span className="gold-divider mt-6" />
-      <p className="mt-8 font-display text-lg text-muted-foreground">{contact.subtext}</p>
+      <p className="mx-auto mt-8 max-w-[60ch] font-display fluid-lead text-muted-foreground">{contact.subtext}</p>
       <div className="mt-10 flex flex-wrap justify-center gap-4">
         <a href={whatsapp} target="_blank" rel="noreferrer" className="btn-gold inline-flex items-center gap-2 rounded-md px-7 py-3 font-display">
           <MessageCircle className="size-4" /> {contact.whatsappText}
@@ -861,7 +861,7 @@ export function ContactCta() {
         </a>
       </div>
       <div className="luxe-card mx-auto mt-14 max-w-2xl p-6">
-        <p className="font-display text-muted-foreground">{contact.boxText}</p>
+        <p className="font-display fluid-body text-muted-foreground">{contact.boxText}</p>
         <p className="mt-3 text-sm">
           <a href={mailto(settings.email)} className="text-gold underline-offset-4 hover:underline">{settings.email}</a>
           <span className="mx-3 text-gold">•</span>
@@ -886,14 +886,14 @@ export function Footer() {
       </div>
       <div className="mx-auto grid max-w-6xl gap-10 border-t border-border pt-12 md:grid-cols-3">
         <div>
-          <h3 className="font-display text-2xl text-gold">{settings.siteName}</h3>
-          <p className="mt-4 font-display text-sm text-muted-foreground">{footer.bio}</p>
+          <h3 className="font-display fluid-h3 text-gold">{settings.siteName}</h3>
+          <p className="mt-4 font-display fluid-small text-muted-foreground">{footer.bio}</p>
           {footer.cities.length ? (
             <p className="mt-4 text-sm text-gold">Trusted in: {footer.cities.map((c) => c.text).join(" • ")}</p>
           ) : null}
         </div>
         <div>
-          <h4 className="font-display text-lg font-bold">Quick Links</h4>
+          <h4 className="font-display fluid-h3 font-bold">Quick Links</h4>
           <ul className="mt-4 space-y-2 font-display text-sm text-muted-foreground">
             {footer.quickLinks.map((l) => (
               <li key={l.id}><a href={l.href} className="hover:text-gold">{l.label}</a></li>
@@ -901,7 +901,7 @@ export function Footer() {
           </ul>
         </div>
         <div>
-          <h4 className="font-display text-lg font-bold">{footer.getInTouchHeading}</h4>
+          <h4 className="font-display fluid-h3 font-bold">{footer.getInTouchHeading}</h4>
           <ul className="mt-4 space-y-2 font-display text-sm text-muted-foreground">
             <li><a href={telHref(settings.phone)} className="hover:text-gold">{settings.phone}</a></li>
             <li><a href={mailto(settings.email)} className="hover:text-gold">{settings.email}</a></li>
