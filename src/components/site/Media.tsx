@@ -6,7 +6,7 @@ export type MediaProps = {
   url?: string;
   type: string;
   alt?: string;
-  className?: string;
+  className?: string | undefined;
   style?: CSSProperties;
   loading?: "lazy" | "eager";
   fetchPriority?: "high" | "low" | "auto";
@@ -55,7 +55,7 @@ export function Media({
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry?.isIntersecting) {
           setIsVisible(true);
           observer.disconnect();
         }
