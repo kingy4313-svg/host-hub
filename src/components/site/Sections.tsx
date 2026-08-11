@@ -504,7 +504,7 @@ export function FeaturedMoments() {
         {featured.items.map((m) => (
           <figure key={m.id} className="flex min-w-[85vw] md:min-w-[300px] shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-border bg-muted md:rounded-[1.5rem]">
             <div className="px-4 py-3 text-center">
-              <span className="font-display text-sm font-bold uppercase tracking-[0.18em] text-white">
+              <span className="font-display fluid-small font-bold uppercase tracking-[0.18em] text-white [overflow-wrap:anywhere]">
                 {m.label}
               </span>
             </div>
@@ -512,7 +512,7 @@ export function FeaturedMoments() {
               <FeaturedMedia url={m.mediaUrl} type={m.mediaType} label={m.label} className="absolute inset-0 h-full w-full object-cover" />
             </div>
             <div className="px-4 py-3 text-center">
-              <p className="text-xs font-medium text-muted-foreground">{m.caption}</p>
+              <p className="fluid-small font-medium text-muted-foreground [overflow-wrap:anywhere]">{m.caption}</p>
             </div>
           </figure>
         ))}
@@ -718,8 +718,8 @@ export function MyWorks() {
                   {w.duration ? <span className="absolute bottom-2 right-2 rounded bg-background/85 px-2 py-0.5 text-xs">{w.duration}</span> : null}
                   <Play className="absolute inset-0 m-auto size-10 text-gold opacity-80" />
                 </div>
-                <h4 className="mt-3 font-display text-sm font-bold">{w.title}</h4>
-                <p className="text-xs text-gold">{w.category || active?.name}</p>
+                <h4 className="mt-3 font-display fluid-small font-bold [overflow-wrap:anywhere]">{w.title}</h4>
+                <p className="fluid-small text-gold [overflow-wrap:anywhere]">{w.category || active?.name}</p>
               </>
             );
             return (
@@ -800,12 +800,12 @@ export function Testimonials() {
                   ...(idx % 2 === 1 ? { animationDirection: "reverse" as const } : {}),
                 }}>
                 {[...row, ...row, ...(localItems.length ? localItems : [])].map((t, i) => (
-                  <article key={`${t.id}-${i}`} className="luxe-card w-[300px] shrink-0 p-5">
+                  <article key={`${t.id}-${i}`} className="luxe-card flex w-[300px] max-w-[85vw] shrink-0 flex-col p-5">
                     <div className="flex items-center gap-3">
                       {t.photoUrl ? <img src={t.photoUrl} alt={t.name} className="size-10 rounded-full object-cover" /> : null}
-                      <div>
-                        <h4 className="font-display text-sm font-bold">{t.name}</h4>
-                        <p className="text-xs text-gold">{t.role}</p>
+                      <div className="min-w-0">
+                        <h4 className="font-display fluid-small font-bold [overflow-wrap:anywhere]">{t.name}</h4>
+                        <p className="fluid-small text-gold [overflow-wrap:anywhere]">{t.role}</p>
                       </div>
                     </div>
                     <p className="mt-4 font-display fluid-small text-muted-foreground">{t.text}</p>
