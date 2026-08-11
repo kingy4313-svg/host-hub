@@ -4,7 +4,7 @@ import { useState } from "react";
 import type { PastEventItem } from "@/content/site-content";
 import { ContentProvider, ThemeStyle } from "@/components/site/ContentContext";
 import { Navbar, Footer, FloatingCall } from "@/components/site/Sections";
-import { ScrollReveal, RevealItem } from "@/components/site/ScrollReveal";
+import { ScrollReveal, ScrollRevealGroup, RevealItem } from "@/components/site/ScrollReveal";
 import { Media } from "@/components/site/Media";
 import { getPublishedContent } from "@/lib/content.functions";
 

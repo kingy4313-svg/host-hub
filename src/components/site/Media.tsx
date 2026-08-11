@@ -20,6 +20,7 @@ export type MediaProps = {
   controls?: boolean;
   autoPlay?: boolean;
   onError?: () => void;
+  onLoad?: () => void;
 };
 
 export function Media({
