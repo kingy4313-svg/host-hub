@@ -81,7 +81,7 @@ function PastEventsPage() {
       <ThemeStyle content={content} />
       <div className="min-h-screen bg-background">
         <Navbar />
-        <main className="px-6 pb-14 pt-24">
+        <main className="px-6 pb-14 pt-16 sm:pt-24">
           <ScrollReveal>
             <div className="mx-auto max-w-6xl">
               <div className="flex justify-center sm:justify-start">
@@ -92,11 +92,11 @@ function PastEventsPage() {
                   <ArrowLeft className="size-4" /> Back to home
                 </Link>
               </div>
-              <div className="mt-12 text-center">
-                <h1 className="font-display text-[clamp(3.5rem,7.5vw,6.5rem)] font-black uppercase tracking-[-0.04em] text-foreground leading-[0.95] md:text-[clamp(4rem,6vw,8rem)]">
+              <div className="mt-6 text-center">
+                <h1 className="font-display whitespace-nowrap text-[clamp(1.2rem,4vw,2rem)] font-black uppercase tracking-[-0.04em] text-foreground leading-[0.95] md:text-[clamp(2rem,4.5vw,3.2rem)] lg:text-[clamp(2.4rem,5vw,4.5rem)]">
                   {pastEvents.headingWhite} <span className="text-gold-gradient">{pastEvents.headingGold}</span>
                 </h1>
-                <div className="mx-auto mt-8 h-1.5 w-24 rounded-full bg-gold" />
+                <div className="mx-auto mt-4 h-1.5 w-16 rounded-full bg-gold" />
               </div>
             </div>
           </ScrollReveal>
