@@ -99,7 +99,10 @@ export function Media({
 
   return shouldLoad ? (
     <img
-      ref={ref as React.LegacyRef<HTMLImageElement>}
+      ref={((node: HTMLImageElement | null) => {
+        (ref as React.MutableRefObject<HTMLElement | null>).current = node;
+        if (node?.complete && node.naturalWidth > 0) onLoad?.();
+      }) as React.LegacyRef<HTMLImageElement>}
       src={url}
       alt={alt}
       className={`${className ?? ""} block`}
@@ -111,6 +114,7 @@ export function Media({
       loading={effectiveLoading}
       decoding="async"
       fetchPriority={fetchPriority}
+      onLoad={onLoad}
       onError={handleError}
     />
   ) : (
