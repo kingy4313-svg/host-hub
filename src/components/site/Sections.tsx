@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, ArrowUp, Menu, Pause, Play, MessageCircle, Mail, Phone, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUp, Menu, Pause, Play, Volume2, VolumeX, MessageCircle, Mail, Phone, X } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useContent, Icon } from "./ContentContext";
 import ShareExperienceModal from "./ShareExperienceModal";
@@ -20,32 +20,107 @@ function Media({
   }
   const effectiveType = type === "video" || isVideoUrl(url) ? "video" : "image";
   if (effectiveType === "video") {
-    return <video src={url} className={className} style={style} autoPlay muted loop playsInline />;
+    return <video src={url} className={`${className ?? ""} block`} style={style} autoPlay muted loop playsInline />;
   }
-  return <img src={url} alt={alt} loading="lazy" className={className} style={style} />;
+  return <img src={url} alt={alt} loading="lazy" className={`${className ?? ""} block`} style={style} />;
+}
+
+function getVideoThumbnail(url: string) {
+  const { kind, id } = detectVideo(url);
+  if (kind === "youtube" && id) return `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+  if (kind === "vimeo" && id) return `https://vumbnail.com/${id}.jpg`;
+  return undefined;
+}
+
+function FeaturedMedia({
+  url,
+  type,
+  label,
+  className,
+}: {
+  url: string;
+  type: string;
+  label: string;
+  className?: string;
+}) {
+  const [showPlayer, setShowPlayer] = useState(false);
+  const video = detectVideo(url);
+  const isVideo = type === "video" || video.kind !== "unknown";
+  const thumbnail = getVideoThumbnail(url);
+
+  if (isVideo && video.kind !== "file") {
+    if (!showPlayer) {
+      return (
+        <button
+          type="button"
+          className="relative aspect-[9/11] w-full overflow-hidden rounded-xl bg-black"
+          onClick={() => setShowPlayer(true)}
+        >
+          {thumbnail ? (
+            <img src={thumbnail} alt={`Play ${label}`} className={`${className ?? ""} absolute inset-0 h-full w-full object-cover`} />
+          ) : (
+            <div className="absolute inset-0 flex h-full w-full items-center justify-center bg-black text-white">Play Video</div>
+          )}
+          <div className="absolute inset-0 bg-black/30" />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-black/70 text-white">
+              <Play className="h-6 w-6" />
+            </div>
+          </div>
+        </button>
+      );
+    }
+
+    return <VideoPlayer url={url} title={label} className="absolute inset-0 h-full w-full" ratio="aspect-[9/11]" autoPlay={false} />;
+  }
+
+  if (isVideo) {
+    return <FeaturedVideo url={url} className={`${className} aspect-[9/11]`} />;
+  }
+
+  return <Media url={url} type={type} alt={label} className={className} />;
 }
 
 function FeaturedVideo({ url, className, style }: { url: string; className?: string; style?: React.CSSProperties }) {
   const ref = useRef<HTMLVideoElement | null>(null);
   const [playing, setPlaying] = useState(false);
+  const [muted, setMuted] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [showControls, setShowControls] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
 
-  const togglePlay = async () => {
+  const playVideo = async () => {
     if (!ref.current) return;
-    if (playing) {
-      ref.current.pause();
-      setPlaying(false);
-      return;
-    }
     try {
-      ref.current.muted = false;
+      ref.current.muted = muted;
       await ref.current.play();
       setPlaying(true);
     } catch {
       setPlaying(false);
     }
+  };
+
+  const pauseVideo = () => {
+    if (!ref.current) return;
+    ref.current.pause();
+    setPlaying(false);
+  };
+
+  const togglePlay = async () => {
+    if (!ref.current) return;
+    if (playing) {
+      pauseVideo();
+      return;
+    }
+    await playVideo();
+  };
+
+  const toggleMute = () => {
+    if (!ref.current) return;
+    const nextMuted = !muted;
+    ref.current.muted = nextMuted;
+    setMuted(nextMuted);
   };
 
   const handleTimeUpdate = () => {
@@ -73,52 +148,72 @@ function FeaturedVideo({ url, className, style }: { url: string; className?: str
   return (
     <div
       className="relative h-full w-full"
-      onPointerEnter={() => setShowControls(true)}
-      onPointerLeave={() => setShowControls(false)}
-      onTouchStart={() => setShowControls(true)}
+      onPointerEnter={() => {
+        if (!isTouchDevice) {
+          setShowControls(true);
+          playVideo();
+        }
+      }}
+      onPointerLeave={() => {
+        if (!isTouchDevice) {
+          setShowControls(false);
+          pauseVideo();
+        }
+      }}
+      onTouchStart={() => {
+        setIsTouchDevice(true);
+        setShowControls((current) => !current);
+      }}
     >
       <video
         ref={ref}
         src={url}
         className={className}
         style={style}
-        muted
+        muted={muted}
         loop
         playsInline
         preload="metadata"
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
         onEnded={() => setPlaying(false)}
-        onClick={togglePlay}
+        onClick={(event) => {
+          event.preventDefault();
+          togglePlay();
+        }}
       />
       <div className={`absolute inset-x-0 bottom-0 flex flex-col gap-2 bg-black/40 p-3 backdrop-blur-sm transition-opacity duration-200 ${showControls ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
         <div className="flex items-center justify-between gap-3">
-          <button
-            type="button"
-            onClick={(event) => {
-              event.stopPropagation();
-              void togglePlay();
-            }}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white transition hover:bg-white/10"
-            aria-label={playing ? "Pause video" : "Play video"}
-          >
-            {playing ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation();
+                void togglePlay();
+              }}
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white transition hover:bg-white/10"
+              aria-label={playing ? "Pause video" : "Play video"}
+            >
+              {playing ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+            </button>
+            <button
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation();
+                toggleMute();
+              }}
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white transition hover:bg-white/10"
+              aria-label={muted ? "Unmute video" : "Mute video"}
+            >
+              {muted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+            </button>
+          </div>
           <div className="flex items-center gap-2 text-xs text-white/90">
             <span>{formatTime(currentTime)}</span>
             <span>/</span>
             <span>{formatTime(duration || 0)}</span>
           </div>
         </div>
-        <input
-          type="range"
-          min={0}
-          max={duration || 0}
-          step={0.1}
-          value={Math.min(currentTime, duration || 0)}
-          onChange={(event) => handleSeek(Number(event.target.value))}
-          className="h-1 w-full cursor-pointer appearance-none rounded-full bg-white/30 accent-gold"
-        />
       </div>
     </div>
   );
@@ -143,10 +238,10 @@ export function Navbar() {
   return (
     <header className={`fixed inset-x-0 top-0 z-50 transition-transform duration-300 ${hidden ? "-translate-y-full" : "translate-y-0"}`}>
       <div className="mx-auto flex w-full max-w-[1300px] items-center justify-between px-4 py-4 sm:px-6">
-        <a href="#top" className="logo-glow text-sm font-display uppercase tracking-[0.35em] text-gold transition-colors hover:text-gold/80 md:text-base">
+        <Link to="/" className="logo-glow text-sm font-display uppercase tracking-[0.35em] text-gold transition-colors hover:text-gold/80 md:text-base">
           {settings.logoUrl ? <img src={settings.logoUrl} alt={navbar.logoText} className="mr-3 inline-block h-8 w-auto align-middle" /> : null}
           <span className="align-middle">{navbar.logoText}</span>
-        </a>
+        </Link>
 
         {/* desktop nav moved to the right-side controls for compact alignment */}
 
@@ -326,7 +421,7 @@ export function Intro() {
     <section id="about" className="px-6 py-20 text-center">
       <ScrollRevealGroup stagger={0.12}>
         <RevealItem>
-          <h1 className="font-display text-4xl font-bold md:text-6xl">
+          <h1 className="font-display text-2xl font-bold md:text-6xl tracking-tight whitespace-nowrap overflow-hidden">
             {intro.heading.split("★").map((part, i, arr) => (
               <span key={i}>
                 {part}
@@ -409,24 +504,16 @@ export function FeaturedMoments() {
           </button>
         </div>
       ) : null}
-      <div ref={ref} className="no-scrollbar mt-6 flex snap-x gap-6 overflow-x-auto px-6 pb-4 md:px-[max(1.5rem,calc(50vw-32rem))]">
+      <div ref={ref} className="no-scrollbar mt-6 flex snap-x overflow-x-auto gap-6 px-6 pb-4 md:px-[max(1.5rem,calc(50vw-32rem))]">
         {featured.items.map((m) => (
-          <figure key={m.id} className="flex w-[300px] shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-border bg-muted">
+          <figure key={m.id} className="flex min-w-[85vw] md:min-w-[300px] shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-border bg-muted md:rounded-[1.5rem]">
             <div className="px-4 py-3 text-center">
               <span className="font-display text-sm font-bold uppercase tracking-[0.18em] text-white">
                 {m.label}
               </span>
             </div>
-            <div className="relative h-[440px] overflow-hidden">
-              {m.mediaType === "video" || detectVideo(m.mediaUrl).kind !== "unknown" ? (
-                detectVideo(m.mediaUrl).kind === "file" ? (
-                  <FeaturedVideo url={m.mediaUrl} className="h-full w-full object-cover" />
-                ) : (
-                  <VideoPlayer url={m.mediaUrl} title={m.label} className="h-full w-full" ratio="aspect-[9/11]" />
-                )
-              ) : (
-                <Media url={m.mediaUrl} type={m.mediaType} alt={m.caption} className="h-full w-full object-cover" />
-              )}
+            <div className="relative aspect-[9/11] overflow-hidden">
+              <FeaturedMedia url={m.mediaUrl} type={m.mediaType} label={m.label} className="absolute inset-0 h-full w-full object-cover" />
             </div>
             <div className="px-4 py-3 text-center">
               <p className="text-xs font-medium text-muted-foreground">{m.caption}</p>

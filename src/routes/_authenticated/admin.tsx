@@ -96,6 +96,21 @@ function AdminPage() {
     }
   }
 
+  async function publish() {
+    setSaving(true);
+    try {
+      console.log("admin.publish: publishing content", content);
+      const res = await saveDraft({ data: { content, section: section.label } });
+      console.log("admin.publish: saveDraft response", res);
+      await publishContent({ data: { content } });
+      toast.success("Published live on the site");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Publish failed");
+    } finally {
+      setSaving(false);
+    }
+  }
+
   async function logout() {
     await queryClient.cancelQueries();
     queryClient.clear();
@@ -173,10 +188,20 @@ function AdminPage() {
               <section.Editor content={content} patch={patch} />
 
               <div className="sticky bottom-0 -mx-4 border-t bg-white/95 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6">
-                <Button onClick={() => void save()} disabled={saving}>
-                  {saving ? <Lucide.Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                  Save Changes
-                </Button>
+                <div className="flex flex-wrap gap-2">
+                  <Button onClick={() => void save()} disabled={saving}>
+                    {saving ? <Lucide.Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                    Save Changes
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    onClick={() => void publish()}
+                    disabled={saving}
+                    className="rounded-xl border border-blue-300 bg-white px-5 py-2.5 text-blue-600 shadow-sm"
+                  >
+                    Publish Live
+                  </Button>
+                </div>
               </div>
             </div>
           )}

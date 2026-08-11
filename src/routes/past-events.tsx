@@ -28,33 +28,40 @@ export const Route = createFileRoute("/past-events")({
   component: PastEventsPage,
 });
 
-function GalleryCard({ item }: { item: PastEventItem }) {
+function GalleryCard({ item, index }: { item: PastEventItem; index: number }) {
   const [imgFailed, setImgFailed] = useState(false);
-  const isVideo = item.mediaType === "video" || /\.(mp4|webm|mov|m4v)(\?|$)/i.test(item.mediaUrl);
+  const mediaUrl = item.mediaUrl?.trim() ?? "";
+  const isVideo = mediaUrl && (item.mediaType === "video" || /\.(mp4|webm|mov|m4v)(\?|$)/i.test(mediaUrl));
+  const loadingAttr = index === 0 ? "eager" : "lazy" as const;
 
   return (
     <article className="overflow-hidden rounded-2xl border border-border luxe-card bg-card">
-      <div className="h-56 w-full bg-muted">
-        {item.mediaUrl ? (
+      <div className="w-full bg-muted">
+        {mediaUrl ? (
           isVideo ? (
-            <video src={item.mediaUrl} className="h-full w-full object-cover" controls playsInline />
+            <div className="relative aspect-[4/3] overflow-hidden bg-black/5">
+              <video src={mediaUrl} className="h-full w-full object-contain block" controls playsInline />
+            </div>
           ) : !imgFailed ? (
-            <img
-              src={item.mediaUrl}
-              alt={item.caption || item.label || "Past event"}
-              loading="lazy"
-              className="h-full w-full object-contain"
-              onError={() => setImgFailed(true)}
-            />
+            <div className="relative aspect-[4/3] overflow-hidden bg-black/5">
+              <img
+                src={mediaUrl}
+                alt={item.caption || item.label || "Past event"}
+                loading={loadingAttr}
+                decoding="async"
+                className="h-full w-full object-contain block"
+                onError={() => setImgFailed(true)}
+              />
+            </div>
           ) : (
-            <div className="flex h-full items-center justify-center">
-              <a href={item.mediaUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-[color:var(--gold)] underline">
+            <div className="flex h-56 items-center justify-center">
+              <a href={mediaUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-[color:var(--gold)] underline">
                 Open media in new tab
               </a>
             </div>
           )
         ) : (
-          <div className="flex h-full items-center justify-center text-sm text-muted-foreground">No media yet</div>
+          <div className="flex h-56 items-center justify-center text-sm text-muted-foreground">No media yet</div>
         )}
       </div>
       <div className="p-4">
@@ -74,32 +81,33 @@ function PastEventsPage() {
       <ThemeStyle content={content} />
       <div className="min-h-screen bg-background">
         <Navbar />
-        <main className="px-6 pb-10 pt-32">
+        <main className="px-6 pb-14 pt-24">
           <ScrollReveal>
-            <Link
-              to="/"
-              className="mx-auto inline-flex items-center gap-2 rounded-full bg-[color:var(--gold)] px-4 py-2 text-sm font-semibold text-black uppercase tracking-widest shadow-[0_0_18px_rgba(255,215,0,0.35)] hover:scale-105 transition-transform"
-            >
-              <ArrowLeft className="size-4" /> Back to home
-            </Link>
-            <div className="relative">
-              <h1 className="relative z-10 mt-8 text-center font-display text-4xl font-bold md:text-6xl">
-                {pastEvents.headingWhite} <span className="text-gold-gradient">{pastEvents.headingGold}</span>
-              </h1>
-              <span className="gold-divider mt-5 relative z-10" />
-              <p className="mx-auto mt-6 max-w-2xl text-center font-display text-muted-foreground relative z-10">
-                {pastEvents.description}
-              </p>
+            <div className="mx-auto max-w-6xl">
+              <div className="flex justify-center sm:justify-start">
+                <Link
+                  to="/"
+                  className="inline-flex items-center gap-2 rounded-full bg-gold px-6 py-3 text-sm font-semibold uppercase tracking-[0.22em] text-black shadow-[0_20px_60px_rgba(212,169,71,0.35)] transition-transform hover:-translate-y-0.5"
+                >
+                  <ArrowLeft className="size-4" /> Back to home
+                </Link>
+              </div>
+              <div className="mt-12 text-center">
+                <h1 className="font-display text-[clamp(3.5rem,7.5vw,6.5rem)] font-black uppercase tracking-[-0.04em] text-foreground leading-[0.95] md:text-[clamp(4rem,6vw,8rem)]">
+                  {pastEvents.headingWhite} <span className="text-gold-gradient">{pastEvents.headingGold}</span>
+                </h1>
+                <div className="mx-auto mt-8 h-1.5 w-24 rounded-full bg-gold" />
+              </div>
             </div>
           </ScrollReveal>
 
           <ScrollReveal>
             <h2 className="sr-only">Past Events Gallery</h2>
             {pastEvents.items.length > 0 ? (
-              <div className="mx-auto mt-14 grid max-w-6xl gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                {pastEvents.items.map((item) => (
+              <div className="mx-auto mt-16 grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {pastEvents.items.map((item, index) => (
                   <RevealItem key={item.id}>
-                    <GalleryCard item={item} />
+                    <GalleryCard item={item} index={index} />
                   </RevealItem>
                 ))}
               </div>

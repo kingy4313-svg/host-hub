@@ -136,7 +136,7 @@ export function MediaField({
         <div className="flex-1 min-w-[180px] space-y-2.5">
           <Input
             value={value ?? ""}
-            onChange={(e) => onChange(e.target.value)}
+            onChange={(e) => onChange(e.target.value.trim())}
             placeholder="URL or upload a file"
             className="rounded-xl border-blue-200 bg-white shadow-sm"
           />
