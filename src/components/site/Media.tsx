@@ -6,7 +6,7 @@ export type MediaProps = {
   url?: string;
   type: string;
   alt?: string;
-  className?: string;
+  className?: string | undefined;
   style?: CSSProperties;
   loading?: "lazy" | "eager";
   fetchPriority?: "high" | "low" | "auto";
@@ -20,6 +20,7 @@ export type MediaProps = {
   controls?: boolean;
   autoPlay?: boolean;
   onError?: () => void;
+  onLoad?: () => void;
 };
 
 export function Media({
@@ -40,6 +41,7 @@ export function Media({
   controls = false,
   autoPlay = false,
   onError,
+  onLoad,
 }: MediaProps) {
   const effectiveLoading = priority ? "eager" : loading;
   const [failed, setFailed] = useState(false);
@@ -55,7 +57,7 @@ export function Media({
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry?.isIntersecting) {
           setIsVisible(true);
           observer.disconnect();
         }
@@ -97,7 +99,10 @@ export function Media({
 
   return shouldLoad ? (
     <img
-      ref={ref as React.LegacyRef<HTMLImageElement>}
+      ref={((node: HTMLImageElement | null) => {
+        (ref as React.MutableRefObject<HTMLElement | null>).current = node;
+        if (node?.complete && node.naturalWidth > 0) onLoad?.();
+      }) as React.LegacyRef<HTMLImageElement>}
       src={url}
       alt={alt}
       className={`${className ?? ""} block`}
@@ -109,6 +114,7 @@ export function Media({
       loading={effectiveLoading}
       decoding="async"
       fetchPriority={fetchPriority}
+      onLoad={onLoad}
       onError={handleError}
     />
   ) : (

@@ -29,7 +29,7 @@ function mimeFor(url: string) {
   return "video/mp4";
 }
 
-function Shell({ children, aspectClass }: { children: React.ReactNode; aspectClass: string }) {
+function Shell({ children, aspectClass = "aspect-video" }: { children: React.ReactNode; aspectClass?: string }) {
   return (
     <div className={`relative ${aspectClass} w-full overflow-hidden rounded-xl border border-border bg-black`}>
       {children}
@@ -69,7 +69,7 @@ function InstagramEmbed({ url }: { url: string }) {
     const element = ref.current;
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry?.isIntersecting) {
           setReady(true);
           observer.disconnect();
         }

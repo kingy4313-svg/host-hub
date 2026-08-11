@@ -23,6 +23,7 @@ export function ResponsiveHeroImage({
 }: ResponsiveHeroImageProps) {
   const [failed, setFailed] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
 
   // Use desktop image as fallback if mobile not provided
   const effectiveMobileUrl = mobileUrl || desktopUrl;
@@ -42,7 +43,7 @@ export function ResponsiveHeroImage({
       
       {/* Fallback for browsers that don't support picture element */}
       <img
-        ref={containerRef}
+        ref={imgRef}
         src={effectiveDesktopUrl}
         alt={alt}
         className={`${className ?? ""} block`}

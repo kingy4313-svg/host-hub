@@ -4,7 +4,7 @@ import { useState } from "react";
 import type { PastEventItem } from "@/content/site-content";
 import { ContentProvider, ThemeStyle } from "@/components/site/ContentContext";
 import { Navbar, Footer, FloatingCall } from "@/components/site/Sections";
-import { ScrollReveal, RevealItem } from "@/components/site/ScrollReveal";
+import { ScrollReveal, ScrollRevealGroup, RevealItem } from "@/components/site/ScrollReveal";
 import { Media } from "@/components/site/Media";
 import { getPublishedContent } from "@/lib/content.functions";
 
@@ -31,22 +31,30 @@ export const Route = createFileRoute("/past-events")({
 
 function GalleryCard({ item, index }: { item: PastEventItem; index: number }) {
   const [imgFailed, setImgFailed] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const mediaUrl = item.mediaUrl?.trim() ?? "";
-  const isVideo = mediaUrl && (item.mediaType === "video" || /\.(mp4|webm|mov|m4v)(\?|$)/i.test(mediaUrl));
+  const isVideo = Boolean(mediaUrl) && (item.mediaType === "video" || /\.(mp4|webm|mov|m4v)(\?|$)/i.test(mediaUrl));
+  const priority = index < 4;
 
   return (
     <article className="overflow-hidden rounded-2xl border border-border luxe-card bg-card">
       <div className="w-full bg-muted">
         {mediaUrl && !imgFailed ? (
           <div className="relative aspect-[4/3] overflow-hidden bg-black/5">
+            {!loaded && !isVideo ? (
+              <div className="absolute inset-0 animate-pulse bg-gradient-to-br from-muted to-black/40" aria-hidden="true" />
+            ) : null}
             <Media
               url={mediaUrl}
               type={isVideo ? "video" : "image"}
               alt={item.caption || item.label || "Past event"}
-              className="h-full w-full object-contain block"
-              loading="lazy"
+              className={`h-full w-full object-contain block transition-opacity duration-500 ${loaded || isVideo ? "opacity-100" : "opacity-0"}`}
+              loading={priority ? "eager" : "lazy"}
+              {...(priority ? { priority: true, fetchPriority: "high" as const } : {})}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               preload="metadata"
               controls={isVideo}
+              onLoad={() => setLoaded(true)}
               onError={() => setImgFailed(true)}
             />
           </div>
@@ -97,23 +105,25 @@ function PastEventsPage() {
             </div>
           </ScrollReveal>
 
-          <ScrollReveal>
-            <h2 className="sr-only">Past Events Gallery</h2>
-            {pastEvents.items.length > 0 ? (
-              <div className="mx-auto mt-16 grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {pastEvents.items.map((item, index) => (
-                  <RevealItem key={item.id}>
-                    <GalleryCard item={item} index={index} />
-                  </RevealItem>
-                ))}
-              </div>
-            ) : (
-              <div className="mx-auto mt-14 max-w-3xl rounded-2xl border border-border bg-muted p-10 text-center text-muted-foreground">
-                No past events have been added yet. Upload images or videos from the admin dashboard to populate this page.
-              </div>
-            )}
-          </ScrollReveal>
+          <h2 className="sr-only">Past Events Gallery</h2>
+          {pastEvents.items.length > 0 ? (
+            <ScrollRevealGroup
+              amount={0.02}
+              className="mx-auto mt-16 grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+            >
+              {pastEvents.items.map((item: PastEventItem, index: number) => (
+                <RevealItem key={item.id}>
+                  <GalleryCard item={item} index={index} />
+                </RevealItem>
+              ))}
+            </ScrollRevealGroup>
+          ) : (
+            <div className="mx-auto mt-14 max-w-3xl rounded-2xl border border-border bg-muted p-10 text-center text-muted-foreground">
+              No past events have been added yet. Upload images or videos from the admin dashboard to populate this page.
+            </div>
+          )}
         </main>
+
         <Footer />
         <FloatingCall />
       </div>
