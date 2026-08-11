@@ -62,8 +62,26 @@ function Loading() {
 function InstagramEmbed({ url }: { url: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const [failed, setFailed] = useState(false);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
+    if (!ref.current) return;
+    const element = ref.current;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setReady(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "300px" },
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!ready) return;
     const existing = document.querySelector<HTMLScriptElement>('script[src*="instagram.com/embed.js"]');
     const process = () => {
       const ig = (window as unknown as { instgrm?: { Embeds: { process: () => void } } }).instgrm;
@@ -80,7 +98,7 @@ function InstagramEmbed({ url }: { url: string }) {
     s.onload = process;
     s.onerror = () => setFailed(true);
     document.body.appendChild(s);
-  }, [url]);
+  }, [ready]);
 
   if (failed) {
     return (

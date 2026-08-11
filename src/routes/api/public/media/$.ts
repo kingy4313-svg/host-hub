@@ -1,36 +1,52 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { createClient } from "@supabase/supabase-js";
-
-async function getStorageClient() {
-  try {
-    const mod = await import("@/integrations/supabase/client.server");
-    // prefer admin client when available
-    return (mod as any).supabaseAdmin;
-  } catch (err) {
-    // fallback: create public client using publishable key (works if bucket is public)
-    const SUPABASE_URL = process.env["SUPABASE_URL"] || import.meta.env.VITE_SUPABASE_URL;
-    const SUPABASE_PUBLISHABLE_KEY = process.env["SUPABASE_PUBLISHABLE_KEY"] || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-    if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) throw new Error("Missing Supabase keys for media route");
-    return createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
-  }
-}
+import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 export const Route = createFileRoute("/api/public/media/$")({
   server: {
     handlers: {
-      GET: async ({ params }) => {
+      GET: async ({ params, request }) => {
         const path = (params as { _splat?: string })._splat ?? "";
-        if (!path || path.includes("..")) return new Response("Not found", { status: 404 });
+        const decodedPath = path ? decodeURIComponent(path) : "";
+        if (!decodedPath || decodedPath.includes("..")) return new Response("Not found", { status: 404 });
 
         try {
-          const storage = await getStorageClient();
-          const { data, error } = await storage.storage.from("media").download(path);
+          const { data, error } = await supabaseAdmin.storage.from("media").download(decodedPath);
           if (error || !data) return new Response("Not found", { status: 404 });
 
-          return new Response(await data.arrayBuffer(), {
+          const buffer = await data.arrayBuffer();
+          const size = buffer.byteLength;
+          const contentType = data.type || "application/octet-stream";
+
+          const baseHeaders: Record<string, string> = {
+            "content-type": contentType,
+            "cache-control": "public, max-age=31536000, immutable",
+            "accept-ranges": "bytes",
+            "access-control-allow-origin": "*",
+          };
+
+          // Handle Range requests (needed for mobile browsers loading large images/videos)
+          const range = request.headers.get("range");
+          if (range) {
+            const match = range.match(/bytes=(\d*)-(\d*)/);
+            const start = match?.[1] ? parseInt(match[1], 10) : 0;
+            const end = match?.[2] ? parseInt(match[2], 10) : size - 1;
+            const chunk = buffer.slice(start, end + 1);
+
+            return new Response(chunk, {
+              status: 206,
+              headers: {
+                ...baseHeaders,
+                "content-length": String(chunk.byteLength),
+                "content-range": `bytes ${start}-${end}/${size}`,
+              },
+            });
+          }
+
+          return new Response(buffer, {
+            status: 200,
             headers: {
-              "content-type": data.type || "application/octet-stream",
-              "cache-control": "public, max-age=31536000, immutable",
+              ...baseHeaders,
+              "content-length": String(size),
             },
           });
         } catch (err) {

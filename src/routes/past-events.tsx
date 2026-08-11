@@ -5,6 +5,7 @@ import type { PastEventItem } from "@/content/site-content";
 import { ContentProvider, ThemeStyle } from "@/components/site/ContentContext";
 import { Navbar, Footer, FloatingCall } from "@/components/site/Sections";
 import { ScrollReveal, RevealItem } from "@/components/site/ScrollReveal";
+import { Media } from "@/components/site/Media";
 import { getPublishedContent } from "@/lib/content.functions";
 
 export const Route = createFileRoute("/past-events")({
@@ -32,34 +33,29 @@ function GalleryCard({ item, index }: { item: PastEventItem; index: number }) {
   const [imgFailed, setImgFailed] = useState(false);
   const mediaUrl = item.mediaUrl?.trim() ?? "";
   const isVideo = mediaUrl && (item.mediaType === "video" || /\.(mp4|webm|mov|m4v)(\?|$)/i.test(mediaUrl));
-  const loadingAttr = index === 0 ? "eager" : "lazy" as const;
 
   return (
     <article className="overflow-hidden rounded-2xl border border-border luxe-card bg-card">
       <div className="w-full bg-muted">
-        {mediaUrl ? (
-          isVideo ? (
-            <div className="relative aspect-[4/3] overflow-hidden bg-black/5">
-              <video src={mediaUrl} className="h-full w-full object-contain block" controls playsInline />
-            </div>
-          ) : !imgFailed ? (
-            <div className="relative aspect-[4/3] overflow-hidden bg-black/5">
-              <img
-                src={mediaUrl}
-                alt={item.caption || item.label || "Past event"}
-                loading={loadingAttr}
-                decoding="async"
-                className="h-full w-full object-contain block"
-                onError={() => setImgFailed(true)}
-              />
-            </div>
-          ) : (
-            <div className="flex h-56 items-center justify-center">
-              <a href={mediaUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-[color:var(--gold)] underline">
-                Open media in new tab
-              </a>
-            </div>
-          )
+        {mediaUrl && !imgFailed ? (
+          <div className="relative aspect-[4/3] overflow-hidden bg-black/5">
+            <Media
+              url={mediaUrl}
+              type={isVideo ? "video" : "image"}
+              alt={item.caption || item.label || "Past event"}
+              className="h-full w-full object-contain block"
+              loading="lazy"
+              preload="metadata"
+              controls={isVideo}
+              onError={() => setImgFailed(true)}
+            />
+          </div>
+        ) : mediaUrl ? (
+          <div className="flex h-56 items-center justify-center">
+            <a href={mediaUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-[color:var(--gold)] underline">
+              Open media in new tab
+            </a>
+          </div>
         ) : (
           <div className="flex h-56 items-center justify-center text-sm text-muted-foreground">No media yet</div>
         )}

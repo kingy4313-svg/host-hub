@@ -13,7 +13,7 @@ export async function uploadMedia(file: File): Promise<string> {
       throw new Error(res.error.message || "Upload failed");
     }
 
-    const url = `/api/public/media/${path}`;
+    const url = `/api/public/media/${encodeURIComponent(path)}`;
     const insertRes = await supabase.from("media_assets").insert({
       url,
       path,

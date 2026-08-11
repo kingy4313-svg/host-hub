@@ -6,24 +6,12 @@ import ShareExperienceModal from "./ShareExperienceModal";
 import { ScrollReveal, ScrollRevealGroup, RevealItem, CountUp } from "./ScrollReveal";
 import { AnimatedIconGrid } from "./AnimatedIconGrid";
 import { VideoPlayer, detectVideo } from "./VideoPlayer";
+import { Media } from "./Media";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
-import { isVideoUrl } from "@/lib/media";
 
 const mailto = (email: string) => `mailto:${email}`;
 const telHref = (phone: string) => `tel:${phone.replace(/[^\d+]/g, "")}`;
-
-function Media({
-  url, type, alt, className, style,
-}: { url?: string; type: string; alt: string; className?: string | undefined; style?: React.CSSProperties }) {
-  if (!url) {
-    return <div className={className} style={style} aria-hidden="true" />;
-  }
-  const effectiveType = type === "video" || isVideoUrl(url) ? "video" : "image";
-  if (effectiveType === "video") {
-    return <video src={url} className={`${className ?? ""} block`} style={style} autoPlay muted loop playsInline />;
-  }
-  return <img src={url} alt={alt} loading="lazy" className={`${className ?? ""} block`} style={style} />;
-}
 
 function getVideoThumbnail(url: string) {
   const { kind, id } = detectVideo(url);
@@ -342,26 +330,20 @@ export function Hero() {
     transform: `scale(${zoomMobile})`,
     transformOrigin: `${mediaXMobile}% ${mediaYMobile}%`,
   } as React.CSSProperties;
+  const isMobile = useIsMobile();
+  const heroMediaStyle = isMobile ? mediaStyleMobile : mediaStyleDesktop;
+
   return (
     <section id="top" className="relative w-full overflow-hidden bg-black text-white">
-      {/* Desktop media (visible md+) */}
-      <div className="absolute inset-0 hidden md:block">
+      <div className="absolute inset-0">
         <Media
           url={hero.mediaUrl}
           type={hero.mediaType}
           alt={`${hero.line1} ${hero.line2}`}
           className="h-full w-full object-cover"
-          style={mediaStyleDesktop}
-        />
-      </div>
-      {/* Mobile media (visible below md) */}
-      <div className="absolute inset-0 md:hidden">
-        <Media
-          url={hero.mediaUrl}
-          type={hero.mediaType}
-          alt={`${hero.line1} ${hero.line2}`}
-          className="h-full w-full object-cover"
-          style={mediaStyleMobile}
+          style={heroMediaStyle}
+          priority
+          fetchPriority="high"
         />
       </div>
       <div className="absolute inset-0 bg-black/40" />
@@ -464,7 +446,7 @@ export function WhyBook() {
   return (
     <section className="px-6 py-20">
       <ScrollReveal>
-        <h2 className="text-center font-display text-4xl font-bold md:text-5xl">{whyBook.heading}</h2>
+        <h2 className="text-center font-display text-3xl font-bold sm:text-4xl md:text-5xl">{whyBook.heading}</h2>
         {whyBook.showDivider ? <span className="gold-divider mt-5" /> : null}
       </ScrollReveal>
       <ScrollRevealGroup className="mx-auto mt-12 grid max-w-6xl gap-8 md:grid-cols-3" stagger={0.13} amount={0.2}>
