@@ -5,6 +5,8 @@ import { Navbar, Footer } from "@/components/site/Sections";
 
 export const Route = createFileRoute("/terms")({
   loader: () => getPublishedContent(),
+  staleTime: 0,
+  shouldReload: true,
   head: () => ({
     meta: [
       { title: "Terms of Service — Sayanti Banerjee" },
