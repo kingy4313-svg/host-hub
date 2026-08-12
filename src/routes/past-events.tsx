@@ -10,6 +10,8 @@ import { getPublishedContent } from "@/lib/content.functions";
 
 export const Route = createFileRoute("/past-events")({
   loader: () => getPublishedContent(),
+  staleTime: 0,
+  shouldReload: true,
   head: ({ loaderData }) => {
     const name = loaderData?.settings.siteName ?? "Anchor";
     const title = `Past Events Gallery — ${name}`;

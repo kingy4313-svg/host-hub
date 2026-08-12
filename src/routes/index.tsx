@@ -8,6 +8,8 @@ import { getPublishedContent } from "@/lib/content.functions";
 
 export const Route = createFileRoute("/")({
   loader: () => getPublishedContent(),
+  staleTime: 0,
+  shouldReload: true,
   head: ({ loaderData }) => ({
     meta: [
       { title: loaderData?.settings.seo.title ?? "Sayanti Banerjee — Anchor, Actor & Influencer" },
