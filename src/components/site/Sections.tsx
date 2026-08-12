@@ -227,7 +227,7 @@ export function Navbar() {
   return (
     <header className={`fixed inset-x-0 top-0 z-50 transition-transform duration-300 ${hidden ? "-translate-y-full" : "translate-y-0"}`}>
       <div className="mx-auto flex w-full max-w-[1300px] items-center justify-between px-4 py-4 sm:px-6">
-        <Link to="/" className="logo-glow text-sm font-display uppercase tracking-[0.35em] text-gold transition-colors hover:text-gold/80 md:text-base">
+        <Link to="/" className="logo-glow text-sm font-display font-bold uppercase tracking-[0.25em] text-gold transition-colors hover:text-gold/80 md:text-lg" style={{ textShadow: "0 2px 12px rgba(0,0,0,0.55), 0 0 1px rgba(0,0,0,0.4)" }}>
           {settings.logoUrl ? <img src={settings.logoUrl} alt={navbar.logoText} className="mr-3 inline-block h-8 w-auto align-middle" /> : null}
           <span className="align-middle">{navbar.logoText}</span>
         </Link>
@@ -273,7 +273,7 @@ export function Navbar() {
             </SheetTrigger>
             <SheetContent side="top" className="bg-black/95 p-6 text-white">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-display uppercase tracking-[0.35em] text-gold">{navbar.logoText}</span>
+                <span className="text-sm font-display font-bold uppercase tracking-[0.25em] text-gold md:text-lg" style={{ textShadow: "0 2px 12px rgba(0,0,0,0.55), 0 0 1px rgba(0,0,0,0.4)" }}>{navbar.logoText}</span>
                 <button
                   type="button"
                   aria-label="Close menu"
