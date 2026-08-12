@@ -273,7 +273,7 @@ export function Navbar() {
             </SheetTrigger>
             <SheetContent side="top" className="bg-black/95 p-6 text-white">
               <div className="flex items-center justify-between">
-                <span className="text-sm font-display uppercase tracking-[0.35em] text-gold">{navbar.logoText}</span>
+                <span className="text-sm font-display font-bold uppercase tracking-[0.25em] text-gold md:text-lg" style={{ textShadow: "0 2px 12px rgba(0,0,0,0.55), 0 0 1px rgba(0,0,0,0.4)" }}>{navbar.logoText}</span>
                 <button
                   type="button"
                   aria-label="Close menu"
