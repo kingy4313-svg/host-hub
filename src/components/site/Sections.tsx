@@ -417,7 +417,7 @@ export function Intro() {
     <section id="about" className="px-6 py-20 text-center">
       <ScrollRevealGroup stagger={0.12}>
         <RevealItem>
-          <h1 className="mx-auto max-w-[24ch] font-display fluid-h1 font-bold tracking-tight">
+          <h1 className="section-heading section-h1 font-display font-bold tracking-tight">
             {intro.heading.split("★").map((part, i, arr) => (
               <span key={i}>
                 {part}
@@ -460,7 +460,7 @@ export function WhyBook() {
   return (
     <section className="px-6 py-20">
       <ScrollReveal>
-        <h2 className="mx-auto max-w-[22ch] text-center font-display fluid-h2 font-bold">{whyBook.heading}</h2>
+        <h2 className="section-heading section-h2 font-display font-bold">{whyBook.heading}</h2>
         {whyBook.showDivider ? <span className="gold-divider mt-5" /> : null}
       </ScrollReveal>
       <ScrollRevealGroup className="mx-auto mt-12 grid max-w-6xl gap-8 md:grid-cols-3" stagger={0.13} amount={0.2}>
@@ -485,7 +485,7 @@ export function FeaturedMoments() {
   return (
     <section className="py-20">
       <ScrollReveal>
-        <h2 className="mx-auto max-w-[22ch] text-center font-display fluid-h2 font-bold">
+        <h2 className="section-heading section-h2 font-display font-bold">
           {featured.headingWhite} <span className="text-gold-gradient">{featured.headingGold}</span>
         </h2>
         <span className="gold-divider mt-5" />
@@ -526,7 +526,7 @@ export function Services() {
   return (
     <section id="services" className="px-6 py-20">
       <ScrollReveal>
-        <h2 className="mx-auto max-w-[22ch] text-center font-display fluid-h2 font-bold">
+        <h2 className="section-heading section-h2 font-display font-bold">
           {services.headingWhite} <span className="text-gold-gradient">{services.headingGold}</span>
         </h2>
         <span className="gold-divider mt-5" />
@@ -620,7 +620,7 @@ export function PastEvents() {
   return (
     <section id="past-events" className="px-6 py-20 text-center">
       <ScrollReveal>
-        <h2 className="mx-auto max-w-[22ch] font-display fluid-h2 font-bold">
+        <h2 className="section-heading section-h2 font-display font-bold">
           {pastEvents.headingWhite} <span className="text-gold-gradient">{pastEvents.headingGold}</span>
         </h2>
         <span className="gold-divider mt-5" />
@@ -691,7 +691,7 @@ export function MyWorks() {
   return (
     <section id="works" className="px-6 py-20">
       <ScrollReveal>
-        <h2 className="mx-auto max-w-[22ch] text-center font-display fluid-h2 font-bold">{works.heading}</h2>
+        <h2 className="section-heading section-h2 font-display font-bold">{works.heading}</h2>
         <span className="gold-divider mt-5" />
       </ScrollReveal>
       <div className="mt-10 flex flex-wrap justify-center gap-8">
@@ -779,7 +779,7 @@ export function Testimonials() {
   return (
     <section className="py-20">
       <ScrollReveal>
-        <h2 className="mx-auto max-w-[22ch] text-center font-display fluid-h2 font-bold">
+        <h2 className="section-heading section-h2 font-display font-bold">
           {testimonials.headingWhite} <span className="text-gold-gradient">{testimonials.headingGold}</span>
         </h2>
         {testimonials.subtext ? <p className="mt-4 text-center text-sm text-muted-foreground">{testimonials.subtext}</p> : null}
@@ -844,8 +844,8 @@ export function ContactCta() {
     <section id="contact" className="relative overflow-hidden px-6 py-24 text-center">
       <span className="absolute left-[8%] top-1/3 size-1.5 rounded-full bg-gold" />
       <span className="absolute right-[10%] top-1/2 size-1 rounded-full bg-gold/70" />
-      <h2 className="mx-auto max-w-[20ch] font-display fluid-h1 font-bold">
-        {contact.headingWhite}<br /><span className="text-gold-gradient">{contact.headingGold}</span>
+      <h2 className="section-heading section-h1 font-display font-bold">
+        {contact.headingWhite} <span className="text-gold-gradient">{contact.headingGold}</span>
       </h2>
       <span className="gold-divider mt-6" />
       <p className="mx-auto mt-8 max-w-[60ch] font-display fluid-lead text-muted-foreground">{contact.subtext}</p>

@@ -97,7 +97,7 @@ function PastEventsPage() {
                 </Link>
               </div>
               <div className="mt-6 text-center">
-                <h1 className="font-display whitespace-nowrap text-[clamp(1.2rem,4vw,2rem)] font-black uppercase tracking-[-0.04em] text-foreground leading-[0.95] md:text-[clamp(2rem,4.5vw,3.2rem)] lg:text-[clamp(2.4rem,5vw,4.5rem)]">
+                <h1 className="section-heading section-h1 font-display font-black uppercase tracking-[-0.04em] text-foreground">
                   {pastEvents.headingWhite} <span className="text-gold-gradient">{pastEvents.headingGold}</span>
                 </h1>
                 <div className="mx-auto mt-4 h-1.5 w-16 rounded-full bg-gold" />

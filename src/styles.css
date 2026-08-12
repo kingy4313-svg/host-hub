@@ -206,6 +206,33 @@
   }
 }
 
+/* ------------------------------------------------- section headings (one line) */
+
+@utility section-heading {
+  display: block;
+  width: 100%;
+  max-width: none;
+  white-space: nowrap;
+  text-wrap: nowrap;
+  text-align: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility section-h1 {
+  font-size: clamp(0.75rem, 2.8vw, 3.75rem);
+  line-height: 1.1;
+}
+
+@utility section-h2 {
+  font-size: clamp(0.7rem, 2.3vw, 3rem);
+  line-height: 1.1;
+}
+
 /* ------------------------------------------- fluid typography (admin text) */
 
 @utility fluid-hero-ghost-1 {
@@ -278,3 +305,4 @@
   line-height: 1.3;
   overflow-wrap: break-word;
 }
+
