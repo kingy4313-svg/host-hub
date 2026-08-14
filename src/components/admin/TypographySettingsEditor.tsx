@@ -151,6 +151,7 @@ function PreviewBox({
   textAlign,
   width,
   height,
+  gradient,
 }: {
   label: string;
   sampleText: string;
@@ -160,7 +161,7 @@ function PreviewBox({
   textAlign: string;
   width: number;
   height: number;
-  gradient?: string;
+  gradient?: string | undefined;
 }) {
   const isDesktop = width >= 1000;
   const outerRef = useRef<HTMLDivElement | null>(null);
