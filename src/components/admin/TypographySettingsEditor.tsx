@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { EditorProps } from "./SectionEditors";
-import type { TypographySettings } from "@/content/site-content";
+import { DEFAULT_CONTENT, type TypographySettings } from "@/content/site-content";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
