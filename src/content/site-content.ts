@@ -42,40 +42,53 @@ export type WorkTab = { id: string; name: string; items: WorkItem[] };
 export type TestimonialItem = { id: string; name: string; role: string; text: string; photoUrl: string };
 export type TextItem = { id: string; text: string };
 
-export type TypographySettings = {
-  heroHeading: {
-    desktop: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-    mobile: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-  };
-  whyBookMe: {
-    desktop: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-    mobile: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-  };
-  featuredMoments: {
-    desktop: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-    mobile: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-  };
-  eventsSpecialize: {
-    desktop: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-    mobile: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-  };
-  pastEvents: {
-    desktop: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-    mobile: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-  };
-  myWork: {
-    desktop: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-    mobile: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-  };
-  testimonials: {
-    desktop: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-    mobile: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-  };
-  contactCta: {
-    desktop: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-    mobile: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-  };
+export type TypoStyle = {
+  fontSize: number;
+  color: string;
+  fontWeight: string;
+  textAlign: string;
+  gradientEnabled?: boolean;
+  gradientFrom?: string;
+  gradientTo?: string;
+  gradientAngle?: number;
 };
+
+export type TypoPair = { desktop: TypoStyle; mobile: TypoStyle };
+
+export type BrandTypography = {
+  fontFamily: string;
+  fontSize: number;
+  fontSizeMobile: number;
+  letterSpacing: number;
+  fontWeight: string;
+  color: string;
+  gradientEnabled: boolean;
+  gradientFrom: string;
+  gradientTo: string;
+  gradientAngle: number;
+  highlightEnabled: boolean;
+  highlightColor: string;
+  shadowEnabled: boolean;
+  shadowX: number;
+  shadowY: number;
+  shadowBlur: number;
+  shadowColor: string;
+};
+
+export type TypographySettings = {
+  heroHeading: TypoPair;
+  whyBookMe: TypoPair;
+  featuredMoments: TypoPair;
+  eventsSpecialize: TypoPair;
+  pastEvents: TypoPair;
+  myWork: TypoPair;
+  testimonials: TypoPair;
+  contactCta: TypoPair;
+  brand: BrandTypography;
+};
+
+export type HeadingKey = Exclude<keyof TypographySettings, "brand">;
+
 
 export type SiteContent = {
   settings: {
