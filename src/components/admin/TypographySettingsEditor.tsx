@@ -249,6 +249,64 @@ function PreviewBox({
 
 }
 
+function gradientCss(s: { gradientEnabled?: boolean; gradientFrom?: string; gradientTo?: string; gradientAngle?: number }) {
+  if (!s.gradientEnabled) return undefined;
+  return `linear-gradient(${s.gradientAngle ?? 90}deg, ${s.gradientFrom ?? "#F7E7A6"}, ${s.gradientTo ?? "#B8860B"})`;
+}
+
+function ColorField({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
+  return (
+    <div className="flex flex-col gap-2">
+      <Label className="text-xs font-semibold uppercase tracking-wide">{label}</Label>
+      <div className="flex gap-2">
+        <input
+          type="color"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="h-9 w-12 cursor-pointer rounded border border-blue-200 bg-white"
+        />
+        <Input value={value} onChange={(e) => onChange(e.target.value)} className="flex-1" />
+      </div>
+    </div>
+  );
+}
+
+/** Gradient text controls for a single heading + device. */
+function GradientControls({
+  value,
+  onUpdate,
+}: {
+  value: { gradientEnabled?: boolean; gradientFrom?: string; gradientTo?: string; gradientAngle?: number };
+  onUpdate: (property: string, val: string | number | boolean) => void;
+}) {
+  const enabled = Boolean(value.gradientEnabled);
+  return (
+    <div className="space-y-4 rounded-lg border border-blue-100 bg-blue-50/40 p-3">
+      <label className="flex items-center gap-2 text-sm font-semibold">
+        <input type="checkbox" checked={enabled} onChange={(e) => onUpdate("gradientEnabled", e.target.checked)} />
+        Gradient text effect
+      </label>
+      {enabled ? (
+        <>
+          <div className="grid grid-cols-2 gap-4">
+            <ColorField label="Gradient Start" value={value.gradientFrom ?? "#F7E7A6"} onChange={(v) => onUpdate("gradientFrom", v)} />
+            <ColorField label="Gradient End" value={value.gradientTo ?? "#B8860B"} onChange={(v) => onUpdate("gradientTo", v)} />
+          </div>
+          <TypographyControl
+            label="Gradient Angle (deg)"
+            value={value.gradientAngle ?? 90}
+            min={0}
+            max={360}
+            onChange={(v) => onUpdate("gradientAngle", v)}
+          />
+        </>
+      ) : (
+        <p className="text-xs text-muted-foreground">When off, the heading uses the solid colour above.</p>
+      )}
+    </div>
+  );
+}
+
 function HeadingSettingBlock({
   heading,
   settings,
@@ -356,6 +414,10 @@ function HeadingSettingBlock({
                   </Select>
                 </div>
               </div>
+              <GradientControls
+                value={settings.desktop}
+                onUpdate={(property, val) => onUpdate("desktop", property, val as string | number)}
+              />
             </Card>
 
             <PreviewBox
@@ -365,6 +427,7 @@ function HeadingSettingBlock({
               color={settings.desktop.color}
               fontWeight={settings.desktop.fontWeight}
               textAlign={settings.desktop.textAlign}
+              gradient={gradientCss(settings.desktop)}
               width={1200}
               height={200}
             />
@@ -443,6 +506,10 @@ function HeadingSettingBlock({
                   </Select>
                 </div>
               </div>
+              <GradientControls
+                value={settings.mobile}
+                onUpdate={(property, val) => onUpdate("mobile", property, val as string | number)}
+              />
             </Card>
 
             <PreviewBox
@@ -452,6 +519,7 @@ function HeadingSettingBlock({
               color={settings.mobile.color}
               fontWeight={settings.mobile.fontWeight}
               textAlign={settings.mobile.textAlign}
+              gradient={gradientCss(settings.mobile)}
               width={375}
               height={300}
             />
