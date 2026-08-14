@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, Trash2 } from "lucide-react";
+import { TypographySettingsEditor } from "./TypographySettingsEditor";
 
 const newId = (p: string) => `${p}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
 
@@ -636,4 +637,5 @@ export const ADMIN_SECTIONS: AdminSection[] = [
   { key: "testimonials", label: "Testimonials", icon: "Quote", Editor: TestimonialsEditor },
   { key: "contact", label: "Contact Info", icon: "Phone", Editor: ContactInfoEditor },
   { key: "footer", label: "Footer", icon: "PanelBottom", Editor: FooterEditor },
+  { key: "typography", label: "Typography & Styles", icon: "Type", Editor: TypographySettingsEditor },
 ];

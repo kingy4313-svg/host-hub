@@ -376,12 +376,28 @@ export function Hero() {
           <div className="relative z-10 flex w-full max-w-4xl flex-col items-center gap-6 px-4 sm:px-6 md:px-4">
             <div className="w-full flex flex-col items-center gap-3">
               {hero.line1 ? (
-                <h1 className="w-full font-display font-black uppercase text-white fluid-hero-1">
+                <h1
+                  className="w-full font-display font-black uppercase text-white fluid-hero-1"
+                  style={{
+                    fontSize: "var(--typo-hero-fs, 48px)",
+                    color: "var(--typo-hero-color, #FFFFFF)",
+                    fontWeight: "var(--typo-hero-fw, 900)",
+                    textAlign: "var(--typo-hero-ta, center)" as any,
+                  }}
+                >
                   {hero.line1}
                 </h1>
               ) : null}
               {hero.line2 ? (
-                <h2 className="w-full font-display font-black uppercase text-white fluid-hero-2">
+                <h2
+                  className="w-full font-display font-black uppercase text-white fluid-hero-2"
+                  style={{
+                    fontSize: "var(--typo-hero-fs, 48px)",
+                    color: "var(--typo-hero-color, #FFFFFF)",
+                    fontWeight: "var(--typo-hero-fw, 900)",
+                    textAlign: "var(--typo-hero-ta, center)" as any,
+                  }}
+                >
                   {hero.line2}
                 </h2>
               ) : null}
@@ -417,7 +433,15 @@ export function Intro() {
     <section id="about" className="px-6 py-20 text-center">
       <ScrollRevealGroup stagger={0.12}>
         <RevealItem>
-          <h1 className="section-heading section-h1 font-display font-bold tracking-tight">
+          <h1
+            className="section-heading section-h1 font-display font-bold tracking-tight"
+            style={{
+              fontSize: "var(--typo-hero-fs, 48px)",
+              color: "var(--typo-hero-color, #FFFFFF)",
+              fontWeight: "var(--typo-hero-fw, 900)",
+              textAlign: "var(--typo-hero-ta, center)" as any,
+            }}
+          >
             {intro.heading.split("★").map((part, i, arr) => (
               <span key={i}>
                 {part}
@@ -460,7 +484,17 @@ export function WhyBook() {
   return (
     <section className="px-6 py-20">
       <ScrollReveal>
-        <h2 className="section-heading section-h2 font-display font-bold">{whyBook.heading}</h2>
+        <h2
+          className="section-heading section-h2 font-display font-bold"
+          style={{
+            fontSize: "var(--typo-whybook-fs, 36px)",
+            color: "var(--typo-whybook-color, #FFFFFF)",
+            fontWeight: "var(--typo-whybook-fw, 700)",
+            textAlign: "var(--typo-whybook-ta, center)" as any,
+          }}
+        >
+          {whyBook.heading}
+        </h2>
         {whyBook.showDivider ? <span className="gold-divider mt-5" /> : null}
       </ScrollReveal>
       <ScrollRevealGroup className="mx-auto mt-12 grid max-w-6xl gap-8 md:grid-cols-3" stagger={0.13} amount={0.2}>
@@ -485,8 +519,16 @@ export function FeaturedMoments() {
   return (
     <section className="py-20">
       <ScrollReveal>
-        <h2 className="section-heading section-h2 font-display font-bold">
-          {featured.headingWhite} <span className="text-gold-gradient">{featured.headingGold}</span>
+        <h2
+          className="section-heading section-h2 font-display font-bold"
+          style={{
+            fontSize: "var(--typo-featured-fs, 36px)",
+            color: "var(--typo-featured-color, #FFFFFF)",
+            fontWeight: "var(--typo-featured-fw, 700)",
+            textAlign: "var(--typo-featured-ta, center)" as any,
+          }}
+        >
+          {featured.headingWhite} {featured.headingGold}
         </h2>
         <span className="gold-divider mt-5" />
       </ScrollReveal>
@@ -526,7 +568,15 @@ export function Services() {
   return (
     <section id="services" className="px-6 py-20">
       <ScrollReveal>
-        <h2 className="section-heading section-h2 font-display font-bold">
+        <h2
+          className="section-heading section-h2 font-display font-bold"
+          style={{
+            fontSize: "var(--typo-events-fs, 36px)",
+            color: "var(--typo-events-color, #FFFFFF)",
+            fontWeight: "var(--typo-events-fw, 700)",
+            textAlign: "var(--typo-events-ta, center)" as any,
+          }}
+        >
           {services.headingWhite} <span className="text-gold-gradient">{services.headingGold}</span>
         </h2>
         <span className="gold-divider mt-5" />
@@ -620,7 +670,15 @@ export function PastEvents() {
   return (
     <section id="past-events" className="px-6 py-20 text-center">
       <ScrollReveal>
-        <h2 className="section-heading section-h2 font-display font-bold">
+        <h2
+          className="section-heading section-h2 font-display font-bold"
+          style={{
+            fontSize: "var(--typo-pastevents-fs, 36px)",
+            color: "var(--typo-pastevents-color, #FFFFFF)",
+            fontWeight: "var(--typo-pastevents-fw, 700)",
+            textAlign: "var(--typo-pastevents-ta, center)" as any,
+          }}
+        >
           {pastEvents.headingWhite} <span className="text-gold-gradient">{pastEvents.headingGold}</span>
         </h2>
         <span className="gold-divider mt-5" />
@@ -691,7 +749,17 @@ export function MyWorks() {
   return (
     <section id="works" className="px-6 py-20">
       <ScrollReveal>
-        <h2 className="section-heading section-h2 font-display font-bold">{works.heading}</h2>
+        <h2
+          className="section-heading section-h2 font-display font-bold"
+          style={{
+            fontSize: "var(--typo-works-fs, 36px)",
+            color: "var(--typo-works-color, #FFFFFF)",
+            fontWeight: "var(--typo-works-fw, 700)",
+            textAlign: "var(--typo-works-ta, center)" as any,
+          }}
+        >
+          {works.heading}
+        </h2>
         <span className="gold-divider mt-5" />
       </ScrollReveal>
       <div className="mt-10 flex flex-wrap justify-center gap-8">
@@ -779,7 +847,15 @@ export function Testimonials() {
   return (
     <section className="py-20">
       <ScrollReveal>
-        <h2 className="section-heading section-h2 font-display font-bold">
+        <h2
+          className="section-heading section-h2 font-display font-bold"
+          style={{
+            fontSize: "var(--typo-testimonials-fs, 36px)",
+            color: "var(--typo-testimonials-color, #FFFFFF)",
+            fontWeight: "var(--typo-testimonials-fw, 700)",
+            textAlign: "var(--typo-testimonials-ta, center)" as any,
+          }}
+        >
           {testimonials.headingWhite} <span className="text-gold-gradient">{testimonials.headingGold}</span>
         </h2>
         {testimonials.subtext ? <p className="mt-4 text-center text-sm text-muted-foreground">{testimonials.subtext}</p> : null}
@@ -844,7 +920,15 @@ export function ContactCta() {
     <section id="contact" className="relative overflow-hidden px-6 py-24 text-center">
       <span className="absolute left-[8%] top-1/3 size-1.5 rounded-full bg-gold" />
       <span className="absolute right-[10%] top-1/2 size-1 rounded-full bg-gold/70" />
-      <h2 className="section-heading section-h1 font-display font-bold">
+      <h2
+        className="section-heading section-h1 font-display font-bold"
+        style={{
+          fontSize: "var(--typo-contact-fs, 40px)",
+          color: "var(--typo-contact-color, #FFFFFF)",
+          fontWeight: "var(--typo-contact-fw, 700)",
+          textAlign: "var(--typo-contact-ta, center)" as any,
+        }}
+      >
         {contact.headingWhite} <span className="text-gold-gradient">{contact.headingGold}</span>
       </h2>
       <span className="gold-divider mt-6" />

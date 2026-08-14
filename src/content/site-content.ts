@@ -42,6 +42,41 @@ export type WorkTab = { id: string; name: string; items: WorkItem[] };
 export type TestimonialItem = { id: string; name: string; role: string; text: string; photoUrl: string };
 export type TextItem = { id: string; text: string };
 
+export type TypographySettings = {
+  heroHeading: {
+    desktop: { fontSize: number; color: string; fontWeight: string; textAlign: string };
+    mobile: { fontSize: number; color: string; fontWeight: string; textAlign: string };
+  };
+  whyBookMe: {
+    desktop: { fontSize: number; color: string; fontWeight: string; textAlign: string };
+    mobile: { fontSize: number; color: string; fontWeight: string; textAlign: string };
+  };
+  featuredMoments: {
+    desktop: { fontSize: number; color: string; fontWeight: string; textAlign: string };
+    mobile: { fontSize: number; color: string; fontWeight: string; textAlign: string };
+  };
+  eventsSpecialize: {
+    desktop: { fontSize: number; color: string; fontWeight: string; textAlign: string };
+    mobile: { fontSize: number; color: string; fontWeight: string; textAlign: string };
+  };
+  pastEvents: {
+    desktop: { fontSize: number; color: string; fontWeight: string; textAlign: string };
+    mobile: { fontSize: number; color: string; fontWeight: string; textAlign: string };
+  };
+  myWork: {
+    desktop: { fontSize: number; color: string; fontWeight: string; textAlign: string };
+    mobile: { fontSize: number; color: string; fontWeight: string; textAlign: string };
+  };
+  testimonials: {
+    desktop: { fontSize: number; color: string; fontWeight: string; textAlign: string };
+    mobile: { fontSize: number; color: string; fontWeight: string; textAlign: string };
+  };
+  contactCta: {
+    desktop: { fontSize: number; color: string; fontWeight: string; textAlign: string };
+    mobile: { fontSize: number; color: string; fontWeight: string; textAlign: string };
+  };
+};
+
 export type SiteContent = {
   settings: {
     siteName: string;
@@ -141,6 +176,7 @@ export type SiteContent = {
     copyright: string;
     autoYear: boolean;
   };
+  typography: TypographySettings;
 };
 
 export type SectionKey = keyof SiteContent;
@@ -158,6 +194,7 @@ export const SECTION_LABELS: Record<SectionKey, string> = {
   testimonials: "Testimonials",
   contact: "Contact / CTA",
   footer: "Footer",
+  typography: "Typography & Text Styles",
 };
 
 export const ICON_OPTIONS = [
@@ -413,6 +450,40 @@ export const DEFAULT_CONTENT: SiteContent = {
     privacyContent: "This is the privacy policy. Edit this text from the admin dashboard.",
     copyright: "© {year} Sayanti Banerjee. All rights reserved.",
     autoYear: true,
+  },
+  typography: {
+    heroHeading: {
+      desktop: { fontSize: 48, color: "#FFFFFF", fontWeight: "900", textAlign: "center" },
+      mobile: { fontSize: 24, color: "#FFFFFF", fontWeight: "900", textAlign: "center" },
+    },
+    whyBookMe: {
+      desktop: { fontSize: 36, color: "#FFFFFF", fontWeight: "700", textAlign: "center" },
+      mobile: { fontSize: 20, color: "#FFFFFF", fontWeight: "700", textAlign: "center" },
+    },
+    featuredMoments: {
+      desktop: { fontSize: 36, color: "#FFFFFF", fontWeight: "700", textAlign: "center" },
+      mobile: { fontSize: 20, color: "#FFFFFF", fontWeight: "700", textAlign: "center" },
+    },
+    eventsSpecialize: {
+      desktop: { fontSize: 36, color: "#FFFFFF", fontWeight: "700", textAlign: "center" },
+      mobile: { fontSize: 20, color: "#FFFFFF", fontWeight: "700", textAlign: "center" },
+    },
+    pastEvents: {
+      desktop: { fontSize: 36, color: "#FFFFFF", fontWeight: "700", textAlign: "center" },
+      mobile: { fontSize: 20, color: "#FFFFFF", fontWeight: "700", textAlign: "center" },
+    },
+    myWork: {
+      desktop: { fontSize: 36, color: "#FFFFFF", fontWeight: "700", textAlign: "center" },
+      mobile: { fontSize: 20, color: "#FFFFFF", fontWeight: "700", textAlign: "center" },
+    },
+    testimonials: {
+      desktop: { fontSize: 36, color: "#FFFFFF", fontWeight: "700", textAlign: "center" },
+      mobile: { fontSize: 20, color: "#FFFFFF", fontWeight: "700", textAlign: "center" },
+    },
+    contactCta: {
+      desktop: { fontSize: 40, color: "#FFFFFF", fontWeight: "700", textAlign: "center" },
+      mobile: { fontSize: 22, color: "#FFFFFF", fontWeight: "700", textAlign: "center" },
+    },
   },
 };
 

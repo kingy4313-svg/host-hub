@@ -1,6 +1,7 @@
 import { createContext, useContext, type ReactNode } from "react";
 import * as Lucide from "lucide-react";
 import { DEFAULT_CONTENT, type SiteContent } from "@/content/site-content";
+import { TypographyStyleInjector } from "./TypographyStyleInjector";
 
 const ContentContext = createContext<SiteContent>(DEFAULT_CONTENT);
 
@@ -18,11 +19,16 @@ export function Icon({ name, className }: { name: string; className?: string | u
   return <Final className={className} />;
 }
 
-/** Applies admin-configured colors and fonts as CSS variables. */
+/** Applies admin-configured colors, fonts, and typography settings as CSS variables. */
 export function ThemeStyle({ content }: { content: SiteContent }) {
   const { colors, fonts } = content.settings;
   const css = `:root{--gold:${colors.gold};--primary:${colors.gold};--ring:${colors.gold};--background:${colors.background};--foreground:${colors.foreground};}
 body{font-family:"${fonts.body}",ui-sans-serif,system-ui,sans-serif;}
 h1,h2,h3,h4,.font-display{font-family:"${fonts.heading}",Georgia,serif;}`;
-  return <style dangerouslySetInnerHTML={{ __html: css }} />;
+  return (
+    <>
+      <style dangerouslySetInnerHTML={{ __html: css }} />
+      <TypographyStyleInjector typography={content.typography} />
+    </>
+  );
 }

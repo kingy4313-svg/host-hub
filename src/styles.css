@@ -63,6 +63,177 @@
   --gold-deep: oklch(0.62 0.12 78);
   --gradient-gold: linear-gradient(135deg, var(--gold-deep), var(--gold-soft) 55%, var(--gold-deep));
   --shadow-gold: 0 12px 40px -12px oklch(0.78 0.13 88 / 45%);
+  
+  /* ============== Typography Settings (Admin-Controlled) ============== */
+  /* Hero Heading */
+  --typo-hero-fs-desktop: 48px;
+  --typo-hero-color-desktop: #FFFFFF;
+  --typo-hero-fw-desktop: 900;
+  --typo-hero-ta-desktop: center;
+  --typo-hero-fs-mobile: 24px;
+  --typo-hero-color-mobile: #FFFFFF;
+  --typo-hero-fw-mobile: 900;
+  --typo-hero-ta-mobile: center;
+
+  /* Why People Book Me */
+  --typo-whybook-fs-desktop: 36px;
+  --typo-whybook-color-desktop: #FFFFFF;
+  --typo-whybook-fw-desktop: 700;
+  --typo-whybook-ta-desktop: center;
+  --typo-whybook-fs-mobile: 20px;
+  --typo-whybook-color-mobile: #FFFFFF;
+  --typo-whybook-fw-mobile: 700;
+  --typo-whybook-ta-mobile: center;
+
+  /* Featured Moments */
+  --typo-featured-fs-desktop: 36px;
+  --typo-featured-color-desktop: #FFFFFF;
+  --typo-featured-fw-desktop: 700;
+  --typo-featured-ta-desktop: center;
+  --typo-featured-fs-mobile: 20px;
+  --typo-featured-color-mobile: #FFFFFF;
+  --typo-featured-fw-mobile: 700;
+  --typo-featured-ta-mobile: center;
+
+  /* Events I Specialize In */
+  --typo-events-fs-desktop: 36px;
+  --typo-events-color-desktop: #FFFFFF;
+  --typo-events-fw-desktop: 700;
+  --typo-events-ta-desktop: center;
+  --typo-events-fs-mobile: 20px;
+  --typo-events-color-mobile: #FFFFFF;
+  --typo-events-fw-mobile: 700;
+  --typo-events-ta-mobile: center;
+
+  /* Past Events */
+  --typo-pastevents-fs-desktop: 36px;
+  --typo-pastevents-color-desktop: #FFFFFF;
+  --typo-pastevents-fw-desktop: 700;
+  --typo-pastevents-ta-desktop: center;
+  --typo-pastevents-fs-mobile: 20px;
+  --typo-pastevents-color-mobile: #FFFFFF;
+  --typo-pastevents-fw-mobile: 700;
+  --typo-pastevents-ta-mobile: center;
+
+  /* My Works */
+  --typo-works-fs-desktop: 36px;
+  --typo-works-color-desktop: #FFFFFF;
+  --typo-works-fw-desktop: 700;
+  --typo-works-ta-desktop: center;
+  --typo-works-fs-mobile: 20px;
+  --typo-works-color-mobile: #FFFFFF;
+  --typo-works-fw-mobile: 700;
+  --typo-works-ta-mobile: center;
+
+  /* Testimonials */
+  --typo-testimonials-fs-desktop: 36px;
+  --typo-testimonials-color-desktop: #FFFFFF;
+  --typo-testimonials-fw-desktop: 700;
+  --typo-testimonials-ta-desktop: center;
+  --typo-testimonials-fs-mobile: 20px;
+  --typo-testimonials-color-mobile: #FFFFFF;
+  --typo-testimonials-fw-mobile: 700;
+  --typo-testimonials-ta-mobile: center;
+
+  /* Contact CTA */
+  --typo-contact-fs-desktop: 40px;
+  --typo-contact-color-desktop: #FFFFFF;
+  --typo-contact-fw-desktop: 700;
+  --typo-contact-ta-desktop: center;
+  --typo-contact-fs-mobile: 22px;
+  --typo-contact-color-mobile: #FFFFFF;
+  --typo-contact-fw-mobile: 700;
+  --typo-contact-ta-mobile: center;
+}
+
+@media (max-width: 768px) {
+  :root {
+    /* Switch to mobile values */
+    --typo-hero-fs: var(--typo-hero-fs-mobile);
+    --typo-hero-color: var(--typo-hero-color-mobile);
+    --typo-hero-fw: var(--typo-hero-fw-mobile);
+    --typo-hero-ta: var(--typo-hero-ta-mobile);
+
+    --typo-whybook-fs: var(--typo-whybook-fs-mobile);
+    --typo-whybook-color: var(--typo-whybook-color-mobile);
+    --typo-whybook-fw: var(--typo-whybook-fw-mobile);
+    --typo-whybook-ta: var(--typo-whybook-ta-mobile);
+
+    --typo-featured-fs: var(--typo-featured-fs-mobile);
+    --typo-featured-color: var(--typo-featured-color-mobile);
+    --typo-featured-fw: var(--typo-featured-fw-mobile);
+    --typo-featured-ta: var(--typo-featured-ta-mobile);
+
+    --typo-events-fs: var(--typo-events-fs-mobile);
+    --typo-events-color: var(--typo-events-color-mobile);
+    --typo-events-fw: var(--typo-events-fw-mobile);
+    --typo-events-ta: var(--typo-events-ta-mobile);
+
+    --typo-pastevents-fs: var(--typo-pastevents-fs-mobile);
+    --typo-pastevents-color: var(--typo-pastevents-color-mobile);
+    --typo-pastevents-fw: var(--typo-pastevents-fw-mobile);
+    --typo-pastevents-ta: var(--typo-pastevents-ta-mobile);
+
+    --typo-works-fs: var(--typo-works-fs-mobile);
+    --typo-works-color: var(--typo-works-color-mobile);
+    --typo-works-fw: var(--typo-works-fw-mobile);
+    --typo-works-ta: var(--typo-works-ta-mobile);
+
+    --typo-testimonials-fs: var(--typo-testimonials-fs-mobile);
+    --typo-testimonials-color: var(--typo-testimonials-color-mobile);
+    --typo-testimonials-fw: var(--typo-testimonials-fw-mobile);
+    --typo-testimonials-ta: var(--typo-testimonials-ta-mobile);
+
+    --typo-contact-fs: var(--typo-contact-fs-mobile);
+    --typo-contact-color: var(--typo-contact-color-mobile);
+    --typo-contact-fw: var(--typo-contact-fw-mobile);
+    --typo-contact-ta: var(--typo-contact-ta-mobile);
+  }
+}
+
+@media (min-width: 769px) {
+  :root {
+    /* Use desktop values for screens larger than mobile breakpoint */
+    --typo-hero-fs: var(--typo-hero-fs-desktop);
+    --typo-hero-color: var(--typo-hero-color-desktop);
+    --typo-hero-fw: var(--typo-hero-fw-desktop);
+    --typo-hero-ta: var(--typo-hero-ta-desktop);
+
+    --typo-whybook-fs: var(--typo-whybook-fs-desktop);
+    --typo-whybook-color: var(--typo-whybook-color-desktop);
+    --typo-whybook-fw: var(--typo-whybook-fw-desktop);
+    --typo-whybook-ta: var(--typo-whybook-ta-desktop);
+
+    --typo-featured-fs: var(--typo-featured-fs-desktop);
+    --typo-featured-color: var(--typo-featured-color-desktop);
+    --typo-featured-fw: var(--typo-featured-fw-desktop);
+    --typo-featured-ta: var(--typo-featured-ta-desktop);
+
+    --typo-events-fs: var(--typo-events-fs-desktop);
+    --typo-events-color: var(--typo-events-color-desktop);
+    --typo-events-fw: var(--typo-events-fw-desktop);
+    --typo-events-ta: var(--typo-events-ta-desktop);
+
+    --typo-pastevents-fs: var(--typo-pastevents-fs-desktop);
+    --typo-pastevents-color: var(--typo-pastevents-color-desktop);
+    --typo-pastevents-fw: var(--typo-pastevents-fw-desktop);
+    --typo-pastevents-ta: var(--typo-pastevents-ta-desktop);
+
+    --typo-works-fs: var(--typo-works-fs-desktop);
+    --typo-works-color: var(--typo-works-color-desktop);
+    --typo-works-fw: var(--typo-works-fw-desktop);
+    --typo-works-ta: var(--typo-works-ta-desktop);
+
+    --typo-testimonials-fs: var(--typo-testimonials-fs-desktop);
+    --typo-testimonials-color: var(--typo-testimonials-color-desktop);
+    --typo-testimonials-fw: var(--typo-testimonials-fw-desktop);
+    --typo-testimonials-ta: var(--typo-testimonials-ta-desktop);
+
+    --typo-contact-fs: var(--typo-contact-fs-desktop);
+    --typo-contact-color: var(--typo-contact-color-desktop);
+    --typo-contact-fw: var(--typo-contact-fw-desktop);
+    --typo-contact-ta: var(--typo-contact-ta-desktop);
+  }
 }
 
 @layer base {
@@ -212,25 +383,21 @@
   display: block;
   width: 100%;
   max-width: none;
-  white-space: nowrap;
-  text-wrap: nowrap;
   text-align: center;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  text-wrap: balance;
+  overflow-wrap: break-word;
 }
 
 @utility section-h1 {
-  font-size: clamp(0.75rem, 2.8vw, 3.75rem);
-  line-height: 1.1;
+  font-size: clamp(1.375rem, 2.8vw, 3.75rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
 }
 
 @utility section-h2 {
-  font-size: clamp(0.7rem, 2.3vw, 3rem);
-  line-height: 1.1;
+  font-size: clamp(1.125rem, 2.3vw, 3rem);
+  line-height: 1.2;
+  letter-spacing: -0.005em;
 }
 
 /* ------------------------------------------- fluid typography (admin text) */
