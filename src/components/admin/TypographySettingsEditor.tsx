@@ -317,7 +317,7 @@ function HeadingSettingBlock({
   onUpdate: (
     device: "desktop" | "mobile",
     property: string,
-    value: string | number
+    value: string | number | boolean
   ) => void;
 }) {
   return (
@@ -416,7 +416,7 @@ function HeadingSettingBlock({
               </div>
               <GradientControls
                 value={settings.desktop}
-                onUpdate={(property, val) => onUpdate("desktop", property, val as string | number)}
+                onUpdate={(property, val) => onUpdate("desktop", property, val)}
               />
             </Card>
 
@@ -508,7 +508,7 @@ function HeadingSettingBlock({
               </div>
               <GradientControls
                 value={settings.mobile}
-                onUpdate={(property, val) => onUpdate("mobile", property, val as string | number)}
+                onUpdate={(property, val) => onUpdate("mobile", property, val)}
               />
             </Card>
 
@@ -530,6 +530,137 @@ function HeadingSettingBlock({
   );
 }
 
+const BRAND_FONTS = [
+  "Playfair Display",
+  "Cormorant Garamond",
+  "Georgia",
+  "Poppins",
+  "Montserrat",
+  "Great Vibes",
+  "Cinzel",
+  "Space Grotesk",
+];
+
+/** Header brand name (e.g. "Sayanti Banerjee") styling panel. */
+function BrandPanel({ brand, onChange }: { brand: BrandTypography; onChange: (b: BrandTypography) => void }) {
+  const set = <K extends keyof BrandTypography>(key: K, value: BrandTypography[K]) => onChange({ ...brand, [key]: value });
+  const gradient = brand.gradientEnabled
+    ? `linear-gradient(${brand.gradientAngle}deg, ${brand.gradientFrom}, ${brand.gradientTo})`
+    : undefined;
+
+  return (
+    <Card className="space-y-5 p-4">
+      <div>
+        <h3 className="text-sm font-semibold">Header Brand Name</h3>
+        <p className="text-xs text-muted-foreground">Font style, colour, gradient, highlight and drop shadow for the name in the site header.</p>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="flex flex-col gap-2">
+          <Label className="text-xs font-semibold uppercase tracking-wide">Font Style</Label>
+          <Select value={brand.fontFamily} onValueChange={(v) => set("fontFamily", v)}>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {BRAND_FONTS.map((f) => (
+                <SelectItem key={f} value={f}>
+                  {f}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label className="text-xs font-semibold uppercase tracking-wide">Font Weight</Label>
+          <Select value={brand.fontWeight} onValueChange={(v) => set("fontWeight", v)}>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {FONT_WEIGHTS.map((fw) => (
+                <SelectItem key={fw.value} value={fw.value}>
+                  {fw.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <TypographyControl label="Desktop Size" value={brand.fontSize} min={10} max={64} onChange={(v) => set("fontSize", Number(v))} />
+        <TypographyControl label="Mobile Size" value={brand.fontSizeMobile} min={8} max={48} onChange={(v) => set("fontSizeMobile", Number(v))} />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <TypographyControl label="Letter Spacing" value={brand.letterSpacing} min={0} max={20} onChange={(v) => set("letterSpacing", Number(v))} />
+        <ColorField label="Font Colour" value={brand.color} onChange={(v) => set("color", v)} />
+      </div>
+
+      <GradientControls
+        value={brand}
+        onUpdate={(property, val) => onChange({ ...brand, [property]: val } as BrandTypography)}
+      />
+
+      <div className="space-y-4 rounded-lg border border-blue-100 bg-blue-50/40 p-3">
+        <label className="flex items-center gap-2 text-sm font-semibold">
+          <input type="checkbox" checked={brand.highlightEnabled} onChange={(e) => set("highlightEnabled", e.target.checked)} />
+          Highlight background
+        </label>
+        {brand.highlightEnabled ? (
+          <ColorField label="Highlight Colour" value={brand.highlightColor} onChange={(v) => set("highlightColor", v)} />
+        ) : null}
+      </div>
+
+      <div className="space-y-4 rounded-lg border border-blue-100 bg-blue-50/40 p-3">
+        <label className="flex items-center gap-2 text-sm font-semibold">
+          <input type="checkbox" checked={brand.shadowEnabled} onChange={(e) => set("shadowEnabled", e.target.checked)} />
+          Drop shadow
+        </label>
+        {brand.shadowEnabled ? (
+          <>
+            <div className="grid grid-cols-3 gap-4">
+              <TypographyControl label="Offset X" value={brand.shadowX} min={-20} max={20} onChange={(v) => set("shadowX", Number(v))} />
+              <TypographyControl label="Offset Y" value={brand.shadowY} min={-20} max={20} onChange={(v) => set("shadowY", Number(v))} />
+              <TypographyControl label="Blur" value={brand.shadowBlur} min={0} max={40} onChange={(v) => set("shadowBlur", Number(v))} />
+            </div>
+            <ColorField label="Shadow Colour" value={brand.shadowColor} onChange={(v) => set("shadowColor", v)} />
+          </>
+        ) : null}
+      </div>
+
+      <div className="rounded-xl border border-slate-700 bg-black p-6 text-center">
+        <span
+          className="inline-block rounded-md uppercase"
+          style={{
+            backgroundColor: brand.highlightEnabled ? brand.highlightColor : "transparent",
+            padding: brand.highlightEnabled ? "0.15em 0.45em" : 0,
+          }}
+        >
+          <span
+            style={{
+              fontFamily: `"${brand.fontFamily}", Georgia, serif`,
+              fontSize: brand.fontSize,
+              fontWeight: brand.fontWeight as never,
+              letterSpacing: `${brand.letterSpacing / 10}em`,
+              color: brand.color,
+              ...(gradient
+                ? { backgroundImage: gradient, backgroundClip: "text", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }
+                : {}),
+              textShadow: brand.shadowEnabled
+                ? `${brand.shadowX}px ${brand.shadowY}px ${brand.shadowBlur}px ${brand.shadowColor}`
+                : "none",
+            }}
+          >
+            Sayanti Banerjee
+          </span>
+        </span>
+      </div>
+    </Card>
+  );
+}
+
 export function TypographySettingsEditor({ content, patch }: EditorProps) {
   const typography = content.typography;
   const [isResetting, setIsResetting] = useState(false);
@@ -538,7 +669,7 @@ export function TypographySettingsEditor({ content, patch }: EditorProps) {
     headingKey: HeadingKey,
     device: "desktop" | "mobile",
     property: string,
-    value: string | number
+    value: string | number | boolean
   ) => {
     const currentHeading = typography[headingKey];
     const updated = {
@@ -571,6 +702,11 @@ export function TypographySettingsEditor({ content, patch }: EditorProps) {
         </p>
       </div>
 
+
+      <BrandPanel
+        brand={{ ...DEFAULT_CONTENT.typography.brand, ...(typography.brand ?? {}) }}
+        onChange={(b) => patch("typography", { ...typography, brand: b })}
+      />
 
       <Accordion type="single" collapsible className="w-full space-y-3">
         {HEADINGS.map((heading) => (
