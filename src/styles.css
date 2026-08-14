@@ -473,3 +473,56 @@
   overflow-wrap: break-word;
 }
 
+
+/* ------------------------------------------------- admin dashboard (light surface) */
+
+.admin-surface,
+.admin-surface-popover {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.21 0.02 260);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.21 0.02 260);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.21 0.02 260);
+  --primary: oklch(0.55 0.19 258);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.96 0.01 260);
+  --secondary-foreground: oklch(0.24 0.02 260);
+  --muted: oklch(0.96 0.01 260);
+  --muted-foreground: oklch(0.5 0.02 260);
+  --accent: oklch(0.95 0.02 258);
+  --accent-foreground: oklch(0.24 0.02 260);
+  --destructive: oklch(0.58 0.22 27);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.9 0.01 260);
+  --input: oklch(0.88 0.01 260);
+  --ring: oklch(0.55 0.19 258);
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.admin-surface input,
+.admin-surface textarea,
+.admin-surface select,
+.admin-surface-popover input,
+.admin-surface-popover textarea,
+.admin-surface-popover select {
+  color: var(--foreground);
+  background-color: var(--background);
+}
+
+.admin-surface input[type="color"] {
+  padding: 2px;
+  background-color: var(--background);
+}
+
+.admin-surface h1,
+.admin-surface h2,
+.admin-surface h3,
+.admin-surface h4,
+.admin-surface-popover h1,
+.admin-surface-popover h2,
+.admin-surface-popover h3,
+.admin-surface-popover h4 {
+  font-family: var(--font-sans);
+}
