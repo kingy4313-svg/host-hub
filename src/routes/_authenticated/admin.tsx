@@ -133,7 +133,7 @@ function AdminPage() {
               <Lucide.Menu className="h-4 w-4" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-72 overflow-y-auto p-4">
+          <SheetContent side="left" className="admin-surface-popover w-72 overflow-y-auto p-4">
             <p className="mb-3 text-sm font-semibold">Sections</p>
             {sidebar}
           </SheetContent>
