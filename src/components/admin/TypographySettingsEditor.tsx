@@ -479,17 +479,21 @@ export function TypographySettingsEditor({ content, patch }: EditorProps) {
 
   const resetToDefaults = () => {
     setIsResetting(true);
-    // Reset to defaults - you can implement this with your DEFAULT_CONTENT
-    // For now, just show a toast-like behavior
-    setTimeout(() => setIsResetting(false), 500);
+    patch("typography", DEFAULT_CONTENT.typography);
+    setTimeout(() => setIsResetting(false), 400);
   };
 
   return (
     <div className="space-y-6">
       <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-900">
-        <p className="font-semibold mb-2">💡 Live Preview Features</p>
-        <p>Edit the font size, color, weight, and alignment for each heading. Preview updates instantly for both desktop (1200px) and mobile (375px) viewports.</p>
+        <p className="font-semibold mb-2">Live preview</p>
+        <p>
+          Edit font size, colour, weight and alignment for each heading. The previews below show the
+          real 1200px desktop and 375px mobile rendering, scaled to fit. Press <strong>Save Changes</strong>{" "}
+          (with “Save as draft only” unchecked) to apply them to the live website.
+        </p>
       </div>
+
 
       <Accordion type="single" collapsible className="w-full space-y-3">
         {HEADINGS.map((heading) => (
