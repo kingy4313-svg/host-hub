@@ -22,7 +22,7 @@ export function typoStyle(slug: string, fs: number, fw: string): React.CSSProper
     backgroundClip: "text",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: `var(--typo-${slug}-fill, currentColor)`,
-  } as React.CSSProperties;
+  } as unknown as React.CSSProperties;
 }
 
 const mailto = (email: string) => `mailto:${email}`;
@@ -360,7 +360,7 @@ export function Hero() {
     objectPosition: `${mediaXDesktop}% ${mediaYDesktop}%`,
     transform: `scale(${zoomDesktop})`,
     transformOrigin: `${mediaXDesktop}% ${mediaYDesktop}%`,
-  } as React.CSSProperties;
+  } as unknown as React.CSSProperties;
 
   const mediaXMobile = (hero as any).mediaPositionXMobile ?? mediaX;
   const mediaYMobile = (hero as any).mediaPositionYMobile ?? mediaY;
@@ -369,7 +369,7 @@ export function Hero() {
     objectPosition: `${mediaXMobile}% ${mediaYMobile}%`,
     transform: `scale(${zoomMobile})`,
     transformOrigin: `${mediaXMobile}% ${mediaYMobile}%`,
-  } as React.CSSProperties;
+  } as unknown as React.CSSProperties;
 
   // Use responsive image loading via picture element
   // Desktop (16:9) and Mobile (9:16) images are selected by browser based on viewport width
