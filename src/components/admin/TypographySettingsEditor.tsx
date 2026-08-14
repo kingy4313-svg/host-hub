@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { EditorProps } from "./SectionEditors";
 import type { TypographySettings } from "@/content/site-content";
 import { Button } from "@/components/ui/button";
