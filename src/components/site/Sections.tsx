@@ -241,10 +241,35 @@ export function Navbar() {
   return (
     <header className={`fixed inset-x-0 top-0 z-50 transition-transform duration-300 ${hidden ? "-translate-y-full" : "translate-y-0"}`}>
       <div className="mx-auto flex w-full max-w-[1300px] items-center justify-between px-4 py-4 sm:px-6">
-        <Link to="/" className="logo-glow text-sm font-display font-bold uppercase tracking-[0.25em] text-gold transition-colors hover:text-gold/80 md:text-lg" style={{ textShadow: "0 2px 12px rgba(0,0,0,0.55), 0 0 1px rgba(0,0,0,0.4)" }}>
+        <Link to="/" className="logo-glow inline-flex items-center transition-opacity hover:opacity-90">
           {settings.logoUrl ? <img src={settings.logoUrl} alt={navbar.logoText} className="mr-3 inline-block h-8 w-auto align-middle" /> : null}
-          <span className="align-middle">{navbar.logoText}</span>
+          <span
+            className="align-middle rounded-md"
+            style={{
+              backgroundColor: "var(--brand-highlight, transparent)",
+              padding: "var(--brand-highlight-pad, 0)",
+            }}
+          >
+            <span
+              className="uppercase"
+              style={{
+                fontFamily: "var(--brand-ff, \"Playfair Display\", Georgia, serif)",
+                fontSize: "var(--brand-fs, 14px)",
+                fontWeight: "var(--brand-fw, 700)" as any,
+                letterSpacing: "var(--brand-ls, 0.4em)",
+                color: "var(--brand-color, #D4AF37)",
+                backgroundImage: "var(--brand-bg, none)",
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "var(--brand-fill, currentColor)",
+                textShadow: "var(--brand-shadow, none)",
+              }}
+            >
+              {navbar.logoText}
+            </span>
+          </span>
         </Link>
+
 
         {/* desktop nav moved to the right-side controls for compact alignment */}
 
