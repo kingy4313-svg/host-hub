@@ -1,5 +1,33 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { createClient } from "@supabase/supabase-js";
+
+/**
+ * Downloads a media object. Prefers the service-role client, but falls back to
+ * the publishable key (the bucket has a public SELECT policy) so uploads still
+ * render when no service-role key is configured.
+ */
+async function downloadMedia(objectPath: string) {
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const res = await supabaseAdmin.storage.from("media").download(objectPath);
+    if (!res.error && res.data) return res.data;
+  } catch {
+    // fall through to the publishable-key client
+  }
+
+  const url = process.env["SUPABASE_URL"] ?? process.env["VITE_SUPABASE_URL"];
+  const key =
+    process.env["SUPABASE_PUBLISHABLE_KEY"] ?? process.env["VITE_SUPABASE_PUBLISHABLE_KEY"];
+  if (!url || !key) return null;
+
+  const anon = createClient(url, key, {
+    auth: { persistSession: false, autoRefreshToken: false },
+    global: { fetch: (input, init) => fetch(input, { ...init, headers: { ...Object.fromEntries(new Headers(init?.headers)), apikey: key } }) },
+  });
+  const res = await anon.storage.from("media").download(objectPath);
+  if (res.error || !res.data) return null;
+  return res.data;
+}
 
 export const Route = createFileRoute("/api/public/media/$")({
   server: {
@@ -10,8 +38,8 @@ export const Route = createFileRoute("/api/public/media/$")({
         if (!decodedPath || decodedPath.includes("..")) return new Response("Not found", { status: 404 });
 
         try {
-          const { data, error } = await supabaseAdmin.storage.from("media").download(decodedPath);
-          if (error || !data) return new Response("Not found", { status: 404 });
+          const data = await downloadMedia(decodedPath);
+          if (!data) return new Response("Not found", { status: 404 });
 
           const buffer = await data.arrayBuffer();
           const size = buffer.byteLength;
