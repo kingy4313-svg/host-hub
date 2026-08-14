@@ -497,7 +497,27 @@ export const DEFAULT_CONTENT: SiteContent = {
       desktop: { fontSize: 40, color: "#FFFFFF", fontWeight: "700", textAlign: "center" },
       mobile: { fontSize: 22, color: "#FFFFFF", fontWeight: "700", textAlign: "center" },
     },
+    brand: {
+      fontFamily: "Playfair Display",
+      fontSize: 18,
+      fontSizeMobile: 14,
+      letterSpacing: 4,
+      fontWeight: "700",
+      color: "#D4AF37",
+      gradientEnabled: false,
+      gradientFrom: "#F7E7A6",
+      gradientTo: "#B8860B",
+      gradientAngle: 90,
+      highlightEnabled: false,
+      highlightColor: "#000000",
+      shadowEnabled: true,
+      shadowX: 0,
+      shadowY: 2,
+      shadowBlur: 12,
+      shadowColor: "#000000",
+    },
   },
+
 };
 
 /* ---------------------------------------------------------------- helpers */
