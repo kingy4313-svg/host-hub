@@ -122,7 +122,7 @@ function AdminPage() {
 
   return (
     <div className="admin-surface min-h-screen bg-white text-neutral-900">
-      <header className="sticky top-0 z-30 flex items-center gap-3 border-b bg-white px-4 py-3">
+      <header className="sticky top-0 z-30 flex flex-wrap items-center gap-2 border-b bg-white px-3 py-3 sm:gap-3 sm:px-4">
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
           <SheetTrigger asChild>
             <Button
