@@ -121,8 +121,8 @@ function AdminPage() {
   const sidebar = <Nav active={active} onSelect={(k) => { setActive(k); setMobileOpen(false); }} />;
 
   return (
-    <div className="min-h-screen bg-white text-neutral-900">
-      <header className="sticky top-0 z-30 flex items-center gap-3 border-b bg-white px-4 py-3">
+    <div className="admin-surface min-h-screen bg-white text-neutral-900">
+      <header className="sticky top-0 z-30 flex flex-wrap items-center gap-2 border-b bg-white px-3 py-3 sm:gap-3 sm:px-4">
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
           <SheetTrigger asChild>
             <Button
@@ -133,7 +133,7 @@ function AdminPage() {
               <Lucide.Menu className="h-4 w-4" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-72 overflow-y-auto p-4">
+          <SheetContent side="left" className="admin-surface-popover w-72 overflow-y-auto p-4">
             <p className="mb-3 text-sm font-semibold">Sections</p>
             {sidebar}
           </SheetContent>
