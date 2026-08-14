@@ -42,40 +42,53 @@ export type WorkTab = { id: string; name: string; items: WorkItem[] };
 export type TestimonialItem = { id: string; name: string; role: string; text: string; photoUrl: string };
 export type TextItem = { id: string; text: string };
 
-export type TypographySettings = {
-  heroHeading: {
-    desktop: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-    mobile: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-  };
-  whyBookMe: {
-    desktop: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-    mobile: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-  };
-  featuredMoments: {
-    desktop: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-    mobile: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-  };
-  eventsSpecialize: {
-    desktop: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-    mobile: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-  };
-  pastEvents: {
-    desktop: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-    mobile: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-  };
-  myWork: {
-    desktop: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-    mobile: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-  };
-  testimonials: {
-    desktop: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-    mobile: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-  };
-  contactCta: {
-    desktop: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-    mobile: { fontSize: number; color: string; fontWeight: string; textAlign: string };
-  };
+export type TypoStyle = {
+  fontSize: number;
+  color: string;
+  fontWeight: string;
+  textAlign: string;
+  gradientEnabled?: boolean;
+  gradientFrom?: string;
+  gradientTo?: string;
+  gradientAngle?: number;
 };
+
+export type TypoPair = { desktop: TypoStyle; mobile: TypoStyle };
+
+export type BrandTypography = {
+  fontFamily: string;
+  fontSize: number;
+  fontSizeMobile: number;
+  letterSpacing: number;
+  fontWeight: string;
+  color: string;
+  gradientEnabled: boolean;
+  gradientFrom: string;
+  gradientTo: string;
+  gradientAngle: number;
+  highlightEnabled: boolean;
+  highlightColor: string;
+  shadowEnabled: boolean;
+  shadowX: number;
+  shadowY: number;
+  shadowBlur: number;
+  shadowColor: string;
+};
+
+export type TypographySettings = {
+  heroHeading: TypoPair;
+  whyBookMe: TypoPair;
+  featuredMoments: TypoPair;
+  eventsSpecialize: TypoPair;
+  pastEvents: TypoPair;
+  myWork: TypoPair;
+  testimonials: TypoPair;
+  contactCta: TypoPair;
+  brand: BrandTypography;
+};
+
+export type HeadingKey = Exclude<keyof TypographySettings, "brand">;
+
 
 export type SiteContent = {
   settings: {
@@ -484,7 +497,27 @@ export const DEFAULT_CONTENT: SiteContent = {
       desktop: { fontSize: 40, color: "#FFFFFF", fontWeight: "700", textAlign: "center" },
       mobile: { fontSize: 22, color: "#FFFFFF", fontWeight: "700", textAlign: "center" },
     },
+    brand: {
+      fontFamily: "Playfair Display",
+      fontSize: 18,
+      fontSizeMobile: 14,
+      letterSpacing: 4,
+      fontWeight: "700",
+      color: "#D4AF37",
+      gradientEnabled: false,
+      gradientFrom: "#F7E7A6",
+      gradientTo: "#B8860B",
+      gradientAngle: 90,
+      highlightEnabled: false,
+      highlightColor: "#000000",
+      shadowEnabled: true,
+      shadowX: 0,
+      shadowY: 2,
+      shadowBlur: 12,
+      shadowColor: "#000000",
+    },
   },
+
 };
 
 /* ---------------------------------------------------------------- helpers */

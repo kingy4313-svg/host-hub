@@ -11,6 +11,20 @@ import { ResponsiveHeroImage } from "./ResponsiveHeroImage";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 
+/** Heading style driven by the admin typography variables (incl. optional gradient text). */
+export function typoStyle(slug: string, fs: number, fw: string): React.CSSProperties {
+  return {
+    fontSize: `var(--typo-${slug}-fs, ${fs}px)`,
+    color: `var(--typo-${slug}-color, #FFFFFF)`,
+    fontWeight: `var(--typo-${slug}-fw, ${fw})`,
+    textAlign: `var(--typo-${slug}-ta, center)`,
+    backgroundImage: `var(--typo-${slug}-bg, none)`,
+    backgroundClip: "text",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: `var(--typo-${slug}-fill, currentColor)`,
+  } as unknown as React.CSSProperties;
+}
+
 const mailto = (email: string) => `mailto:${email}`;
 const telHref = (phone: string) => `tel:${phone.replace(/[^\d+]/g, "")}`;
 
@@ -227,10 +241,35 @@ export function Navbar() {
   return (
     <header className={`fixed inset-x-0 top-0 z-50 transition-transform duration-300 ${hidden ? "-translate-y-full" : "translate-y-0"}`}>
       <div className="mx-auto flex w-full max-w-[1300px] items-center justify-between px-4 py-4 sm:px-6">
-        <Link to="/" className="logo-glow text-sm font-display font-bold uppercase tracking-[0.25em] text-gold transition-colors hover:text-gold/80 md:text-lg" style={{ textShadow: "0 2px 12px rgba(0,0,0,0.55), 0 0 1px rgba(0,0,0,0.4)" }}>
+        <Link to="/" className="logo-glow inline-flex items-center transition-opacity hover:opacity-90">
           {settings.logoUrl ? <img src={settings.logoUrl} alt={navbar.logoText} className="mr-3 inline-block h-8 w-auto align-middle" /> : null}
-          <span className="align-middle">{navbar.logoText}</span>
+          <span
+            className="align-middle rounded-md"
+            style={{
+              backgroundColor: "var(--brand-highlight, transparent)",
+              padding: "var(--brand-highlight-pad, 0)",
+            }}
+          >
+            <span
+              className="uppercase"
+              style={{
+                fontFamily: "var(--brand-ff, \"Playfair Display\", Georgia, serif)",
+                fontSize: "var(--brand-fs, 14px)",
+                fontWeight: "var(--brand-fw, 700)" as any,
+                letterSpacing: "var(--brand-ls, 0.4em)",
+                color: "var(--brand-color, #D4AF37)",
+                backgroundImage: "var(--brand-bg, none)",
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "var(--brand-fill, currentColor)",
+                textShadow: "var(--brand-shadow, none)",
+              }}
+            >
+              {navbar.logoText}
+            </span>
+          </span>
         </Link>
+
 
         {/* desktop nav moved to the right-side controls for compact alignment */}
 
@@ -321,7 +360,7 @@ export function Hero() {
     objectPosition: `${mediaXDesktop}% ${mediaYDesktop}%`,
     transform: `scale(${zoomDesktop})`,
     transformOrigin: `${mediaXDesktop}% ${mediaYDesktop}%`,
-  } as React.CSSProperties;
+  } as unknown as React.CSSProperties;
 
   const mediaXMobile = (hero as any).mediaPositionXMobile ?? mediaX;
   const mediaYMobile = (hero as any).mediaPositionYMobile ?? mediaY;
@@ -330,7 +369,7 @@ export function Hero() {
     objectPosition: `${mediaXMobile}% ${mediaYMobile}%`,
     transform: `scale(${zoomMobile})`,
     transformOrigin: `${mediaXMobile}% ${mediaYMobile}%`,
-  } as React.CSSProperties;
+  } as unknown as React.CSSProperties;
 
   // Use responsive image loading via picture element
   // Desktop (16:9) and Mobile (9:16) images are selected by browser based on viewport width
@@ -379,10 +418,7 @@ export function Hero() {
                 <h1
                   className="w-full font-display font-black uppercase text-white fluid-hero-1"
                   style={{
-                    fontSize: "var(--typo-hero-fs, 48px)",
-                    color: "var(--typo-hero-color, #FFFFFF)",
-                    fontWeight: "var(--typo-hero-fw, 900)",
-                    textAlign: "var(--typo-hero-ta, center)" as any,
+                    ...typoStyle("hero", 48, "900"),
                   }}
                 >
                   {hero.line1}
@@ -392,10 +428,7 @@ export function Hero() {
                 <h2
                   className="w-full font-display font-black uppercase text-white fluid-hero-2"
                   style={{
-                    fontSize: "var(--typo-hero-fs, 48px)",
-                    color: "var(--typo-hero-color, #FFFFFF)",
-                    fontWeight: "var(--typo-hero-fw, 900)",
-                    textAlign: "var(--typo-hero-ta, center)" as any,
+                    ...typoStyle("hero", 48, "900"),
                   }}
                 >
                   {hero.line2}
@@ -436,10 +469,7 @@ export function Intro() {
           <h1
             className="section-heading section-h1 font-display font-bold tracking-tight"
             style={{
-              fontSize: "var(--typo-hero-fs, 48px)",
-              color: "var(--typo-hero-color, #FFFFFF)",
-              fontWeight: "var(--typo-hero-fw, 900)",
-              textAlign: "var(--typo-hero-ta, center)" as any,
+              ...typoStyle("hero", 48, "900"),
             }}
           >
             {intro.heading.split("★").map((part, i, arr) => (
@@ -487,10 +517,7 @@ export function WhyBook() {
         <h2
           className="section-heading section-h2 font-display font-bold"
           style={{
-            fontSize: "var(--typo-whybook-fs, 36px)",
-            color: "var(--typo-whybook-color, #FFFFFF)",
-            fontWeight: "var(--typo-whybook-fw, 700)",
-            textAlign: "var(--typo-whybook-ta, center)" as any,
+            ...typoStyle("whybook", 36, "700"),
           }}
         >
           {whyBook.heading}
@@ -522,10 +549,7 @@ export function FeaturedMoments() {
         <h2
           className="section-heading section-h2 font-display font-bold"
           style={{
-            fontSize: "var(--typo-featured-fs, 36px)",
-            color: "var(--typo-featured-color, #FFFFFF)",
-            fontWeight: "var(--typo-featured-fw, 700)",
-            textAlign: "var(--typo-featured-ta, center)" as any,
+            ...typoStyle("featured", 36, "700"),
           }}
         >
           {featured.headingWhite} {featured.headingGold}
@@ -571,10 +595,7 @@ export function Services() {
         <h2
           className="section-heading section-h2 font-display font-bold"
           style={{
-            fontSize: "var(--typo-events-fs, 36px)",
-            color: "var(--typo-events-color, #FFFFFF)",
-            fontWeight: "var(--typo-events-fw, 700)",
-            textAlign: "var(--typo-events-ta, center)" as any,
+            ...typoStyle("events", 36, "700"),
           }}
         >
           {services.headingWhite} <span className="text-gold-gradient">{services.headingGold}</span>
@@ -673,10 +694,7 @@ export function PastEvents() {
         <h2
           className="section-heading section-h2 font-display font-bold"
           style={{
-            fontSize: "var(--typo-pastevents-fs, 36px)",
-            color: "var(--typo-pastevents-color, #FFFFFF)",
-            fontWeight: "var(--typo-pastevents-fw, 700)",
-            textAlign: "var(--typo-pastevents-ta, center)" as any,
+            ...typoStyle("pastevents", 36, "700"),
           }}
         >
           {pastEvents.headingWhite} <span className="text-gold-gradient">{pastEvents.headingGold}</span>
@@ -752,10 +770,7 @@ export function MyWorks() {
         <h2
           className="section-heading section-h2 font-display font-bold"
           style={{
-            fontSize: "var(--typo-works-fs, 36px)",
-            color: "var(--typo-works-color, #FFFFFF)",
-            fontWeight: "var(--typo-works-fw, 700)",
-            textAlign: "var(--typo-works-ta, center)" as any,
+            ...typoStyle("works", 36, "700"),
           }}
         >
           {works.heading}
@@ -850,10 +865,7 @@ export function Testimonials() {
         <h2
           className="section-heading section-h2 font-display font-bold"
           style={{
-            fontSize: "var(--typo-testimonials-fs, 36px)",
-            color: "var(--typo-testimonials-color, #FFFFFF)",
-            fontWeight: "var(--typo-testimonials-fw, 700)",
-            textAlign: "var(--typo-testimonials-ta, center)" as any,
+            ...typoStyle("testimonials", 36, "700"),
           }}
         >
           {testimonials.headingWhite} <span className="text-gold-gradient">{testimonials.headingGold}</span>
@@ -923,10 +935,7 @@ export function ContactCta() {
       <h2
         className="section-heading section-h1 font-display font-bold"
         style={{
-          fontSize: "var(--typo-contact-fs, 40px)",
-          color: "var(--typo-contact-color, #FFFFFF)",
-          fontWeight: "var(--typo-contact-fw, 700)",
-          textAlign: "var(--typo-contact-ta, center)" as any,
+          ...typoStyle("contact", 40, "700"),
         }}
       >
         {contact.headingWhite} <span className="text-gold-gradient">{contact.headingGold}</span>
