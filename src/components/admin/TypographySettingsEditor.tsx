@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import type { EditorProps } from "./SectionEditors";
-import { DEFAULT_CONTENT, type TypographySettings } from "@/content/site-content";
+import { DEFAULT_CONTENT, type BrandTypography, type HeadingKey, type TypoPair, type TypographySettings } from "@/content/site-content";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,7 +22,7 @@ import { Card } from "@/components/ui/card";
 import { ChevronDown } from "lucide-react";
 
 interface HeadingConfig {
-  key: keyof TypographySettings;
+  key: HeadingKey;
   label: string;
   sampleText: string;
   description?: string;
@@ -160,6 +160,7 @@ function PreviewBox({
   textAlign: string;
   width: number;
   height: number;
+  gradient?: string;
 }) {
   const isDesktop = width >= 1000;
   const outerRef = useRef<HTMLDivElement | null>(null);
@@ -222,6 +223,14 @@ function PreviewBox({
                 style={{
                   fontSize: `${fontSize}px`,
                   color,
+                  ...(gradient
+                    ? {
+                        backgroundImage: gradient,
+                        backgroundClip: "text",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                      }
+                    : {}),
                   fontWeight,
                   textAlign: textAlign as "left" | "center" | "right",
                   fontFamily: "Playfair Display, Georgia, serif",
@@ -246,7 +255,7 @@ function HeadingSettingBlock({
   onUpdate,
 }: {
   heading: HeadingConfig;
-  settings: TypographySettings[keyof TypographySettings];
+  settings: TypoPair;
   onUpdate: (
     device: "desktop" | "mobile",
     property: string,
@@ -458,7 +467,7 @@ export function TypographySettingsEditor({ content, patch }: EditorProps) {
   const [isResetting, setIsResetting] = useState(false);
 
   const handleUpdate = (
-    headingKey: keyof TypographySettings,
+    headingKey: HeadingKey,
     device: "desktop" | "mobile",
     property: string,
     value: string | number
