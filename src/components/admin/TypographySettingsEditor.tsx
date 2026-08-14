@@ -161,74 +161,73 @@ function PreviewBox({
   width: number;
   height: number;
 }) {
-  const isDesktop = width === 1200;
-  
+  const isDesktop = width >= 1000;
+  const outerRef = useRef<HTMLDivElement | null>(null);
+  const [available, setAvailable] = useState(isDesktop ? 640 : 300);
+
+  useEffect(() => {
+    const el = outerRef.current;
+    if (!el) return;
+    const update = () => setAvailable(el.clientWidth);
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  // Never scale the phone up past its real size; desktop always scales down to fit.
+  const maxFrame = isDesktop ? available : Math.min(available, width);
+  const scale = Math.min(1, maxFrame / width);
+  const frameHeight = Math.round(height * scale);
+
   return (
     <div className="flex flex-col gap-3">
-      <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-        {label}
-      </p>
-      <div className="flex gap-3 w-full justify-center">
-        {/* Outer container for the preview - provides max width and centers content */}
-        <div 
-          className="rounded-lg border-8 border-slate-800 bg-slate-950 shadow-2xl overflow-hidden"
-          style={{
-            width: isDesktop ? '100%' : 'fit-content',
-            maxWidth: isDesktop ? '600px' : '200px',
-            aspectRatio: isDesktop ? '16 / 9' : '9 / 11',
-          }}
+      <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</p>
+
+      <div ref={outerRef} className="w-full">
+        <div
+          className="mx-auto overflow-hidden rounded-xl border border-slate-700 bg-slate-950 shadow-lg"
+          style={{ width: Math.round(width * scale) }}
         >
-          {/* Browser chrome for desktop */}
-          {isDesktop && (
-            <div className="h-6 border-b border-slate-700 bg-slate-900 flex items-center px-3 gap-1.5 shrink-0">
-              <div className="h-2.5 w-2.5 rounded-full bg-red-500" />
-              <div className="h-2.5 w-2.5 rounded-full bg-yellow-500" />
-              <div className="h-2.5 w-2.5 rounded-full bg-green-500" />
-              <div className="flex-1" />
-              <div className="text-xs text-slate-500 font-mono">localhost:8081</div>
+          {isDesktop ? (
+            <div className="flex h-6 items-center gap-1.5 border-b border-slate-700 bg-slate-900 px-3">
+              <span className="h-2.5 w-2.5 rounded-full bg-red-500" />
+              <span className="h-2.5 w-2.5 rounded-full bg-yellow-500" />
+              <span className="h-2.5 w-2.5 rounded-full bg-green-500" />
+              <span className="ml-auto font-mono text-[10px] text-slate-500">1200 × {height} px</span>
+            </div>
+          ) : (
+            <div className="flex h-6 items-center justify-center border-b border-slate-700 bg-slate-900">
+              <span className="h-1.5 w-12 rounded-full bg-slate-700" />
             </div>
           )}
 
-          {/* Phone notch for mobile */}
-          {!isDesktop && (
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-5 bg-slate-900 rounded-b-2xl z-10" />
-          )}
-
-          {/* Scaled preview content container */}
-          <div 
-            className="w-full h-full flex items-center justify-center bg-black overflow-hidden"
-            style={{
-              paddingTop: isDesktop ? '0' : '0',
-            }}
-          >
-            {/* Inner content that gets scaled */}
+          {/* Real-size stage, uniformly scaled down to fit the card. */}
+          <div style={{ height: frameHeight, overflow: "hidden" }} className="bg-black">
             <div
               style={{
-                width: isDesktop ? `${width}px` : `${width}px`,
-                minHeight: isDesktop ? '600px' : `${height}px`,
-                transform: isDesktop ? `scale(${600 / width})` : 'scale(1)',
-                transformOrigin: 'top center',
-                display: 'flex',
-                alignItems: isDesktop ? 'flex-start' : 'center',
-                justifyContent: 'center',
-                paddingTop: isDesktop ? '80px' : '0',
-                paddingBottom: isDesktop ? '80px' : '0',
+                width,
+                height,
+                transform: `scale(${scale})`,
+                transformOrigin: "top left",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: isDesktop ? "40px 60px" : "20px 16px",
+                boxSizing: "border-box",
               }}
             >
               <div
+                className="font-display w-full"
                 style={{
                   fontSize: `${fontSize}px`,
                   color,
                   fontWeight,
-                  textAlign: textAlign as any,
-                  fontFamily: 'Playfair Display, Georgia, serif',
-                  lineHeight: '1.2',
-                  wordWrap: 'break-word',
-                  overflowWrap: 'break-word',
-                  maxWidth: '90%',
-                  padding: '0 20px',
+                  textAlign: textAlign as "left" | "center" | "right",
+                  fontFamily: "Playfair Display, Georgia, serif",
+                  lineHeight: 1.2,
+                  overflowWrap: "break-word",
                 }}
-                className="font-display"
               >
                 {sampleText}
               </div>
@@ -238,6 +237,7 @@ function PreviewBox({
       </div>
     </div>
   );
+
 }
 
 function HeadingSettingBlock({
