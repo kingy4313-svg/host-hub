@@ -121,7 +121,7 @@ function AdminPage() {
   const sidebar = <Nav active={active} onSelect={(k) => { setActive(k); setMobileOpen(false); }} />;
 
   return (
-    <div className="min-h-screen bg-white text-neutral-900">
+    <div className="admin-surface min-h-screen bg-white text-neutral-900">
       <header className="sticky top-0 z-30 flex items-center gap-3 border-b bg-white px-4 py-3">
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
           <SheetTrigger asChild>
