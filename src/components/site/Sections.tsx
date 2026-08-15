@@ -7,6 +7,8 @@ import { ScrollReveal, ScrollRevealGroup, RevealItem, CountUp } from "./ScrollRe
 import { AnimatedIconGrid } from "./AnimatedIconGrid";
 import { VideoPlayer, detectVideo } from "./VideoPlayer";
 import { Media } from "./Media";
+import { VideoCarousel } from "./VideoCarousel";
+
 import { ResponsiveHeroImage } from "./ResponsiveHeroImage";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
