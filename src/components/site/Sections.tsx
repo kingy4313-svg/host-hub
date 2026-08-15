@@ -489,8 +489,7 @@ export function Intro() {
         ))}
       </ScrollRevealGroup>
       <AnimatedIconGrid
-        className="mx-auto mt-14 grid max-w-3xl grid-cols-3 gap-y-12"
-        itemClassName="flex flex-col items-center gap-3"
+        className="mx-auto mt-14 grid max-w-3xl grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-3 sm:gap-x-8 sm:gap-y-14"
         items={intro.stats.map((s) => ({
           id: s.id,
           badge: s.iconImageUrl ? (
