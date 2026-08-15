@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Pause, Play, Volume2, VolumeX } from "lucide-react";
+import { ArrowLeft, ArrowRight, Pause, Play, Volume2, VolumeX } from "lucide-react";
 import { detectVideo } from "./VideoPlayer";
 import { Media } from "./Media";
 
