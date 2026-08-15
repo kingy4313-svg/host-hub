@@ -541,8 +541,6 @@ export function WhyBook() {
 
 export function FeaturedMoments() {
   const { featured } = useContent();
-  const ref = useRef<HTMLDivElement>(null);
-  const scroll = (dir: number) => ref.current?.scrollBy({ left: dir * 340, behavior: "smooth" });
   return (
     <section className="py-20">
       <ScrollReveal>
@@ -554,9 +552,12 @@ export function FeaturedMoments() {
         >
           {featured.headingWhite} {featured.headingGold}
         </h2>
+        <span className="gold-divider mt-5" />
+      </ScrollReveal>
       <div className="mt-8">
         <VideoCarousel items={featured.items} />
       </div>
+
 
     </section>
   );
