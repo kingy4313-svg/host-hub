@@ -554,35 +554,10 @@ export function FeaturedMoments() {
         >
           {featured.headingWhite} {featured.headingGold}
         </h2>
-        <span className="gold-divider mt-5" />
-      </ScrollReveal>
-      {featured.showArrows ? (
-        <div className="mx-auto mt-10 flex max-w-6xl justify-between px-6">
-          <button onClick={() => scroll(-1)} aria-label="Previous" className="flex size-11 items-center justify-center rounded-full border border-gold/40 text-gold">
-            <ArrowLeft className="size-5" />
-          </button>
-          <button onClick={() => scroll(1)} aria-label="Next" className="flex size-11 items-center justify-center rounded-full border border-gold/40 text-gold">
-            <ArrowRight className="size-5" />
-          </button>
-        </div>
-      ) : null}
-      <div ref={ref} className="no-scrollbar mt-6 flex snap-x overflow-x-auto gap-6 px-6 pb-4 md:px-[max(1.5rem,calc(50vw-32rem))]">
-        {featured.items.map((m) => (
-          <figure key={m.id} className="flex min-w-[85vw] md:min-w-[300px] shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-border bg-muted md:rounded-[1.5rem]">
-            <div className="px-4 py-3 text-center">
-              <span className="font-display fluid-small font-bold uppercase tracking-[0.18em] text-white [overflow-wrap:anywhere]">
-                {m.label}
-              </span>
-            </div>
-            <div className="relative aspect-[9/11] overflow-hidden">
-              <FeaturedMedia url={m.mediaUrl} type={m.mediaType} label={m.label} className="absolute inset-0 h-full w-full object-cover" />
-            </div>
-            <div className="px-4 py-3 text-center">
-              <p className="fluid-small font-medium text-muted-foreground [overflow-wrap:anywhere]">{m.caption}</p>
-            </div>
-          </figure>
-        ))}
+      <div className="mt-8">
+        <VideoCarousel items={featured.items} />
       </div>
+
     </section>
   );
 }
