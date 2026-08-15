@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Pause, Play, Volume2, VolumeX } from "lucide-react";
+import { ArrowLeft, ArrowRight, Pause, Play, Volume2, VolumeX } from "lucide-react";
 import { detectVideo } from "./VideoPlayer";
 import { Media } from "./Media";
 
@@ -109,10 +109,26 @@ export function VideoCarousel({ items }: { items: CarouselItem[] }) {
   if (items.length === 0) return null;
 
   return (
-    <div className="w-full">
+    <div className="relative mx-auto w-full max-w-5xl px-4 sm:px-6">
+      <button
+        type="button"
+        aria-label="Previous video"
+        onClick={() => goTo(Math.max(0, activeIndex - 1))}
+        className="absolute left-1 top-1/2 z-10 hidden -translate-y-1/2 items-center justify-center rounded-full border border-gold/40 bg-black/60 p-3 text-gold backdrop-blur transition hover:bg-black/80 sm:flex"
+      >
+        <ArrowLeft className="h-5 w-5" />
+      </button>
+      <button
+        type="button"
+        aria-label="Next video"
+        onClick={() => goTo(Math.min(items.length - 1, activeIndex + 1))}
+        className="absolute right-1 top-1/2 z-10 hidden -translate-y-1/2 items-center justify-center rounded-full border border-gold/40 bg-black/60 p-3 text-gold backdrop-blur transition hover:bg-black/80 sm:flex"
+      >
+        <ArrowRight className="h-5 w-5" />
+      </button>
       <div
         ref={trackRef}
-        className="no-scrollbar flex w-full snap-x snap-mandatory overflow-x-auto overscroll-x-contain scroll-smooth"
+        className="no-scrollbar flex w-full snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain scroll-smooth"
       >
         {items.map((item, index) => {
           const kind = detectVideo(item.mediaUrl).kind;
@@ -123,7 +139,8 @@ export function VideoCarousel({ items }: { items: CarouselItem[] }) {
               data-slide-index={index}
               className="relative w-full shrink-0 snap-center"
             >
-              <div className="relative aspect-[9/16] w-full overflow-hidden bg-black sm:aspect-[16/9]">
+              <div className="relative aspect-[9/16] w-full overflow-hidden rounded-2xl border border-border bg-black sm:aspect-[16/9]">
+
                 {isFileVideo ? (
                   <>
                     <video
