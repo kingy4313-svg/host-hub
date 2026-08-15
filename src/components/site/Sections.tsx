@@ -489,17 +489,17 @@ export function Intro() {
         ))}
       </ScrollRevealGroup>
       <AnimatedIconGrid
-        className="mx-auto mt-14 grid max-w-3xl grid-cols-3 gap-y-12"
+        className="mx-auto mt-14 grid max-w-3xl grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-3 sm:gap-x-8 sm:gap-y-14"
         itemClassName="flex flex-col items-center gap-3"
         items={intro.stats.map((s) => ({
           id: s.id,
           badge: s.iconImageUrl ? (
-            <img src={s.iconImageUrl} alt="" className="size-6" />
+            <img src={s.iconImageUrl} alt="" className="size-5 sm:size-6" />
           ) : (
-            <Icon name={s.icon} className="size-6 text-gold" />
+            <Icon name={s.icon} className="size-5 text-gold sm:size-6" />
           ),
           label: (
-            <span className="font-display text-sm font-bold tracking-wide text-gold">
+            <span className="font-display text-center text-xs font-bold leading-relaxed tracking-wide text-gold sm:text-sm">
               {s.value ? <CountUp value={s.value} /> : null}
               {s.value && s.label ? " " : null}
               {s.label}
