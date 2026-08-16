@@ -87,8 +87,9 @@ export function VideoCarousel({ items }: { items: CarouselItem[] }) {
   }, [activeIndex, activate, paused]);
 
   useEffect(() => {
-    activate(activeIndex, !paused);
-  }, [activeIndex, paused, activate]);
+    if (paused) return;
+    activate(activeIndex, true);
+  }, [activeIndex, activate]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const current = videoRefs.current[activeIndex];
