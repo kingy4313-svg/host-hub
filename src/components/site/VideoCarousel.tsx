@@ -86,8 +86,14 @@ export function VideoCarousel({ items }: { items: CarouselItem[] }) {
     };
   }, [activeIndex, activate, paused]);
 
+  // Reset pause state whenever the active slide changes so a new video autoplays.
   useEffect(() => {
-    activate(activeIndex, !paused);
+    setPaused(false);
+  }, [activeIndex]);
+
+  useEffect(() => {
+    if (paused) return;
+    activate(activeIndex, true);
   }, [activeIndex, paused, activate]);
 
   useEffect(() => {
@@ -153,17 +159,23 @@ export function VideoCarousel({ items }: { items: CarouselItem[] }) {
                       playsInline
                       muted={muted}
                       preload="metadata"
-                      onClick={() => {
-                        toggleOverlay();
-                        setPaused((p) => !p);
-                      }}
                     />
                     <button
                       type="button"
                       aria-label={paused ? "Play video" : "Pause video"}
-                      onClick={() => {
+                      onClick={(event) => {
+                        event.stopPropagation();
                         toggleOverlay();
-                        setPaused((p) => !p);
+                        const video = videoRefs.current[index];
+                        if (!video) return;
+                        if (video.paused) {
+                          video.muted = muted;
+                          void video.play().catch(() => undefined);
+                          setPaused(false);
+                        } else {
+                          video.pause();
+                          setPaused(true);
+                        }
                       }}
                       className="absolute inset-0 flex items-center justify-center"
                     >
