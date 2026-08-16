@@ -6,10 +6,12 @@ import { createClient } from "@supabase/supabase-js";
  * the publishable key (the bucket has a public SELECT policy) so uploads still
  * render when no service-role key is configured.
  */
-async function downloadMedia(objectPath: string) {
+const ALLOWED_BUCKETS = new Set(["media", "featured-moments-videos"]);
+
+async function downloadMedia(objectPath: string, bucket: string) {
   try {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const res = await supabaseAdmin.storage.from("media").download(objectPath);
+    const res = await supabaseAdmin.storage.from(bucket).download(objectPath);
     if (!res.error && res.data) return res.data;
   } catch {
     // fall through to the publishable-key client
@@ -24,7 +26,7 @@ async function downloadMedia(objectPath: string) {
     auth: { persistSession: false, autoRefreshToken: false },
     global: { fetch: (input, init) => fetch(input, { ...init, headers: { ...Object.fromEntries(new Headers(init?.headers)), apikey: key } }) },
   });
-  const res = await anon.storage.from("media").download(objectPath);
+  const res = await anon.storage.from(bucket).download(objectPath);
   if (res.error || !res.data) return null;
   return res.data;
 }
@@ -37,8 +39,12 @@ export const Route = createFileRoute("/api/public/media/$")({
         const decodedPath = path ? decodeURIComponent(path) : "";
         if (!decodedPath || decodedPath.includes("..")) return new Response("Not found", { status: 404 });
 
+        const requested = new URL(request.url).searchParams.get("bucket") ?? "media";
+        const bucket = ALLOWED_BUCKETS.has(requested) ? requested : "media";
+
         try {
-          const data = await downloadMedia(decodedPath);
+          const data = await downloadMedia(decodedPath, bucket);
+
           if (!data) return new Response("Not found", { status: 404 });
 
           const buffer = await data.arrayBuffer();
