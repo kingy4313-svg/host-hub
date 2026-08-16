@@ -68,6 +68,42 @@ export type Database = {
         }
         Relationships: []
       }
+      featured_moments: {
+        Row: {
+          caption: string
+          created_at: string
+          created_by: string | null
+          id: string
+          sort_order: number
+          thumbnail_url: string | null
+          title: string
+          video_path: string | null
+          video_url: string
+        }
+        Insert: {
+          caption?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          sort_order?: number
+          thumbnail_url?: string | null
+          title?: string
+          video_path?: string | null
+          video_url: string
+        }
+        Update: {
+          caption?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          sort_order?: number
+          thumbnail_url?: string | null
+          title?: string
+          video_path?: string | null
+          video_url?: string
+        }
+        Relationships: []
+      }
       media_assets: {
         Row: {
           created_at: string
