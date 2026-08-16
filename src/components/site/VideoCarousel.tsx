@@ -86,10 +86,15 @@ export function VideoCarousel({ items }: { items: CarouselItem[] }) {
     };
   }, [activeIndex, activate, paused]);
 
+  // Reset pause state whenever the active slide changes so a new video autoplays.
+  useEffect(() => {
+    setPaused(false);
+  }, [activeIndex]);
+
   useEffect(() => {
     if (paused) return;
     activate(activeIndex, true);
-  }, [activeIndex, activate]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [activeIndex, paused, activate]);
 
   useEffect(() => {
     const current = videoRefs.current[activeIndex];
