@@ -154,17 +154,23 @@ export function VideoCarousel({ items }: { items: CarouselItem[] }) {
                       playsInline
                       muted={muted}
                       preload="metadata"
-                      onClick={() => {
-                        toggleOverlay();
-                        setPaused((p) => !p);
-                      }}
                     />
                     <button
                       type="button"
                       aria-label={paused ? "Play video" : "Pause video"}
-                      onClick={() => {
+                      onClick={(event) => {
+                        event.stopPropagation();
                         toggleOverlay();
-                        setPaused((p) => !p);
+                        const video = videoRefs.current[index];
+                        if (!video) return;
+                        if (video.paused) {
+                          video.muted = muted;
+                          void video.play().catch(() => undefined);
+                          setPaused(false);
+                        } else {
+                          video.pause();
+                          setPaused(true);
+                        }
                       }}
                       className="absolute inset-0 flex items-center justify-center"
                     >
