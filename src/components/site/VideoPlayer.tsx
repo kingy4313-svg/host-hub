@@ -3,7 +3,8 @@ import { AlertTriangle, Loader2, RotateCcw } from "lucide-react";
 
 export type VideoKind = "youtube" | "vimeo" | "instagram" | "file" | "unknown";
 
-const YT = /(?:youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([\w-]{6,})/i;
+const YT =
+  /(?:youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([\w-]{6,})/i;
 const VIMEO = /vimeo\.com\/(?:video\/)?(\d+)/i;
 const IG = /instagram\.com\/(p|reel|reels|tv)\/([\w-]+)/i;
 const FILE = /\.(mp4|webm|ogv|ogg|mov|m4v)(\?|#|$)/i;
@@ -17,7 +18,8 @@ export function detectVideo(url: string): { kind: VideoKind; id?: string } {
   if (vm?.[1]) return { kind: "vimeo", id: vm[1] };
   const ig = u.match(IG);
   if (ig?.[2]) return { kind: "instagram", id: ig[2] };
-  if (FILE.test(u) || u.startsWith("/api/public/media/") || u.startsWith("blob:")) return { kind: "file" };
+  if (FILE.test(u) || u.startsWith("/api/public/media/") || u.startsWith("blob:"))
+    return { kind: "file" };
   return { kind: "unknown" };
 }
 
@@ -29,9 +31,17 @@ function mimeFor(url: string) {
   return "video/mp4";
 }
 
-function Shell({ children, aspectClass = "aspect-video" }: { children: React.ReactNode; aspectClass?: string }) {
+function Shell({
+  children,
+  aspectClass = "aspect-video",
+}: {
+  children: React.ReactNode;
+  aspectClass?: string;
+}) {
   return (
-    <div className={`relative ${aspectClass} w-full overflow-hidden rounded-xl border border-border bg-black`}>
+    <div
+      className={`relative ${aspectClass} w-full overflow-hidden rounded-xl border border-border bg-black`}
+    >
       {children}
     </div>
   );
@@ -43,7 +53,10 @@ function ErrorState({ message, onRetry }: { message: string; onRetry?: (() => vo
       <AlertTriangle className="size-7 text-gold" />
       <p className="font-display text-sm text-muted-foreground">{message}</p>
       {onRetry ? (
-        <button onClick={onRetry} className="btn-gold inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs">
+        <button
+          onClick={onRetry}
+          className="btn-gold inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs"
+        >
           <RotateCcw className="size-3.5" /> Retry
         </button>
       ) : null}
@@ -82,7 +95,9 @@ function InstagramEmbed({ url }: { url: string }) {
 
   useEffect(() => {
     if (!ready) return;
-    const existing = document.querySelector<HTMLScriptElement>('script[src*="instagram.com/embed.js"]');
+    const existing = document.querySelector<HTMLScriptElement>(
+      'script[src*="instagram.com/embed.js"]',
+    );
     const process = () => {
       const ig = (window as unknown as { instgrm?: { Embeds: { process: () => void } } }).instgrm;
       if (ig) ig.Embeds.process();
@@ -163,8 +178,8 @@ export function VideoPlayer({
   if (kind === "youtube" || kind === "vimeo") {
     const src =
       kind === "youtube"
-        ? `https://www.youtube.com/embed/${id}?rel=0&playsinline=1${autoPlay ? "&autoplay=1" : ""}`
-        : `https://player.vimeo.com/video/${id}${autoPlay ? "?autoplay=1" : ""}`;
+        ? `https://www.youtube.com/embed/${id}?rel=0&playsinline=1&enablejsapi=1${autoPlay ? "&autoplay=1" : ""}`
+        : `https://player.vimeo.com/video/${id}?api=1${autoPlay ? "&autoplay=1" : ""}`;
     return (
       <div className={className}>
         <Shell aspectClass={aspectClass}>
@@ -199,7 +214,10 @@ export function VideoPlayer({
       <Shell aspectClass={aspectClass}>
         {state === "loading" ? <Loading /> : null}
         {state === "error" ? (
-          <ErrorState message="This video failed to load. The file may be missing or blocked." onRetry={() => setAttempt((a) => a + 1)} />
+          <ErrorState
+            message="This video failed to load. The file may be missing or blocked."
+            onRetry={() => setAttempt((a) => a + 1)}
+          />
         ) : (
           <video
             key={attempt}

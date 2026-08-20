@@ -13,36 +13,53 @@ export type CarouselItem = {
 
 /**
  * Full-width, scroll-snapping video carousel.
- * Only the slide centered in the viewport plays; scrolling pauses the previous video.
+ * Only one video plays at a time, tracked via a single `playingIndex` source of truth.
+ * The slide centered in the viewport (or the one clicked) becomes the playing slide.
  */
 export function VideoCarousel({ items }: { items: CarouselItem[] }) {
   const trackRef = useRef<HTMLDivElement | null>(null);
   const videoRefs = useRef<Array<HTMLVideoElement | null>>([]);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [playingIndex, setPlayingIndex] = useState<number | null>(null);
   const [muted, setMuted] = useState(true);
-  const [paused, setPaused] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
 
-  // Pause every video except the given index.
-  const activate = useCallback(
-    (index: number, shouldPlay: boolean) => {
-      videoRefs.current.forEach((video, i) => {
-        if (!video) return;
-        if (i !== index) {
-          video.pause();
-          video.currentTime = 0;
-        }
-      });
-      const current = videoRefs.current[index];
-      if (current && shouldPlay) {
-        current.muted = muted;
-        void current.play().catch(() => undefined);
-      }
-    },
-    [muted],
-  );
+  const postFrameCommand = useCallback((frame: HTMLIFrameElement, cmd: "play" | "pause") => {
+    const isVimeo = frame.src.includes("vimeo.com");
+    frame.contentWindow?.postMessage(
+      JSON.stringify(
+        isVimeo
+          ? { method: cmd }
+          : { event: "command", func: cmd === "play" ? "playVideo" : "pauseVideo", args: [] },
+      ),
+      isVimeo ? "https://player.vimeo.com" : "https://www.youtube.com",
+    );
+  }, []);
 
-  // Horizontal intersection observer: root is the scroll track.
+  // Single source of truth: sync all DOM video/iframe elements to playingIndex.
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    videoRefs.current.forEach((video, i) => {
+      if (!video) return;
+      video.muted = muted;
+      if (i === playingIndex) {
+        void video.play().catch(() => undefined);
+      } else {
+        video.pause();
+        video.currentTime = 0;
+      }
+    });
+
+    track.querySelectorAll<HTMLIFrameElement>("iframe").forEach((frame) => {
+      const slideEl = frame.closest<HTMLElement>("[data-slide-index]");
+      const index = slideEl ? Number(slideEl.dataset["slideIndex"]) : -1;
+      postFrameCommand(frame, index === playingIndex ? "play" : "pause");
+    });
+  }, [playingIndex, muted, postFrameCommand]);
+
+  // Horizontal intersection observer decides which slide is "in focus."
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return undefined;
@@ -53,10 +70,7 @@ export function VideoCarousel({ items }: { items: CarouselItem[] }) {
         let best: { index: number; ratio: number } | null = null;
         for (const entry of entries) {
           const index = Number((entry.target as HTMLElement).dataset["slideIndex"]);
-          if (!entry.isIntersecting) {
-            videoRefs.current[index]?.pause();
-            continue;
-          }
+          if (!entry.isIntersecting) continue;
           if (!best || entry.intersectionRatio > best.ratio) {
             best = { index, ratio: entry.intersectionRatio };
           }
@@ -70,39 +84,27 @@ export function VideoCarousel({ items }: { items: CarouselItem[] }) {
     return () => observer.disconnect();
   }, [items.length]);
 
-  // Pause immediately while the user is scrolling; resume when it settles.
+  // New focused slide (from scroll or arrows) autoplays and takes over from whatever was playing.
+  useEffect(() => {
+    setPlayingIndex(activeIndex);
+  }, [activeIndex]);
+
+  // Pause immediately while scrolling; resume the focused slide once it settles.
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return undefined;
     let timer: ReturnType<typeof setTimeout> | undefined;
     const onScroll = () => {
-      videoRefs.current.forEach((video) => video?.pause());
+      track.querySelectorAll<HTMLVideoElement>("video").forEach((video) => video.pause());
       if (timer) clearTimeout(timer);
-      timer = setTimeout(() => {
-        if (!paused) activate(activeIndex, true);
-      }, 140);
+      timer = setTimeout(() => setPlayingIndex(activeIndex), 140);
     };
     track.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       track.removeEventListener("scroll", onScroll);
       if (timer) clearTimeout(timer);
     };
-  }, [activeIndex, activate, paused]);
-
-  // Reset pause state whenever the active slide changes so a new video autoplays.
-  useEffect(() => {
-    setPaused(false);
   }, [activeIndex]);
-
-  useEffect(() => {
-    if (paused) return;
-    activate(activeIndex, true);
-  }, [activeIndex, paused, activate]);
-
-  useEffect(() => {
-    const current = videoRefs.current[activeIndex];
-    if (current) current.muted = muted;
-  }, [muted, activeIndex]);
 
   const goTo = (index: number) => {
     const track = trackRef.current;
@@ -122,6 +124,17 @@ export function VideoCarousel({ items }: { items: CarouselItem[] }) {
   const toggleOverlay = () => {
     setShowOverlay(true);
     window.setTimeout(() => setShowOverlay(false), 1800);
+  };
+
+  // Click a slide: if it's already the focused/playing one, toggle it off/on.
+  // If it's a different slide (e.g. desktop 3-col grid), focus + play it, pausing the rest.
+  const toggleVideo = (index: number) => {
+    toggleOverlay();
+    if (index === activeIndex) {
+      setPlayingIndex((prev) => (prev === index ? null : index));
+    } else {
+      setActiveIndex(index); // triggers the effect above, which sets playingIndex(index)
+    }
   };
 
   if (items.length === 0) return null;
@@ -146,6 +159,7 @@ export function VideoCarousel({ items }: { items: CarouselItem[] }) {
       </button>
       <div
         ref={trackRef}
+        data-carousel-video
         className="no-scrollbar flex w-full snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain scroll-smooth"
       >
         {items.map((item, index) => {
@@ -155,6 +169,7 @@ export function VideoCarousel({ items }: { items: CarouselItem[] }) {
             item.mediaType === "video"
               ? kind !== "youtube" && kind !== "vimeo" && kind !== "instagram"
               : kind === "file";
+          const isPlaying = playingIndex === index;
           return (
             <div
               key={item.id}
@@ -189,31 +204,19 @@ export function VideoCarousel({ items }: { items: CarouselItem[] }) {
                     />
                     <button
                       type="button"
-                      aria-label={paused ? "Play video" : "Pause video"}
+                      aria-label={isPlaying ? "Pause video" : "Play video"}
                       onClick={(event) => {
                         event.stopPropagation();
-                        toggleOverlay();
-                        const video = videoRefs.current[index];
-                        if (!video) return;
-                        if (video.paused) {
-                          video.muted = muted;
-                          void video.play().catch(() => undefined);
-                          setPaused(false);
-                        } else {
-                          video.pause();
-                          setPaused(true);
-                        }
+                        toggleVideo(index);
                       }}
                       className="absolute inset-0 flex items-center justify-center"
                     >
                       <span
                         className={`flex h-16 w-16 items-center justify-center rounded-full bg-black/55 text-white transition-opacity duration-300 ${
-                          showOverlay || (paused && index === activeIndex)
-                            ? "opacity-100"
-                            : "opacity-0"
+                          showOverlay && index === activeIndex ? "opacity-100" : "opacity-0"
                         }`}
                       >
-                        {paused ? <Play className="h-7 w-7" /> : <Pause className="h-7 w-7" />}
+                        {isPlaying ? <Pause className="h-7 w-7" /> : <Play className="h-7 w-7" />}
                       </span>
                     </button>
                     <button

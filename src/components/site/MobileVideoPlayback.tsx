@@ -15,7 +15,7 @@ export function MobileVideoPlayback() {
       if (!observer || !mediaQuery.matches) return;
 
       document.querySelectorAll<HTMLVideoElement>("video").forEach((video) => {
-        if (observedVideos.has(video)) return;
+        if (video.closest("[data-carousel-video]") || observedVideos.has(video)) return;
         video.muted = true;
         video.setAttribute("muted", "");
         video.setAttribute("playsinline", "");
