@@ -148,6 +148,12 @@ function LoginPage() {
           {error ? <p className="text-center text-sm text-red-400">{error}</p> : null}
           {notice ? <p className="text-center text-sm text-[color:var(--gold)]">{notice}</p> : null}
         </form>
+        <Link
+          to="/"
+          className="mt-4 flex w-full items-center justify-center rounded-full border border-[color:var(--gold)]/50 px-6 py-3 text-sm text-[color:var(--gold)] transition-colors hover:bg-[color:var(--gold)]/10"
+        >
+          Go to Homepage
+        </Link>
       </div>
     </div>
   );

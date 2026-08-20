@@ -10,7 +10,13 @@ export type MediaType = "image" | "video";
 
 export type NavItem = { id: string; label: string; href: string };
 export type SocialLink = { id: string; platform: string; url: string };
-export type StatItem = { id: string; icon: string; iconImageUrl?: string; value: string; label: string };
+export type StatItem = {
+  id: string;
+  icon: string;
+  iconImageUrl?: string;
+  value: string;
+  label: string;
+};
 export type ReasonCard = { id: string; title: string; text: string; goldTitle: boolean };
 export type MomentItem = {
   id: string;
@@ -28,7 +34,13 @@ export type PastEventItem = {
   label: string;
   caption: string;
 };
-export type ServiceItem = { id: string; icon: string; iconImageUrl?: string; label: string; href: string };
+export type ServiceItem = {
+  id: string;
+  icon: string;
+  iconImageUrl?: string;
+  label: string;
+  href: string;
+};
 export type WorkItem = {
   id: string;
   thumbUrl: string;
@@ -39,7 +51,13 @@ export type WorkItem = {
   openNewTab: boolean;
 };
 export type WorkTab = { id: string; name: string; items: WorkItem[] };
-export type TestimonialItem = { id: string; name: string; role: string; text: string; photoUrl: string };
+export type TestimonialItem = {
+  id: string;
+  name: string;
+  role: string;
+  text: string;
+  photoUrl: string;
+};
 export type TextItem = { id: string; text: string };
 
 export type TypoStyle = {
@@ -89,7 +107,6 @@ export type TypographySettings = {
 
 export type HeadingKey = Exclude<keyof TypographySettings, "brand">;
 
-
 export type SiteContent = {
   settings: {
     siteName: string;
@@ -101,6 +118,7 @@ export type SiteContent = {
     whatsapp: string;
     email: string;
     phone: string;
+    alternatePhone: string;
     socials: SocialLink[];
     seo: { title: string; description: string; ogImage: string };
   };
@@ -211,15 +229,50 @@ export const SECTION_LABELS: Record<SectionKey, string> = {
 };
 
 export const ICON_OPTIONS = [
-  "Mic", "Users", "Star", "Calendar", "Target", "PartyPopper", "Heart", "Rocket",
-  "Clock", "Globe", "Globe2", "Instagram", "Facebook", "Youtube", "Linkedin",
-  "Twitter", "MessageCircle", "Mail", "Phone", "Camera", "Video", "Music",
-  "Award", "Sparkles", "Crown", "MapPin", "Briefcase", "Film", "Plane",
+  "Mic",
+  "Users",
+  "Star",
+  "Calendar",
+  "Target",
+  "PartyPopper",
+  "Heart",
+  "Rocket",
+  "Clock",
+  "Globe",
+  "Globe2",
+  "Instagram",
+  "Facebook",
+  "Youtube",
+  "Linkedin",
+  "Twitter",
+  "MessageCircle",
+  "Mail",
+  "Phone",
+  "Camera",
+  "Video",
+  "Music",
+  "Award",
+  "Sparkles",
+  "Crown",
+  "MapPin",
+  "Briefcase",
+  "Film",
+  "Plane",
 ];
 
 export const FONT_OPTIONS = [
-  "Playfair Display", "Inter", "Cormorant Garamond", "Marcellus", "Cinzel",
-  "Lora", "Montserrat", "Poppins", "Raleway", "Jost", "DM Serif Display", "Outfit",
+  "Playfair Display",
+  "Inter",
+  "Cormorant Garamond",
+  "Marcellus",
+  "Cinzel",
+  "Lora",
+  "Montserrat",
+  "Poppins",
+  "Raleway",
+  "Jost",
+  "DM Serif Display",
+  "Outfit",
 ];
 
 const uid = (n: string) => n;
@@ -237,6 +290,7 @@ export const DEFAULT_CONTENT: SiteContent = {
     whatsapp: "https://wa.me/919702334193",
     email: "anchorsayantibanerjee@gmail.com",
     phone: "+91 97023 34193",
+    alternatePhone: "",
     socials: [{ id: uid("s1"), platform: "Instagram", url: "https://instagram.com" }],
     seo: {
       title: "Sayanti Banerjee — Anchor, Actor & Influencer",
@@ -282,8 +336,14 @@ export const DEFAULT_CONTENT: SiteContent = {
   intro: {
     heading: "Anchor ★ Actor ★ Influencer",
     taglines: [
-      { id: "t1", text: "Journalist to Influencer, Actor and Anchor... Journey of Life Must Go ON..." },
-      { id: "t2", text: "I bring stories to life on stage — with poise, spontaneity, and presence that holds the attention." },
+      {
+        id: "t1",
+        text: "Journalist to Influencer, Actor and Anchor... Journey of Life Must Go ON...",
+      },
+      {
+        id: "t2",
+        text: "I bring stories to life on stage — with poise, spontaneity, and presence that holds the attention.",
+      },
     ],
     stats: [
       { id: "st1", icon: "Clock", value: "1+", label: "YRS" },
@@ -298,9 +358,24 @@ export const DEFAULT_CONTENT: SiteContent = {
     heading: "Why People Book Me",
     showDivider: true,
     cards: [
-      { id: "w1", title: "Emotion Over Script", text: "Your event deserves real connection, not robotic hosting.", goldTitle: true },
-      { id: "w2", title: "Energy That Lifts the Attention", text: "From shy crowds to wild parties — I match your vibe.", goldTitle: true },
-      { id: "w3", title: "Flawless Stage Flow", text: "I handle last-minute changes with calm confidence.", goldTitle: true },
+      {
+        id: "w1",
+        title: "Emotion Over Script",
+        text: "Your event deserves real connection, not robotic hosting.",
+        goldTitle: true,
+      },
+      {
+        id: "w2",
+        title: "Energy That Lifts the Attention",
+        text: "From shy crowds to wild parties — I match your vibe.",
+        goldTitle: true,
+      },
+      {
+        id: "w3",
+        title: "Flawless Stage Flow",
+        text: "I handle last-minute changes with calm confidence.",
+        goldTitle: true,
+      },
     ],
   },
   featured: {
@@ -310,24 +385,49 @@ export const DEFAULT_CONTENT: SiteContent = {
     autoplayMs: 0,
     items: [
       {
-        id: "f1", mediaUrl: eventCorporate, label: "Corporate Conference", caption: "Why Women Should Always Support Women Entrepreneurs", overlayIcon: "Instagram", overlayLink: "https://instagram.com",
-        mediaType: "image"
+        id: "f1",
+        mediaUrl: eventCorporate,
+        label: "Corporate Conference",
+        caption: "Why Women Should Always Support Women Entrepreneurs",
+        overlayIcon: "Instagram",
+        overlayLink: "https://instagram.com",
+        mediaType: "image",
       },
       {
-        id: "f2", mediaUrl: eventCelebrity, label: "CELEBRITY EVENTS", caption: "Film premiere red carpet hosting", overlayIcon: "Instagram", overlayLink: "https://instagram.com",
-        mediaType: "image"
+        id: "f2",
+        mediaUrl: eventCelebrity,
+        label: "CELEBRITY EVENTS",
+        caption: "Film premiere red carpet hosting",
+        overlayIcon: "Instagram",
+        overlayLink: "https://instagram.com",
+        mediaType: "image",
       },
       {
-        id: "f3", mediaUrl: eventAwards, label: "TTK Healthcare", caption: "Doctor's Day Celebration 2025", overlayIcon: "Instagram", overlayLink: "https://instagram.com",
-        mediaType: "image"
+        id: "f3",
+        mediaUrl: eventAwards,
+        label: "TTK Healthcare",
+        caption: "Doctor's Day Celebration 2025",
+        overlayIcon: "Instagram",
+        overlayLink: "https://instagram.com",
+        mediaType: "image",
       },
       {
-        id: "f4", mediaUrl: eventWedding, label: "Destination Weddings", caption: "Sangeet night in Goa", overlayIcon: "Instagram", overlayLink: "https://instagram.com",
-        mediaType: "image"
+        id: "f4",
+        mediaUrl: eventWedding,
+        label: "Destination Weddings",
+        caption: "Sangeet night in Goa",
+        overlayIcon: "Instagram",
+        overlayLink: "https://instagram.com",
+        mediaType: "image",
       },
       {
-        id: "f5", mediaUrl: eventCelebrity, label: "CELEBRITY EVENTS", caption: "In conversation with Ram Gopal Sir", overlayIcon: "Instagram", overlayLink: "https://instagram.com",
-        mediaType: "image"
+        id: "f5",
+        mediaUrl: eventCelebrity,
+        label: "CELEBRITY EVENTS",
+        caption: "In conversation with Ram Gopal Sir",
+        overlayIcon: "Instagram",
+        overlayLink: "https://instagram.com",
+        mediaType: "image",
       },
       {
         id: "f6",
@@ -336,7 +436,7 @@ export const DEFAULT_CONTENT: SiteContent = {
         caption: "Baby Shower Mumbai emcee highlights",
         overlayIcon: "",
         overlayLink: "",
-        mediaType: "video"
+        mediaType: "video",
       },
     ],
   },
@@ -370,40 +470,141 @@ export const DEFAULT_CONTENT: SiteContent = {
     heading: "My Works",
     tabs: [
       {
-        id: "tb1", name: "Corporate Conference",
+        id: "tb1",
+        name: "Corporate Conference",
         items: [
-          { id: "wk1", thumbUrl: eventCorporate, title: "Corporate Conference Event", category: "Corporate Conference", duration: "9:47", videoUrl: "", openNewTab: true },
-          { id: "wk2", thumbUrl: eventAwards, title: "Business Conference Hosting", category: "Corporate Conference", duration: "6:12", videoUrl: "", openNewTab: true },
-          { id: "wk3", thumbUrl: eventCelebrity, title: "Corporate Event Management", category: "Corporate Conference", duration: "4:38", videoUrl: "", openNewTab: true },
+          {
+            id: "wk1",
+            thumbUrl: eventCorporate,
+            title: "Corporate Conference Event",
+            category: "Corporate Conference",
+            duration: "9:47",
+            videoUrl: "",
+            openNewTab: true,
+          },
+          {
+            id: "wk2",
+            thumbUrl: eventAwards,
+            title: "Business Conference Hosting",
+            category: "Corporate Conference",
+            duration: "6:12",
+            videoUrl: "",
+            openNewTab: true,
+          },
+          {
+            id: "wk3",
+            thumbUrl: eventCelebrity,
+            title: "Corporate Event Management",
+            category: "Corporate Conference",
+            duration: "4:38",
+            videoUrl: "",
+            openNewTab: true,
+          },
         ],
       },
       {
-        id: "tb2", name: "Celebrity Events",
+        id: "tb2",
+        name: "Celebrity Events",
         items: [
-          { id: "wk4", thumbUrl: eventCelebrity, title: "Film Premiere Red Carpet", category: "Celebrity Events", duration: "7:10", videoUrl: "", openNewTab: true },
-          { id: "wk5", thumbUrl: eventAwards, title: "Awards Night Hosting", category: "Celebrity Events", duration: "9:02", videoUrl: "", openNewTab: true },
-          { id: "wk6", thumbUrl: eventCelebrity, title: "Star Studded Launch", category: "Celebrity Events", duration: "4:55", videoUrl: "", openNewTab: true },
+          {
+            id: "wk4",
+            thumbUrl: eventCelebrity,
+            title: "Film Premiere Red Carpet",
+            category: "Celebrity Events",
+            duration: "7:10",
+            videoUrl: "",
+            openNewTab: true,
+          },
+          {
+            id: "wk5",
+            thumbUrl: eventAwards,
+            title: "Awards Night Hosting",
+            category: "Celebrity Events",
+            duration: "9:02",
+            videoUrl: "",
+            openNewTab: true,
+          },
+          {
+            id: "wk6",
+            thumbUrl: eventCelebrity,
+            title: "Star Studded Launch",
+            category: "Celebrity Events",
+            duration: "4:55",
+            videoUrl: "",
+            openNewTab: true,
+          },
         ],
       },
       {
-        id: "tb3", name: "Tourism",
+        id: "tb3",
+        name: "Tourism",
         items: [
-          { id: "wk7", thumbUrl: eventAwards, title: "Land of Adventure Showcase", category: "Tourism", duration: "5:26", videoUrl: "", openNewTab: true },
-          { id: "wk8", thumbUrl: eventCorporate, title: "Tourism Board Roadshow", category: "Tourism", duration: "7:33", videoUrl: "", openNewTab: true },
+          {
+            id: "wk7",
+            thumbUrl: eventAwards,
+            title: "Land of Adventure Showcase",
+            category: "Tourism",
+            duration: "5:26",
+            videoUrl: "",
+            openNewTab: true,
+          },
+          {
+            id: "wk8",
+            thumbUrl: eventCorporate,
+            title: "Tourism Board Roadshow",
+            category: "Tourism",
+            duration: "7:33",
+            videoUrl: "",
+            openNewTab: true,
+          },
         ],
       },
       {
-        id: "tb4", name: "Acting Career",
+        id: "tb4",
+        name: "Acting Career",
         items: [
-          { id: "wk9", thumbUrl: eventCelebrity, title: "Short Film Feature", category: "Acting Career", duration: "14:02", videoUrl: "", openNewTab: true },
-          { id: "wk10", thumbUrl: eventAwards, title: "Web Series Cameo", category: "Acting Career", duration: "8:20", videoUrl: "", openNewTab: true },
+          {
+            id: "wk9",
+            thumbUrl: eventCelebrity,
+            title: "Short Film Feature",
+            category: "Acting Career",
+            duration: "14:02",
+            videoUrl: "",
+            openNewTab: true,
+          },
+          {
+            id: "wk10",
+            thumbUrl: eventAwards,
+            title: "Web Series Cameo",
+            category: "Acting Career",
+            duration: "8:20",
+            videoUrl: "",
+            openNewTab: true,
+          },
         ],
       },
       {
-        id: "tb5", name: "Wedding",
+        id: "tb5",
+        name: "Wedding",
         items: [
-          { id: "wk11", thumbUrl: eventWedding, title: "Destination Sangeet Night", category: "Wedding", duration: "10:22", videoUrl: "", openNewTab: true },
-          { id: "wk12", thumbUrl: eventWedding, title: "Reception Grand Entry", category: "Wedding", duration: "7:48", videoUrl: "", openNewTab: true },
+          {
+            id: "wk11",
+            thumbUrl: eventWedding,
+            title: "Destination Sangeet Night",
+            category: "Wedding",
+            duration: "10:22",
+            videoUrl: "",
+            openNewTab: true,
+          },
+          {
+            id: "wk12",
+            thumbUrl: eventWedding,
+            title: "Reception Grand Entry",
+            category: "Wedding",
+            duration: "7:48",
+            videoUrl: "",
+            openNewTab: true,
+          },
         ],
       },
     ],
@@ -418,18 +619,90 @@ export const DEFAULT_CONTENT: SiteContent = {
     buttonHref: "#contact",
     rowSpeeds: [45, 55, 50],
     items: [
-      { id: "ts1", name: "Arjun Reddy", role: "Product Launch Manager", photoUrl: "", text: "Our product launch was elevated to a whole new level with Sayanti's exceptional hosting skills." },
-      { id: "ts2", name: "Kavya Nair", role: "Award Ceremony Organizer", photoUrl: "", text: "Sayanti hosted our industry awards night phenomenally and created an unforgettable experience for everyone." },
-      { id: "ts3", name: "Rajesh Kumar", role: "Corporate Event Manager", photoUrl: "", text: "She's punctual and brings incredible energy to every corporate event." },
-      { id: "ts4", name: "Anjali Patel", role: "Fashion Show Organizer", photoUrl: "", text: "She doesn't just host, she builds lasting relationships and helped make our fashion week a huge success." },
-      { id: "ts5", name: "Aditya Verma", role: "Entertainment Professional", photoUrl: "", text: "Sayanti's hosting skills are truly world-class. She knows how to read the room perfectly." },
-      { id: "ts6", name: "Neha Gupta", role: "Event Planning Consultant", photoUrl: "", text: "Every event feels special and memorable with her innovative hosting techniques." },
-      { id: "ts7", name: "Karan Mehta", role: "Wedding Coordinator", photoUrl: "", text: "Sayanti made our wedding reception unforgettable and kept everyone engaged throughout the evening." },
-      { id: "ts8", name: "Divya Sharma", role: "Corporate Communications", photoUrl: "", text: "Our international conference was engaging for all participants thanks to her." },
-      { id: "ts9", name: "Deepika Sharma", role: "Business Consultant", photoUrl: "", text: "Sayanti's journey is truly inspiring — she understands the value of building relationships." },
-      { id: "ts10", name: "Amit Patel", role: "Event Entrepreneur", photoUrl: "", text: "Consistent excellence in everything she does on stage." },
-      { id: "ts11", name: "Rohan Kapoor", role: "Festival Organizer", photoUrl: "", text: "Her multilingual ability kept our cultural festival crowd entertained all night." },
-      { id: "ts12", name: "Ananya Das", role: "Event Management Professional", photoUrl: "", text: "Working with Sayanti is effortless because of her exceptional preparation." },
+      {
+        id: "ts1",
+        name: "Arjun Reddy",
+        role: "Product Launch Manager",
+        photoUrl: "",
+        text: "Our product launch was elevated to a whole new level with Sayanti's exceptional hosting skills.",
+      },
+      {
+        id: "ts2",
+        name: "Kavya Nair",
+        role: "Award Ceremony Organizer",
+        photoUrl: "",
+        text: "Sayanti hosted our industry awards night phenomenally and created an unforgettable experience for everyone.",
+      },
+      {
+        id: "ts3",
+        name: "Rajesh Kumar",
+        role: "Corporate Event Manager",
+        photoUrl: "",
+        text: "She's punctual and brings incredible energy to every corporate event.",
+      },
+      {
+        id: "ts4",
+        name: "Anjali Patel",
+        role: "Fashion Show Organizer",
+        photoUrl: "",
+        text: "She doesn't just host, she builds lasting relationships and helped make our fashion week a huge success.",
+      },
+      {
+        id: "ts5",
+        name: "Aditya Verma",
+        role: "Entertainment Professional",
+        photoUrl: "",
+        text: "Sayanti's hosting skills are truly world-class. She knows how to read the room perfectly.",
+      },
+      {
+        id: "ts6",
+        name: "Neha Gupta",
+        role: "Event Planning Consultant",
+        photoUrl: "",
+        text: "Every event feels special and memorable with her innovative hosting techniques.",
+      },
+      {
+        id: "ts7",
+        name: "Karan Mehta",
+        role: "Wedding Coordinator",
+        photoUrl: "",
+        text: "Sayanti made our wedding reception unforgettable and kept everyone engaged throughout the evening.",
+      },
+      {
+        id: "ts8",
+        name: "Divya Sharma",
+        role: "Corporate Communications",
+        photoUrl: "",
+        text: "Our international conference was engaging for all participants thanks to her.",
+      },
+      {
+        id: "ts9",
+        name: "Deepika Sharma",
+        role: "Business Consultant",
+        photoUrl: "",
+        text: "Sayanti's journey is truly inspiring — she understands the value of building relationships.",
+      },
+      {
+        id: "ts10",
+        name: "Amit Patel",
+        role: "Event Entrepreneur",
+        photoUrl: "",
+        text: "Consistent excellence in everything she does on stage.",
+      },
+      {
+        id: "ts11",
+        name: "Rohan Kapoor",
+        role: "Festival Organizer",
+        photoUrl: "",
+        text: "Her multilingual ability kept our cultural festival crowd entertained all night.",
+      },
+      {
+        id: "ts12",
+        name: "Ananya Das",
+        role: "Event Management Professional",
+        photoUrl: "",
+        text: "Working with Sayanti is effortless because of her exceptional preparation.",
+      },
     ],
   },
   contact: {
@@ -448,8 +721,11 @@ export const DEFAULT_CONTENT: SiteContent = {
     quote: "Your story deserves the perfect voice.",
     bio: "Crafted with care to leave your audience smiling.",
     cities: [
-      { id: "c1", text: "Mumbai" }, { id: "c2", text: "Goa" }, { id: "c3", text: "Pune" },
-      { id: "c4", text: "Delhi" }, { id: "c5", text: "Kolkata" },
+      { id: "c1", text: "Mumbai" },
+      { id: "c2", text: "Goa" },
+      { id: "c3", text: "Pune" },
+      { id: "c4", text: "Delhi" },
+      { id: "c5", text: "Kolkata" },
     ],
     quickLinks: [
       { id: "q1", label: "About", href: "#about" },
@@ -517,7 +793,6 @@ export const DEFAULT_CONTENT: SiteContent = {
       shadowColor: "#000000",
     },
   },
-
 };
 
 /* ---------------------------------------------------------------- helpers */

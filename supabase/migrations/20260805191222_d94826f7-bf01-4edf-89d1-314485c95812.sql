@@ -1,7 +1,13 @@
 
-CREATE TYPE public.app_role AS ENUM ('admin', 'user');
+DO $$
+BEGIN
+  CREATE TYPE public.app_role AS ENUM ('admin', 'user');
+EXCEPTION
+  WHEN duplicate_object THEN NULL;
+END;
+$$;
 
-CREATE TABLE public.user_roles (
+CREATE TABLE IF NOT EXISTS public.user_roles (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL,
   role public.app_role NOT NULL,
@@ -11,6 +17,7 @@ CREATE TABLE public.user_roles (
 GRANT SELECT ON public.user_roles TO authenticated;
 GRANT ALL ON public.user_roles TO service_role;
 ALTER TABLE public.user_roles ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users can read own roles" ON public.user_roles;
 CREATE POLICY "Users can read own roles" ON public.user_roles FOR SELECT TO authenticated USING (auth.uid() = user_id);
 
 CREATE OR REPLACE FUNCTION public.has_role(_user_id uuid, _role public.app_role)
@@ -30,10 +37,11 @@ BEGIN
   RETURN NEW;
 END;
 $$;
+DROP TRIGGER IF EXISTS on_auth_user_created_role ON auth.users;
 CREATE TRIGGER on_auth_user_created_role
 AFTER INSERT ON auth.users FOR EACH ROW EXECUTE FUNCTION public.handle_new_user_role();
 
-CREATE TABLE public.site_content (
+CREATE TABLE IF NOT EXISTS public.site_content (
   id text PRIMARY KEY,
   data jsonb NOT NULL DEFAULT '{}'::jsonb,
   updated_at timestamptz NOT NULL DEFAULT now(),
@@ -43,14 +51,19 @@ GRANT SELECT ON public.site_content TO anon;
 GRANT SELECT, INSERT, UPDATE ON public.site_content TO authenticated;
 GRANT ALL ON public.site_content TO service_role;
 ALTER TABLE public.site_content ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Anyone can read published content" ON public.site_content;
 CREATE POLICY "Anyone can read published content" ON public.site_content FOR SELECT TO anon USING (id = 'published');
+DROP POLICY IF EXISTS "Admins can read all content" ON public.site_content;
 CREATE POLICY "Admins can read all content" ON public.site_content FOR SELECT TO authenticated USING (public.has_role(auth.uid(), 'admin'));
+DROP POLICY IF EXISTS "Admins can insert content" ON public.site_content;
 CREATE POLICY "Admins can insert content" ON public.site_content FOR INSERT TO authenticated WITH CHECK (public.has_role(auth.uid(), 'admin'));
+DROP POLICY IF EXISTS "Admins can update content" ON public.site_content;
 CREATE POLICY "Admins can update content" ON public.site_content FOR UPDATE TO authenticated USING (public.has_role(auth.uid(), 'admin')) WITH CHECK (public.has_role(auth.uid(), 'admin'));
 
-INSERT INTO public.site_content (id, data) VALUES ('draft', '{}'::jsonb), ('published', '{}'::jsonb);
+INSERT INTO public.site_content (id, data) VALUES ('draft', '{}'::jsonb), ('published', '{}'::jsonb)
+ON CONFLICT (id) DO NOTHING;
 
-CREATE TABLE public.content_versions (
+CREATE TABLE IF NOT EXISTS public.content_versions (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   data jsonb NOT NULL,
   label text,
@@ -60,9 +73,10 @@ CREATE TABLE public.content_versions (
 GRANT SELECT, INSERT, DELETE ON public.content_versions TO authenticated;
 GRANT ALL ON public.content_versions TO service_role;
 ALTER TABLE public.content_versions ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Admins manage versions" ON public.content_versions;
 CREATE POLICY "Admins manage versions" ON public.content_versions FOR ALL TO authenticated USING (public.has_role(auth.uid(), 'admin')) WITH CHECK (public.has_role(auth.uid(), 'admin'));
 
-CREATE TABLE public.media_assets (
+CREATE TABLE IF NOT EXISTS public.media_assets (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   url text NOT NULL,
   path text NOT NULL,
@@ -75,9 +89,10 @@ CREATE TABLE public.media_assets (
 GRANT SELECT, INSERT, DELETE ON public.media_assets TO authenticated;
 GRANT ALL ON public.media_assets TO service_role;
 ALTER TABLE public.media_assets ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Admins manage media" ON public.media_assets;
 CREATE POLICY "Admins manage media" ON public.media_assets FOR ALL TO authenticated USING (public.has_role(auth.uid(), 'admin')) WITH CHECK (public.has_role(auth.uid(), 'admin'));
 
-CREATE TABLE public.activity_log (
+CREATE TABLE IF NOT EXISTS public.activity_log (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   action text NOT NULL,
   section text,
@@ -89,5 +104,7 @@ CREATE TABLE public.activity_log (
 GRANT SELECT, INSERT ON public.activity_log TO authenticated;
 GRANT ALL ON public.activity_log TO service_role;
 ALTER TABLE public.activity_log ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Admins read activity" ON public.activity_log;
 CREATE POLICY "Admins read activity" ON public.activity_log FOR SELECT TO authenticated USING (public.has_role(auth.uid(), 'admin'));
+DROP POLICY IF EXISTS "Admins write activity" ON public.activity_log;
 CREATE POLICY "Admins write activity" ON public.activity_log FOR INSERT TO authenticated WITH CHECK (public.has_role(auth.uid(), 'admin'));

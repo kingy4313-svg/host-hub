@@ -21,7 +21,7 @@ function publicClient() {
         if (key.startsWith("sb_") && h.get("Authorization") === `Bearer ${key}`)
           h.delete("Authorization");
         h.set("apikey", key);
-        return fetch(input, { ...init, headers: h });
+        return fetch(input, { ...init, headers: h, cache: "no-store" });
       },
     },
   });
@@ -106,19 +106,22 @@ export const publishContent = createServerFn({ method: "POST" })
       .from("site_content")
       .upsert({ id: "published", data: data.content, updated_at: now, updated_by: ctx.userId });
     if (error) throw new Error(error.message);
-    await ctx.supabase
+    const { error: draftError } = await ctx.supabase
       .from("site_content")
       .upsert({ id: "draft", data: data.content, updated_at: now, updated_by: ctx.userId });
-    await ctx.supabase.from("content_versions").insert({
+    if (draftError) throw new Error(draftError.message);
+    const { error: versionError } = await ctx.supabase.from("content_versions").insert({
       data: data.content,
       label: data.label ?? `Published ${new Date().toLocaleString()}`,
       created_by: ctx.userId,
     });
-    await ctx.supabase.from("activity_log").insert({
+    if (versionError) throw new Error(versionError.message);
+    const { error: activityError } = await ctx.supabase.from("activity_log").insert({
       action: "publish",
       actor_email: ctx.claims?.email ?? null,
       created_by: ctx.userId,
     });
+    if (activityError) throw new Error(activityError.message);
     return { ok: true };
   });
 

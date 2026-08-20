@@ -43,6 +43,64 @@ export function typoStyle(slug: string, fs: number, fw: string): React.CSSProper
 const mailto = (email: string) => `mailto:${email}`;
 const telHref = (phone: string) => `tel:${phone.replace(/[^\d+]/g, "")}`;
 
+function CallOptions({
+  primary,
+  alternate,
+  primaryHref,
+  className,
+  ariaLabel,
+  children,
+}: {
+  primary: string;
+  alternate?: string;
+  primaryHref?: string;
+  className: string;
+  ariaLabel?: string;
+  children: React.ReactNode;
+}) {
+  const [open, setOpen] = useState(false);
+  const href = primaryHref || telHref(primary);
+
+  if (!alternate) {
+    return (
+      <a href={href} className={className}>
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        aria-label={ariaLabel}
+        onClick={() => setOpen((value) => !value)}
+        className={className}
+      >
+        {children}
+      </button>
+      {open ? (
+        <div className="absolute bottom-full left-1/2 z-20 mb-2 min-w-48 -translate-x-1/2 rounded-lg border border-gold/40 bg-black p-2 text-left shadow-xl">
+          <a
+            href={href}
+            className="block rounded-md px-3 py-2 text-sm text-white hover:bg-white/10"
+            onClick={() => setOpen(false)}
+          >
+            Primary: {primary}
+          </a>
+          <a
+            href={telHref(alternate)}
+            className="block rounded-md px-3 py-2 text-sm text-white hover:bg-white/10"
+            onClick={() => setOpen(false)}
+          >
+            Alternate: {alternate}
+          </a>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 function getVideoThumbnail(url: string) {
   const { kind, id } = detectVideo(url);
   if (kind === "youtube" && id) return `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
@@ -1085,12 +1143,14 @@ export function ContactCta() {
         >
           <Mail className="size-4" /> {contact.emailText}
         </a>
-        <a
-          href={call}
+        <CallOptions
+          primary={settings.phone}
+          alternate={settings.alternatePhone}
+          primaryHref={call}
           className="inline-flex items-center gap-2 rounded-md border border-gold/50 px-7 py-3 font-display text-gold"
         >
           <Phone className="size-4" /> {contact.callText}
-        </a>
+        </CallOptions>
       </div>
       <div className="luxe-card mx-auto mt-14 max-w-2xl p-6">
         <p className="font-display fluid-body text-muted-foreground">{contact.boxText}</p>
@@ -1105,6 +1165,17 @@ export function ContactCta() {
           >
             {settings.phone}
           </a>
+          {settings.alternatePhone ? (
+            <>
+              <span className="mx-3 text-gold">•</span>
+              <a
+                href={telHref(settings.alternatePhone)}
+                className="text-gold underline-offset-4 hover:underline"
+              >
+                {settings.alternatePhone}
+              </a>
+            </>
+          ) : null}
         </p>
       </div>
     </section>
@@ -1158,6 +1229,13 @@ export function Footer() {
                 {settings.phone}
               </a>
             </li>
+            {settings.alternatePhone ? (
+              <li>
+                <a href={telHref(settings.alternatePhone)} className="hover:text-gold">
+                  {settings.alternatePhone}
+                </a>
+              </li>
+            ) : null}
             <li>
               <a href={mailto(settings.email)} className="hover:text-gold">
                 {settings.email}
@@ -1216,12 +1294,14 @@ export function FloatingCall() {
   const { settings } = useContent();
   if (!settings.floatingCall.enabled) return null;
   return (
-    <a
-      href={telHref(settings.floatingCall.phone)}
-      aria-label="Call now"
+    <CallOptions
+      primary={settings.phone}
+      alternate={settings.alternatePhone}
+      primaryHref={telHref(settings.floatingCall.phone)}
+      ariaLabel="Call now"
       className="btn-gold fixed bottom-6 right-6 z-50 flex size-14 items-center justify-center rounded-full"
     >
       <Phone className="size-6" />
-    </a>
+    </CallOptions>
   );
 }

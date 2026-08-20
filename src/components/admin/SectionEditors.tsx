@@ -123,6 +123,12 @@ function ContactInfoEditor({ content, patch }: EditorProps) {
         value={s.phone}
         onChange={(v) => patch("settings", { phone: v })}
       />
+      <TextField
+        label="Alternate phone number"
+        value={s.alternatePhone ?? ""}
+        onChange={(v) => patch("settings", { alternatePhone: v })}
+        placeholder="Optional second contact number"
+      />
       <SwitchField
         label="Show floating call button"
         checked={s.floatingCall.enabled}
