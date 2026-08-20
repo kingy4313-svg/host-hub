@@ -1,5 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
+import {
+  SUPABASE_PUBLISHABLE_KEY as DEFAULT_PUBLISHABLE_KEY,
+  SUPABASE_URL as DEFAULT_URL,
+} from "@/integrations/supabase/public-config";
 
 /**
  * Downloads a media object. Prefers the service-role client, but falls back to
@@ -17,14 +21,22 @@ async function downloadMedia(objectPath: string, bucket: string) {
     // fall through to the publishable-key client
   }
 
-  const url = process.env["SUPABASE_URL"] ?? process.env["VITE_SUPABASE_URL"];
+  const url = process.env["SUPABASE_URL"] ?? process.env["VITE_SUPABASE_URL"] ?? DEFAULT_URL;
   const key =
-    process.env["SUPABASE_PUBLISHABLE_KEY"] ?? process.env["VITE_SUPABASE_PUBLISHABLE_KEY"];
+    process.env["SUPABASE_PUBLISHABLE_KEY"] ??
+    process.env["VITE_SUPABASE_PUBLISHABLE_KEY"] ??
+    DEFAULT_PUBLISHABLE_KEY;
   if (!url || !key) return null;
 
   const anon = createClient(url, key, {
     auth: { persistSession: false, autoRefreshToken: false },
-    global: { fetch: (input, init) => fetch(input, { ...init, headers: { ...Object.fromEntries(new Headers(init?.headers)), apikey: key } }) },
+    global: {
+      fetch: (input, init) =>
+        fetch(input, {
+          ...init,
+          headers: { ...Object.fromEntries(new Headers(init?.headers)), apikey: key },
+        }),
+    },
   });
   const res = await anon.storage.from(bucket).download(objectPath);
   if (res.error || !res.data) return null;
@@ -37,7 +49,8 @@ export const Route = createFileRoute("/api/public/media/$")({
       GET: async ({ params, request }) => {
         const path = (params as { _splat?: string })._splat ?? "";
         const decodedPath = path ? decodeURIComponent(path) : "";
-        if (!decodedPath || decodedPath.includes("..")) return new Response("Not found", { status: 404 });
+        if (!decodedPath || decodedPath.includes(".."))
+          return new Response("Not found", { status: 404 });
 
         const requested = new URL(request.url).searchParams.get("bucket") ?? "media";
         const bucket = ALLOWED_BUCKETS.has(requested) ? requested : "media";

@@ -1,17 +1,25 @@
 import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import {
+  SUPABASE_PUBLISHABLE_KEY as DEFAULT_PUBLISHABLE_KEY,
+  SUPABASE_URL as DEFAULT_URL,
+} from "@/integrations/supabase/public-config";
 import { mergeContent, type SiteContent } from "@/content/site-content";
 
 function publicClient() {
-  const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
-  const url = process.env["SUPABASE_URL"]!;
+  const key =
+    import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] ||
+    process.env["SUPABASE_PUBLISHABLE_KEY"] ||
+    DEFAULT_PUBLISHABLE_KEY;
+  const url = import.meta.env["VITE_SUPABASE_URL"] || process.env["SUPABASE_URL"] || DEFAULT_URL;
   return createClient(url, key, {
     auth: { persistSession: false, autoRefreshToken: false },
     global: {
       fetch: (input, init) => {
         const h = new Headers(init?.headers);
-        if (key.startsWith("sb_") && h.get("Authorization") === `Bearer ${key}`) h.delete("Authorization");
+        if (key.startsWith("sb_") && h.get("Authorization") === `Bearer ${key}`)
+          h.delete("Authorization");
         h.set("apikey", key);
         return fetch(input, { ...init, headers: h });
       },
@@ -22,7 +30,11 @@ function publicClient() {
 /** Public: the live site content. */
 export const getPublishedContent = createServerFn({ method: "GET" }).handler(async () => {
   try {
-    const { data } = await publicClient().from("site_content").select("data").eq("id", "published").maybeSingle();
+    const { data } = await publicClient()
+      .from("site_content")
+      .select("data")
+      .eq("id", "published")
+      .maybeSingle();
     return mergeContent(data?.data ?? {});
   } catch {
     return mergeContent({});
@@ -30,7 +42,10 @@ export const getPublishedContent = createServerFn({ method: "GET" }).handler(asy
 });
 
 async function assertAdmin(context: { supabase: any; userId: string }) {
-  const { data } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
+  const { data } = await context.supabase.rpc("has_role", {
+    _user_id: context.userId,
+    _role: "admin",
+  });
   if (!data) throw new Error("Forbidden: admin access required");
 }
 
@@ -38,7 +53,9 @@ export const getAdminContent = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await assertAdmin(context as any);
-    const { data } = await (context as any).supabase.from("site_content").select("id, data, updated_at");
+    const { data } = await (context as any).supabase
+      .from("site_content")
+      .select("id, data, updated_at");
     const rows: { id: string; data: unknown; updated_at: string }[] = data ?? [];
     const draft = rows.find((r) => r.id === "draft");
     const published = rows.find((r) => r.id === "published");
@@ -59,9 +76,12 @@ export const saveDraft = createServerFn({ method: "POST" })
     console.log("server.saveDraft: received content for saveDraft (truncated):", {
       keys: Object.keys((data.content ?? {}) as Record<string, unknown>),
     });
-    const { error } = await ctx.supabase
-      .from("site_content")
-      .upsert({ id: "draft", data: data.content, updated_at: new Date().toISOString(), updated_by: ctx.userId });
+    const { error } = await ctx.supabase.from("site_content").upsert({
+      id: "draft",
+      data: data.content,
+      updated_at: new Date().toISOString(),
+      updated_by: ctx.userId,
+    });
     if (error) throw new Error(error.message);
     await ctx.supabase.from("activity_log").insert({
       action: "save_draft",
@@ -149,7 +169,13 @@ export const listActivity = createServerFn({ method: "GET" })
       .select("id, action, section, actor_email, created_at")
       .order("created_at", { ascending: false })
       .limit(40);
-    return (data ?? []) as { id: string; action: string; section: string | null; actor_email: string | null; created_at: string }[];
+    return (data ?? []) as {
+      id: string;
+      action: string;
+      section: string | null;
+      actor_email: string | null;
+      created_at: string;
+    }[];
   });
 
 export const checkIsAdmin = createServerFn({ method: "GET" })

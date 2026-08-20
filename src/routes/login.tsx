@@ -3,13 +3,24 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
+const TEMP_ADMIN = {
+  email: "admin@anchorsayanti.com",
+  password: "admin123",
+};
+
 export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
       { title: "Admin Login | Sayanti Banerjee" },
-      { name: "description", content: "Secure admin login for managing the Anchor Sayanti website content." },
+      {
+        name: "description",
+        content: "Secure admin login for managing the Anchor Sayanti website content.",
+      },
       { property: "og:title", content: "Admin Login | Sayanti Banerjee" },
-      { property: "og:description", content: "Secure admin login for managing the Anchor Sayanti website content." },
+      {
+        property: "og:description",
+        content: "Secure admin login for managing the Anchor Sayanti website content.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
@@ -17,9 +28,6 @@ export const Route = createFileRoute("/login")({
   }),
   component: LoginPage,
 });
-
-// Temporary convenience login: typing "admin" / "admin" signs into the seeded admin account.
-const TEMP_ADMIN = { user: "admin", pass: "admin", email: "admin@anchorsayanti.com", password: "admin123" };
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -37,15 +45,25 @@ function LoginPage() {
     setNotice("");
     setLoading(true);
 
-    const isTempAdmin =
-      email.trim().toLowerCase() === TEMP_ADMIN.user && password === TEMP_ADMIN.pass;
+    const isTempAdmin = email.trim().toLowerCase() === "admin" && password === "admin";
     const { error: authError } = await supabase.auth.signInWithPassword({
-      email: isTempAdmin ? TEMP_ADMIN.email : email,
+      email: isTempAdmin ? TEMP_ADMIN.email : email.trim(),
       password: isTempAdmin ? TEMP_ADMIN.password : password,
     });
     setLoading(false);
     if (authError) {
-      setError("Invalid email or password");
+      const message = authError.message.toLowerCase();
+      if (message.includes("email not confirmed")) {
+        setError("Please confirm your email address before signing in.");
+      } else if (message.includes("invalid login credentials")) {
+        setError("The email or password is incorrect.");
+      } else if (message.includes("failed to fetch") || message.includes("network")) {
+        setError(
+          "Unable to connect to the authentication service. Check the deployed Supabase URL and try again.",
+        );
+      } else {
+        setError(authError.message);
+      }
       return;
     }
     if (!remember) sessionStorage.setItem("admin-session-only", "1");
@@ -63,8 +81,11 @@ function LoginPage() {
 
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="space-y-1.5">
-            <label htmlFor="email" className="text-xs uppercase tracking-widest text-muted-foreground">
-              Email or username
+            <label
+              htmlFor="email"
+              className="text-xs uppercase tracking-widest text-muted-foreground"
+            >
+              Email
             </label>
             <input
               id="email"
@@ -77,9 +98,13 @@ function LoginPage() {
             />
           </div>
 
-
           <div className="space-y-1.5">
-            <label htmlFor="password" className="text-xs uppercase tracking-widest text-muted-foreground">Password</label>
+            <label
+              htmlFor="password"
+              className="text-xs uppercase tracking-widest text-muted-foreground"
+            >
+              Password
+            </label>
             <div className="relative">
               <input
                 id="password"
@@ -111,7 +136,11 @@ function LoginPage() {
             Remember me
           </label>
 
-          <button type="submit" disabled={loading} className="btn-gold flex w-full items-center justify-center rounded-full px-6 py-3 text-sm disabled:opacity-70">
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn-gold flex w-full items-center justify-center rounded-full px-6 py-3 text-sm disabled:opacity-70"
+          >
             {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
             {loading ? "Please wait..." : "Login"}
           </button>
@@ -122,5 +151,4 @@ function LoginPage() {
       </div>
     </div>
   );
-
 }

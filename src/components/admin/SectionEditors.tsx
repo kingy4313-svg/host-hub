@@ -1,13 +1,24 @@
 import type { ReactElement } from "react";
 import type { SiteContent } from "@/content/site-content";
-import { TextField, AreaField, SwitchField, MediaField, IconPicker, ListEditor, VideoField, Field, RangeField } from "./fields";
+import {
+  TextField,
+  AreaField,
+  SwitchField,
+  MediaField,
+  IconPicker,
+  ListEditor,
+  VideoField,
+  Field,
+  RangeField,
+} from "./fields";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, Trash2 } from "lucide-react";
 import { TypographySettingsEditor } from "./TypographySettingsEditor";
 
-const newId = (p: string) => `${p}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
+const newId = (p: string) =>
+  `${p}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
 
 export type EditorProps = {
   content: SiteContent;
@@ -20,9 +31,23 @@ function SettingsEditor({ content, patch }: EditorProps) {
   const s = content.settings;
   return (
     <div className="space-y-4">
-      <TextField label="Site name" value={s.siteName} onChange={(v) => patch("settings", { siteName: v })} />
-      <MediaField label="Logo" value={s.logoUrl} onChange={(v) => patch("settings", { logoUrl: v })} accept="image/*" />
-      <MediaField label="Favicon" value={s.faviconUrl} onChange={(v) => patch("settings", { faviconUrl: v })} accept="image/*" />
+      <TextField
+        label="Site name"
+        value={s.siteName}
+        onChange={(v) => patch("settings", { siteName: v })}
+      />
+      <MediaField
+        label="Logo"
+        value={s.logoUrl}
+        onChange={(v) => patch("settings", { logoUrl: v })}
+        accept="image/*"
+      />
+      <MediaField
+        label="Favicon"
+        value={s.faviconUrl}
+        onChange={(v) => patch("settings", { faviconUrl: v })}
+        accept="image/*"
+      />
       <div className="grid gap-3 sm:grid-cols-3">
         {(["gold", "background", "foreground"] as const).map((k) => (
           <Field key={k} label={`${k} colour`}>
@@ -31,23 +56,48 @@ function SettingsEditor({ content, patch }: EditorProps) {
                 type="color"
                 className="h-9 w-12 rounded border border-blue-200 bg-white"
                 value={s.colors[k]}
-                onChange={(e) => patch("settings", { colors: { ...s.colors, [k]: e.target.value } })}
+                onChange={(e) =>
+                  patch("settings", { colors: { ...s.colors, [k]: e.target.value } })
+                }
               />
               <Input
                 value={s.colors[k]}
-                onChange={(e) => patch("settings", { colors: { ...s.colors, [k]: e.target.value } })}
+                onChange={(e) =>
+                  patch("settings", { colors: { ...s.colors, [k]: e.target.value } })
+                }
               />
             </div>
           </Field>
         ))}
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
-        <TextField label="Heading font" value={s.fonts.heading} onChange={(v) => patch("settings", { fonts: { ...s.fonts, heading: v } })} />
-        <TextField label="Body font" value={s.fonts.body} onChange={(v) => patch("settings", { fonts: { ...s.fonts, body: v } })} />
+        <TextField
+          label="Heading font"
+          value={s.fonts.heading}
+          onChange={(v) => patch("settings", { fonts: { ...s.fonts, heading: v } })}
+        />
+        <TextField
+          label="Body font"
+          value={s.fonts.body}
+          onChange={(v) => patch("settings", { fonts: { ...s.fonts, body: v } })}
+        />
       </div>
-      <TextField label="SEO title" value={s.seo.title} onChange={(v) => patch("settings", { seo: { ...s.seo, title: v } })} />
-      <AreaField label="SEO description" value={s.seo.description} onChange={(v) => patch("settings", { seo: { ...s.seo, description: v } })} />
-      <MediaField label="OG image" value={s.seo.ogImage} onChange={(v) => patch("settings", { seo: { ...s.seo, ogImage: v } })} accept="image/*" />
+      <TextField
+        label="SEO title"
+        value={s.seo.title}
+        onChange={(v) => patch("settings", { seo: { ...s.seo, title: v } })}
+      />
+      <AreaField
+        label="SEO description"
+        value={s.seo.description}
+        onChange={(v) => patch("settings", { seo: { ...s.seo, description: v } })}
+      />
+      <MediaField
+        label="OG image"
+        value={s.seo.ogImage}
+        onChange={(v) => patch("settings", { seo: { ...s.seo, ogImage: v } })}
+        accept="image/*"
+      />
     </div>
   );
 }
@@ -61,9 +111,18 @@ function ContactInfoEditor({ content, patch }: EditorProps) {
       <p className="text-sm text-muted-foreground">
         Used site-wide: WhatsApp button, Call button, footer and the floating call icon.
       </p>
-      <TextField label="WhatsApp link" value={s.whatsapp} onChange={(v) => patch("settings", { whatsapp: v })} placeholder="https://wa.me/91..." />
+      <TextField
+        label="WhatsApp link"
+        value={s.whatsapp}
+        onChange={(v) => patch("settings", { whatsapp: v })}
+        placeholder="https://wa.me/91..."
+      />
       <TextField label="Email" value={s.email} onChange={(v) => patch("settings", { email: v })} />
-      <TextField label="Phone number" value={s.phone} onChange={(v) => patch("settings", { phone: v })} />
+      <TextField
+        label="Phone number"
+        value={s.phone}
+        onChange={(v) => patch("settings", { phone: v })}
+      />
       <SwitchField
         label="Show floating call button"
         checked={s.floatingCall.enabled}
@@ -75,11 +134,27 @@ function ContactInfoEditor({ content, patch }: EditorProps) {
         onChange={(v) => patch("settings", { floatingCall: { ...s.floatingCall, phone: v } })}
       />
       <div className="grid gap-3 sm:grid-cols-2">
-        <TextField label="CTA heading (white)" value={content.contact.headingWhite} onChange={(v) => patch("contact", { headingWhite: v })} />
-        <TextField label="CTA heading (gold)" value={content.contact.headingGold} onChange={(v) => patch("contact", { headingGold: v })} />
+        <TextField
+          label="CTA heading (white)"
+          value={content.contact.headingWhite}
+          onChange={(v) => patch("contact", { headingWhite: v })}
+        />
+        <TextField
+          label="CTA heading (gold)"
+          value={content.contact.headingGold}
+          onChange={(v) => patch("contact", { headingGold: v })}
+        />
       </div>
-      <TextField label="CTA subtext" value={content.contact.subtext} onChange={(v) => patch("contact", { subtext: v })} />
-      <TextField label="Box text" value={content.contact.boxText} onChange={(v) => patch("contact", { boxText: v })} />
+      <TextField
+        label="CTA subtext"
+        value={content.contact.subtext}
+        onChange={(v) => patch("contact", { subtext: v })}
+      />
+      <TextField
+        label="Box text"
+        value={content.contact.boxText}
+        onChange={(v) => patch("contact", { boxText: v })}
+      />
     </div>
   );
 }
@@ -90,7 +165,11 @@ function NavbarEditor({ content, patch }: EditorProps) {
   const n = content.navbar;
   return (
     <div className="space-y-4">
-      <TextField label="Logo text" value={n.logoText} onChange={(v) => patch("navbar", { logoText: v })} />
+      <TextField
+        label="Logo text"
+        value={n.logoText}
+        onChange={(v) => patch("navbar", { logoText: v })}
+      />
       <ListEditor
         items={n.items}
         onChange={(items) => patch("navbar", { items })}
@@ -103,7 +182,11 @@ function NavbarEditor({ content, patch }: EditorProps) {
           </div>
         )}
       />
-      <SwitchField label="Show login button" checked={n.showLogin} onChange={(v) => patch("navbar", { showLogin: v })} />
+      <SwitchField
+        label="Show login button"
+        checked={n.showLogin}
+        onChange={(v) => patch("navbar", { showLogin: v })}
+      />
     </div>
   );
 }
@@ -153,11 +236,19 @@ function HeroEditor({ content, patch }: EditorProps) {
     <div className="space-y-4">
       <div className="grid gap-3 sm:grid-cols-2">
         <div>
-          <MediaField label="Hero background desktop" value={(h as any).mediaUrlDesktop || h.mediaUrl} onChange={(v) => patch("hero", { mediaUrlDesktop: v })} />
+          <MediaField
+            label="Hero background desktop"
+            value={(h as any).mediaUrlDesktop || h.mediaUrl}
+            onChange={(v) => patch("hero", { mediaUrlDesktop: v })}
+          />
           <p className="mt-1 text-xs text-muted-foreground">Recommended: 1920 × 1080 px (16:9)</p>
         </div>
         <div>
-          <MediaField label="Hero background mobile" value={(h as any).mediaUrlMobile || h.mediaUrl} onChange={(v) => patch("hero", { mediaUrlMobile: v })} />
+          <MediaField
+            label="Hero background mobile"
+            value={(h as any).mediaUrlMobile || h.mediaUrl}
+            onChange={(v) => patch("hero", { mediaUrlMobile: v })}
+          />
           <p className="mt-1 text-xs text-muted-foreground">Recommended: 1080 × 1920 px (9:16)</p>
         </div>
       </div>
@@ -172,10 +263,22 @@ function HeroEditor({ content, patch }: EditorProps) {
         </select>
       </Field>
       <div className="grid gap-3 sm:grid-cols-2">
-        <TextField label="Heading line 1" value={h.line1} onChange={(v) => patch("hero", { line1: v })} />
-        <TextField label="Heading line 2" value={h.line2} onChange={(v) => patch("hero", { line2: v })} />
+        <TextField
+          label="Heading line 1"
+          value={h.line1}
+          onChange={(v) => patch("hero", { line1: v })}
+        />
+        <TextField
+          label="Heading line 2"
+          value={h.line2}
+          onChange={(v) => patch("hero", { line2: v })}
+        />
       </div>
-      <TextField label="Subheading" value={h.subheading} onChange={(v) => patch("hero", { subheading: v })} />
+      <TextField
+        label="Subheading"
+        value={h.subheading}
+        onChange={(v) => patch("hero", { subheading: v })}
+      />
       {/* Desktop/mobile controls below — top generic sliders removed (redundant). */}
       <div className="grid gap-3 sm:grid-cols-2">
         <div className="rounded-xl border border-blue-200 bg-white p-3">
@@ -186,7 +289,7 @@ function HeroEditor({ content, patch }: EditorProps) {
             min={0}
             max={100}
             step={1}
-            displayValue={`${((h as any).mediaPositionXDesktop ?? h.mediaPositionX)}%`}
+            displayValue={`${(h as any).mediaPositionXDesktop ?? h.mediaPositionX}%`}
             onChange={(v) => patch("hero", { mediaPositionXDesktop: v })}
           />
           <RangeField
@@ -195,7 +298,7 @@ function HeroEditor({ content, patch }: EditorProps) {
             min={0}
             max={100}
             step={1}
-            displayValue={`${((h as any).mediaPositionYDesktop ?? h.mediaPositionY)}%`}
+            displayValue={`${(h as any).mediaPositionYDesktop ?? h.mediaPositionY}%`}
             onChange={(v) => patch("hero", { mediaPositionYDesktop: v })}
           />
           <RangeField
@@ -216,7 +319,7 @@ function HeroEditor({ content, patch }: EditorProps) {
             min={0}
             max={100}
             step={1}
-            displayValue={`${((h as any).mediaPositionXMobile ?? h.mediaPositionX)}%`}
+            displayValue={`${(h as any).mediaPositionXMobile ?? h.mediaPositionX}%`}
             onChange={(v) => patch("hero", { mediaPositionXMobile: v })}
           />
           <RangeField
@@ -225,7 +328,7 @@ function HeroEditor({ content, patch }: EditorProps) {
             min={0}
             max={100}
             step={1}
-            displayValue={`${((h as any).mediaPositionYMobile ?? h.mediaPositionY)}%`}
+            displayValue={`${(h as any).mediaPositionYMobile ?? h.mediaPositionY}%`}
             onChange={(v) => patch("hero", { mediaPositionYMobile: v })}
           />
           <RangeField
@@ -302,14 +405,20 @@ function IntroEditor({ content, patch }: EditorProps) {
   const i = content.intro;
   return (
     <div className="space-y-4">
-      <TextField label="Heading" value={i.heading} onChange={(v) => patch("intro", { heading: v })} />
+      <TextField
+        label="Heading"
+        value={i.heading}
+        onChange={(v) => patch("intro", { heading: v })}
+      />
       <Field label="Tagline paragraphs">
         <ListEditor
           items={i.taglines}
           onChange={(taglines) => patch("intro", { taglines })}
           create={() => ({ id: newId("t"), text: "" })}
           addLabel="Add paragraph"
-          render={(item, update) => <AreaField label="Text" value={item.text} onChange={(v) => update({ text: v })} />}
+          render={(item, update) => (
+            <AreaField label="Text" value={item.text} onChange={(v) => update({ text: v })} />
+          )}
         />
       </Field>
       <Field label="Stats">
@@ -319,15 +428,32 @@ function IntroEditor({ content, patch }: EditorProps) {
           create={() => ({ id: newId("st"), icon: "Star", value: "", label: "" })}
           addLabel="Add stat"
           render={(item, update) => (
-            <div className="grid gap-3 sm:grid-cols-3">
-              <IconPicker label="Icon" value={item.icon} onChange={(v) => update({ icon: v })} />
-              <TextField
-                label="Value"
-                value={item.value}
-                onChange={(v) => update({ value: v })}
-                placeholder="e.g. 500+, 10K+, 99%, 4.9/5"
+            <div className="space-y-3">
+              <MediaField
+                label="Custom icon image"
+                value={item.iconImageUrl ?? ""}
+                onChange={(v) => update({ iconImageUrl: v })}
+                accept="image/*"
               />
-              <TextField label="Label" value={item.label} onChange={(v) => update({ label: v })} placeholder="YRS" />
+              <div className="grid gap-3 sm:grid-cols-3">
+                <IconPicker
+                  label="Fallback icon"
+                  value={item.icon}
+                  onChange={(v) => update({ icon: v })}
+                />
+                <TextField
+                  label="Value"
+                  value={item.value}
+                  onChange={(v) => update({ value: v })}
+                  placeholder="e.g. 500+, 10K+, 99%, 4.9/5"
+                />
+                <TextField
+                  label="Label"
+                  value={item.label}
+                  onChange={(v) => update({ label: v })}
+                  placeholder="YRS"
+                />
+              </div>
             </div>
           )}
         />
@@ -342,7 +468,11 @@ function WhyBookEditor({ content, patch }: EditorProps) {
   const w = content.whyBook;
   return (
     <div className="space-y-4">
-      <TextField label="Heading" value={w.heading} onChange={(v) => patch("whyBook", { heading: v })} />
+      <TextField
+        label="Heading"
+        value={w.heading}
+        onChange={(v) => patch("whyBook", { heading: v })}
+      />
       <ListEditor
         items={w.cards}
         onChange={(cards) => patch("whyBook", { cards })}
@@ -351,7 +481,11 @@ function WhyBookEditor({ content, patch }: EditorProps) {
         render={(item, update) => (
           <div className="space-y-3">
             <TextField label="Title" value={item.title} onChange={(v) => update({ title: v })} />
-            <AreaField label="Description" value={item.text} onChange={(v) => update({ text: v })} />
+            <AreaField
+              label="Description"
+              value={item.text}
+              onChange={(v) => update({ text: v })}
+            />
           </div>
         )}
       />
@@ -366,19 +500,48 @@ function FeaturedEditor({ content, patch }: EditorProps) {
   return (
     <div className="space-y-4">
       <div className="grid gap-3 sm:grid-cols-2">
-        <TextField label="Heading (white)" value={f.headingWhite} onChange={(v) => patch("featured", { headingWhite: v })} />
-        <TextField label="Heading (gold)" value={f.headingGold} onChange={(v) => patch("featured", { headingGold: v })} />
+        <TextField
+          label="Heading (white)"
+          value={f.headingWhite}
+          onChange={(v) => patch("featured", { headingWhite: v })}
+        />
+        <TextField
+          label="Heading (gold)"
+          value={f.headingGold}
+          onChange={(v) => patch("featured", { headingGold: v })}
+        />
       </div>
       <ListEditor
         items={f.items}
         onChange={(items) => patch("featured", { items })}
-        create={() => ({ id: newId("f"), mediaUrl: "", mediaType: "image" as const, label: "", caption: "", overlayIcon: "", overlayLink: "" })}
+        create={() => ({
+          id: newId("f"),
+          mediaUrl: "",
+          mediaType: "image" as const,
+          label: "",
+          caption: "",
+          overlayIcon: "",
+          overlayLink: "",
+        })}
         addLabel="Add moment"
         render={(item, update) => (
           <div className="space-y-3">
-            <MediaField label="Image or video" value={item.mediaUrl} onChange={(v) => update({ mediaUrl: v })} />
-            <TextField label="Category label" value={item.label} onChange={(v) => update({ label: v })} />
-            <AreaField label="Caption" value={item.caption} onChange={(v) => update({ caption: v })} rows={2} />
+            <MediaField
+              label="Image or video"
+              value={item.mediaUrl}
+              onChange={(v) => update({ mediaUrl: v })}
+            />
+            <TextField
+              label="Category label"
+              value={item.label}
+              onChange={(v) => update({ label: v })}
+            />
+            <AreaField
+              label="Caption"
+              value={item.caption}
+              onChange={(v) => update({ caption: v })}
+              rows={2}
+            />
           </div>
         )}
       />
@@ -393,19 +556,47 @@ function ServicesEditor({ content, patch }: EditorProps) {
   return (
     <div className="space-y-4">
       <div className="grid gap-3 sm:grid-cols-2">
-        <TextField label="Heading (white)" value={s.headingWhite} onChange={(v) => patch("services", { headingWhite: v })} />
-        <TextField label="Heading (gold)" value={s.headingGold} onChange={(v) => patch("services", { headingGold: v })} />
+        <TextField
+          label="Heading (white)"
+          value={s.headingWhite}
+          onChange={(v) => patch("services", { headingWhite: v })}
+        />
+        <TextField
+          label="Heading (gold)"
+          value={s.headingGold}
+          onChange={(v) => patch("services", { headingGold: v })}
+        />
       </div>
-      <TextField label="Trust line" value={s.trustLine} onChange={(v) => patch("services", { trustLine: v })} />
+      <TextField
+        label="Trust line"
+        value={s.trustLine}
+        onChange={(v) => patch("services", { trustLine: v })}
+      />
       <ListEditor
         items={s.items}
         onChange={(items) => patch("services", { items })}
         create={() => ({ id: newId("sv"), icon: "Mic", label: "", href: "" })}
         addLabel="Add service"
         render={(item, update) => (
-          <div className="grid gap-3 sm:grid-cols-2">
-            <TextField label="Service name" value={item.label} onChange={(v) => update({ label: v })} />
-            <IconPicker label="Icon" value={item.icon} onChange={(v) => update({ icon: v })} />
+          <div className="space-y-3">
+            <MediaField
+              label="Custom icon image"
+              value={item.iconImageUrl ?? ""}
+              onChange={(v) => update({ iconImageUrl: v })}
+              accept="image/*"
+            />
+            <div className="grid gap-3 sm:grid-cols-2">
+              <TextField
+                label="Service name"
+                value={item.label}
+                onChange={(v) => update({ label: v })}
+              />
+              <IconPicker
+                label="Fallback icon"
+                value={item.icon}
+                onChange={(v) => update({ icon: v })}
+              />
+            </div>
           </div>
         )}
       />
@@ -420,22 +611,48 @@ function PastEventsEditor({ content, patch }: EditorProps) {
   return (
     <div className="space-y-4">
       <div className="grid gap-3 sm:grid-cols-2">
-        <TextField label="Heading (white)" value={p.headingWhite} onChange={(v) => patch("pastEvents", { headingWhite: v })} />
-        <TextField label="Heading (gold)" value={p.headingGold} onChange={(v) => patch("pastEvents", { headingGold: v })} />
+        <TextField
+          label="Heading (white)"
+          value={p.headingWhite}
+          onChange={(v) => patch("pastEvents", { headingWhite: v })}
+        />
+        <TextField
+          label="Heading (gold)"
+          value={p.headingGold}
+          onChange={(v) => patch("pastEvents", { headingGold: v })}
+        />
       </div>
-      <AreaField label="Description" value={p.description} onChange={(v) => patch("pastEvents", { description: v })} />
+      <AreaField
+        label="Description"
+        value={p.description}
+        onChange={(v) => patch("pastEvents", { description: v })}
+      />
       <div className="rounded-3xl border border-blue-200 bg-white p-4 shadow-sm">
         <p className="mb-3 text-sm font-semibold text-blue-700">Past event items</p>
         <ListEditor
           items={p.items}
           onChange={(items) => patch("pastEvents", { items })}
-          create={() => ({ id: newId("pe"), mediaUrl: "", mediaType: "image" as const, label: "", caption: "" })}
+          create={() => ({
+            id: newId("pe"),
+            mediaUrl: "",
+            mediaType: "image" as const,
+            label: "",
+            caption: "",
+          })}
           addLabel="Add past event"
           render={(item, update) => (
             <div className="space-y-3">
-              <MediaField label="Image or video" value={item.mediaUrl} onChange={(v) => update({ mediaUrl: v })} />
+              <MediaField
+                label="Image or video"
+                value={item.mediaUrl}
+                onChange={(v) => update({ mediaUrl: v })}
+              />
               <div className="grid gap-3 sm:grid-cols-2">
-                <TextField label="Title" value={item.label} onChange={(v) => update({ label: v })} />
+                <TextField
+                  label="Title"
+                  value={item.label}
+                  onChange={(v) => update({ label: v })}
+                />
                 <Field label="Media type">
                   <div className="rounded-xl border border-blue-200 bg-white p-1 shadow-sm">
                     <select
@@ -449,14 +666,27 @@ function PastEventsEditor({ content, patch }: EditorProps) {
                   </div>
                 </Field>
               </div>
-              <AreaField label="Caption" value={item.caption} onChange={(v) => update({ caption: v })} rows={2} />
+              <AreaField
+                label="Caption"
+                value={item.caption}
+                onChange={(v) => update({ caption: v })}
+                rows={2}
+              />
             </div>
           )}
         />
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
-        <TextField label="Button text" value={p.buttonText} onChange={(v) => patch("pastEvents", { buttonText: v })} />
-        <TextField label="Button link" value={p.buttonHref} onChange={(v) => patch("pastEvents", { buttonHref: v })} />
+        <TextField
+          label="Button text"
+          value={p.buttonText}
+          onChange={(v) => patch("pastEvents", { buttonText: v })}
+        />
+        <TextField
+          label="Button link"
+          value={p.buttonHref}
+          onChange={(v) => patch("pastEvents", { buttonHref: v })}
+        />
       </div>
     </div>
   );
@@ -472,13 +702,19 @@ function WorksEditor({ content, patch }: EditorProps) {
 
   return (
     <div className="space-y-4">
-      <TextField label="Section heading" value={content.works.heading} onChange={(v) => patch("works", { heading: v })} />
+      <TextField
+        label="Section heading"
+        value={content.works.heading}
+        onChange={(v) => patch("works", { heading: v })}
+      />
 
       {tabs.length === 0 ? null : (
         <Tabs defaultValue={first}>
           <TabsList className="flex h-auto flex-wrap">
             {tabs.map((t) => (
-              <TabsTrigger key={t.id} value={t.id}>{t.name || "Untitled"}</TabsTrigger>
+              <TabsTrigger key={t.id} value={t.id}>
+                {t.name || "Untitled"}
+              </TabsTrigger>
             ))}
           </TabsList>
           {tabs.map((tab) => (
@@ -488,7 +724,9 @@ function WorksEditor({ content, patch }: EditorProps) {
                   <TextField
                     label="Tab name"
                     value={tab.name}
-                    onChange={(v) => setTabs(tabs.map((t) => (t.id === tab.id ? { ...t, name: v } : t)))}
+                    onChange={(v) =>
+                      setTabs(tabs.map((t) => (t.id === tab.id ? { ...t, name: v } : t)))
+                    }
                   />
                 </div>
                 <Button
@@ -505,16 +743,43 @@ function WorksEditor({ content, patch }: EditorProps) {
 
               <ListEditor
                 items={tab.items}
-                onChange={(items) => setTabs(tabs.map((t) => (t.id === tab.id ? { ...t, items } : t)))}
-                create={() => ({ id: newId("wk"), thumbUrl: "", title: "", category: tab.name, duration: "", videoUrl: "", openNewTab: true })}
+                onChange={(items) =>
+                  setTabs(tabs.map((t) => (t.id === tab.id ? { ...t, items } : t)))
+                }
+                create={() => ({
+                  id: newId("wk"),
+                  thumbUrl: "",
+                  title: "",
+                  category: tab.name,
+                  duration: "",
+                  videoUrl: "",
+                  openNewTab: true,
+                })}
                 addLabel="Add entry"
                 render={(item, update) => (
                   <div className="space-y-3">
-                    <MediaField label="Thumbnail" value={item.thumbUrl} onChange={(v) => update({ thumbUrl: v })} accept="image/*" />
+                    <MediaField
+                      label="Thumbnail"
+                      value={item.thumbUrl}
+                      onChange={(v) => update({ thumbUrl: v })}
+                      accept="image/*"
+                    />
                     <div className="grid gap-3 sm:grid-cols-3">
-                      <TextField label="Title" value={item.title} onChange={(v) => update({ title: v })} />
-                      <TextField label="Category tag" value={item.category} onChange={(v) => update({ category: v })} />
-                      <TextField label="Duration badge" value={item.duration} onChange={(v) => update({ duration: v })} />
+                      <TextField
+                        label="Title"
+                        value={item.title}
+                        onChange={(v) => update({ title: v })}
+                      />
+                      <TextField
+                        label="Category tag"
+                        value={item.category}
+                        onChange={(v) => update({ category: v })}
+                      />
+                      <TextField
+                        label="Duration badge"
+                        value={item.duration}
+                        onChange={(v) => update({ duration: v })}
+                      />
                     </div>
                     <VideoField
                       value={item.videoUrl}
@@ -549,10 +814,22 @@ function TestimonialsEditor({ content, patch }: EditorProps) {
   return (
     <div className="space-y-4">
       <div className="grid gap-3 sm:grid-cols-2">
-        <TextField label="Heading (white)" value={t.headingWhite} onChange={(v) => patch("testimonials", { headingWhite: v })} />
-        <TextField label="Heading (gold)" value={t.headingGold} onChange={(v) => patch("testimonials", { headingGold: v })} />
+        <TextField
+          label="Heading (white)"
+          value={t.headingWhite}
+          onChange={(v) => patch("testimonials", { headingWhite: v })}
+        />
+        <TextField
+          label="Heading (gold)"
+          value={t.headingGold}
+          onChange={(v) => patch("testimonials", { headingGold: v })}
+        />
       </div>
-      <TextField label="Subtext" value={t.subtext} onChange={(v) => patch("testimonials", { subtext: v })} />
+      <TextField
+        label="Subtext"
+        value={t.subtext}
+        onChange={(v) => patch("testimonials", { subtext: v })}
+      />
       <ListEditor
         items={t.items}
         onChange={(items) => patch("testimonials", { items })}
@@ -564,7 +841,17 @@ function TestimonialsEditor({ content, patch }: EditorProps) {
               <TextField label="Name" value={item.name} onChange={(v) => update({ name: v })} />
               <TextField label="Role" value={item.role} onChange={(v) => update({ role: v })} />
             </div>
-            <AreaField label="Testimonial" value={item.text} onChange={(v) => update({ text: v })} />
+            <MediaField
+              label="Photo"
+              value={item.photoUrl}
+              onChange={(v) => update({ photoUrl: v })}
+              accept="image/*"
+            />
+            <AreaField
+              label="Testimonial"
+              value={item.text}
+              onChange={(v) => update({ text: v })}
+            />
           </div>
         )}
       />
@@ -578,7 +865,11 @@ function FooterEditor({ content, patch }: EditorProps) {
   const f = content.footer;
   return (
     <div className="space-y-4">
-      <TextField label="Tagline / quote" value={f.quote} onChange={(v) => patch("footer", { quote: v })} />
+      <TextField
+        label="Tagline / quote"
+        value={f.quote}
+        onChange={(v) => patch("footer", { quote: v })}
+      />
       <AreaField label="Bio" value={f.bio} onChange={(v) => patch("footer", { bio: v })} rows={2} />
       <Field label="Quick links">
         <ListEditor
@@ -602,15 +893,33 @@ function FooterEditor({ content, patch }: EditorProps) {
           addLabel="Add social link"
           render={(item, update) => (
             <div className="grid gap-3 sm:grid-cols-2">
-              <IconPicker label="Platform icon" value={item.platform} onChange={(v) => update({ platform: v })} />
+              <IconPicker
+                label="Platform icon"
+                value={item.platform}
+                onChange={(v) => update({ platform: v })}
+              />
               <TextField label="URL" value={item.url} onChange={(v) => update({ url: v })} />
             </div>
           )}
         />
       </Field>
-      <TextField label="Copyright" value={f.copyright} onChange={(v) => patch("footer", { copyright: v })} />
-      <AreaField label="Terms of Service content" value={f.termsContent} onChange={(v) => patch("footer", { termsContent: v })} rows={5} />
-      <AreaField label="Privacy Policy content" value={f.privacyContent} onChange={(v) => patch("footer", { privacyContent: v })} rows={5} />
+      <TextField
+        label="Copyright"
+        value={f.copyright}
+        onChange={(v) => patch("footer", { copyright: v })}
+      />
+      <AreaField
+        label="Terms of Service content"
+        value={f.termsContent}
+        onChange={(v) => patch("footer", { termsContent: v })}
+        rows={5}
+      />
+      <AreaField
+        label="Privacy Policy content"
+        value={f.privacyContent}
+        onChange={(v) => patch("footer", { privacyContent: v })}
+        rows={5}
+      />
     </div>
   );
 }
@@ -637,5 +946,10 @@ export const ADMIN_SECTIONS: AdminSection[] = [
   { key: "testimonials", label: "Testimonials", icon: "Quote", Editor: TestimonialsEditor },
   { key: "contact", label: "Contact Info", icon: "Phone", Editor: ContactInfoEditor },
   { key: "footer", label: "Footer", icon: "PanelBottom", Editor: FooterEditor },
-  { key: "typography", label: "Typography & Styles", icon: "Type", Editor: TypographySettingsEditor },
+  {
+    key: "typography",
+    label: "Typography & Styles",
+    icon: "Type",
+    Editor: TypographySettingsEditor,
+  },
 ];
