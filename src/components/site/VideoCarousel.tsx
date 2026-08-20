@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, Pause, Play, Volume2, VolumeX } from "lucide-react";
-import { detectVideo } from "./VideoPlayer";
+import { detectVideo, VideoPlayer } from "./VideoPlayer";
 import { Media } from "./Media";
 
 export type CarouselItem = {
@@ -24,20 +24,23 @@ export function VideoCarousel({ items }: { items: CarouselItem[] }) {
   const [showOverlay, setShowOverlay] = useState(false);
 
   // Pause every video except the given index.
-  const activate = useCallback((index: number, shouldPlay: boolean) => {
-    videoRefs.current.forEach((video, i) => {
-      if (!video) return;
-      if (i !== index) {
-        video.pause();
-        video.currentTime = 0;
+  const activate = useCallback(
+    (index: number, shouldPlay: boolean) => {
+      videoRefs.current.forEach((video, i) => {
+        if (!video) return;
+        if (i !== index) {
+          video.pause();
+          video.currentTime = 0;
+        }
+      });
+      const current = videoRefs.current[index];
+      if (current && shouldPlay) {
+        current.muted = muted;
+        void current.play().catch(() => undefined);
       }
-    });
-    const current = videoRefs.current[index];
-    if (current && shouldPlay) {
-      current.muted = muted;
-      void current.play().catch(() => undefined);
-    }
-  }, [muted]);
+    },
+    [muted],
+  );
 
   // Horizontal intersection observer: root is the scroll track.
   useEffect(() => {
@@ -104,7 +107,16 @@ export function VideoCarousel({ items }: { items: CarouselItem[] }) {
   const goTo = (index: number) => {
     const track = trackRef.current;
     const slide = track?.querySelector<HTMLElement>(`[data-slide-index="${index}"]`);
-    slide?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+    if (!track || !slide) return;
+    const activeSlide = track.querySelector<HTMLElement>(`[data-slide-index="${activeIndex}"]`);
+    const distance = activeSlide
+      ? Math.abs(slide.offsetLeft - activeSlide.offsetLeft)
+      : slide.offsetWidth;
+    if (distance === 0) return;
+    track.scrollBy({
+      left: index > activeIndex ? distance : -distance,
+      behavior: "smooth",
+    });
   };
 
   const toggleOverlay = () => {
@@ -115,22 +127,22 @@ export function VideoCarousel({ items }: { items: CarouselItem[] }) {
   if (items.length === 0) return null;
 
   return (
-    <div className="relative mx-auto w-full max-w-5xl px-4 sm:px-6">
+    <div className="relative mx-auto w-full max-w-4xl px-4 sm:px-6">
       <button
         type="button"
         aria-label="Previous video"
         onClick={() => goTo(Math.max(0, activeIndex - 1))}
-        className="absolute left-1 top-1/2 z-10 hidden -translate-y-1/2 items-center justify-center rounded-full border border-gold/40 bg-black/60 p-3 text-gold backdrop-blur transition hover:bg-black/80 sm:flex"
+        className="absolute left-1 top-1/2 z-10 flex -translate-y-1/2 items-center justify-center rounded-full border border-gold/40 bg-black/60 p-2 text-gold backdrop-blur transition hover:bg-black/80 sm:left-2 sm:p-3"
       >
-        <ArrowLeft className="h-5 w-5" />
+        <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
       </button>
       <button
         type="button"
         aria-label="Next video"
         onClick={() => goTo(Math.min(items.length - 1, activeIndex + 1))}
-        className="absolute right-1 top-1/2 z-10 hidden -translate-y-1/2 items-center justify-center rounded-full border border-gold/40 bg-black/60 p-3 text-gold backdrop-blur transition hover:bg-black/80 sm:flex"
+        className="absolute right-1 top-1/2 z-10 flex -translate-y-1/2 items-center justify-center rounded-full border border-gold/40 bg-black/60 p-2 text-gold backdrop-blur transition hover:bg-black/80 sm:right-2 sm:p-3"
       >
-        <ArrowRight className="h-5 w-5" />
+        <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />
       </button>
       <div
         ref={trackRef}
@@ -138,16 +150,31 @@ export function VideoCarousel({ items }: { items: CarouselItem[] }) {
       >
         {items.map((item, index) => {
           const kind = detectVideo(item.mediaUrl).kind;
-          const isFileVideo = item.mediaType === "video" ? kind !== "youtube" && kind !== "vimeo" && kind !== "instagram" : kind === "file";
+          const isEmbedVideo = kind === "youtube" || kind === "vimeo" || kind === "instagram";
+          const isFileVideo =
+            item.mediaType === "video"
+              ? kind !== "youtube" && kind !== "vimeo" && kind !== "instagram"
+              : kind === "file";
           return (
             <div
               key={item.id}
               data-slide-index={index}
-              className="relative w-full shrink-0 snap-center"
+              className="relative w-[82vw] max-w-[300px] shrink-0 snap-center lg:w-[calc((100%-2rem)/3)] lg:max-w-none"
             >
-              <div className="relative aspect-[9/16] w-full overflow-hidden rounded-2xl border border-border bg-black sm:aspect-[16/9]">
-
-                {isFileVideo ? (
+              {item.label ? (
+                <p className="mb-3 font-display text-sm font-bold uppercase tracking-[0.18em] text-foreground">
+                  {item.label}
+                </p>
+              ) : null}
+              <div className="relative aspect-[9/16] w-full overflow-hidden rounded-2xl border border-border bg-black">
+                {isEmbedVideo ? (
+                  <VideoPlayer
+                    url={item.mediaUrl}
+                    title={item.label || "Featured video"}
+                    className="absolute inset-0 h-full w-full"
+                    ratio="aspect-[9/16]"
+                  />
+                ) : isFileVideo ? (
                   <>
                     <video
                       ref={(node) => {
@@ -181,7 +208,9 @@ export function VideoCarousel({ items }: { items: CarouselItem[] }) {
                     >
                       <span
                         className={`flex h-16 w-16 items-center justify-center rounded-full bg-black/55 text-white transition-opacity duration-300 ${
-                          showOverlay || (paused && index === activeIndex) ? "opacity-100" : "opacity-0"
+                          showOverlay || (paused && index === activeIndex)
+                            ? "opacity-100"
+                            : "opacity-0"
                         }`}
                       >
                         {paused ? <Play className="h-7 w-7" /> : <Pause className="h-7 w-7" />}
@@ -207,16 +236,10 @@ export function VideoCarousel({ items }: { items: CarouselItem[] }) {
                     className="absolute inset-0 h-full w-full object-cover"
                   />
                 )}
-
-                {item.label || item.caption ? (
-                  <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-5 pr-20">
-                    {item.label ? (
-                      <p className="font-display text-sm font-bold uppercase tracking-[0.18em] text-white">{item.label}</p>
-                    ) : null}
-                    {item.caption ? <p className="mt-1 text-xs text-white/75">{item.caption}</p> : null}
-                  </div>
-                ) : null}
               </div>
+              {item.caption ? (
+                <p className="mt-3 text-sm text-muted-foreground">{item.caption}</p>
+              ) : null}
             </div>
           );
         })}
