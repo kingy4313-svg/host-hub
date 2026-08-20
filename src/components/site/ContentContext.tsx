@@ -1,5 +1,36 @@
 import { createContext, useContext, type ReactNode } from "react";
-import * as Lucide from "lucide-react";
+import {
+  Award,
+  Briefcase,
+  Calendar,
+  Camera,
+  Crown,
+  Facebook,
+  Film,
+  Globe,
+  Globe2,
+  Heart,
+  Instagram,
+  Linkedin,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Mic,
+  Music,
+  Plane,
+  Phone,
+  Rocket,
+  Sparkles,
+  Star,
+  Target,
+  Twitter,
+  UserRound,
+  Users,
+  Video,
+  Youtube,
+  Clock,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { DEFAULT_CONTENT, type SiteContent } from "@/content/site-content";
 import { TypographyStyleInjector } from "./TypographyStyleInjector";
 
@@ -13,9 +44,40 @@ export function useContent() {
   return useContext(ContentContext);
 }
 
+const ICONS: Record<string, LucideIcon> = {
+  Award,
+  Briefcase,
+  Calendar,
+  Camera,
+  Clock,
+  Crown,
+  Facebook,
+  Film,
+  Globe,
+  Globe2,
+  Heart,
+  Instagram,
+  Linkedin,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Mic,
+  Music,
+  Plane,
+  Phone,
+  Rocket,
+  Sparkles,
+  Star,
+  Target,
+  Twitter,
+  UserRound,
+  Users,
+  Video,
+  Youtube,
+};
+
 export function Icon({ name, className }: { name: string; className?: string | undefined }) {
-  const Cmp = (Lucide as unknown as Record<string, React.ComponentType<{ className?: string | undefined }>>)[name];
-  const Final = Cmp ?? Lucide.Sparkles;
+  const Final = ICONS[name] ?? Sparkles;
   return <Final className={className} />;
 }
 

@@ -14,14 +14,7 @@ const isNetlify =
 export default defineConfig({
   nitro: isNetlify
     ? { preset: "netlify" }
-    : {
-        preset: "cloudflare-module",
-        output: {
-          dir: "dist",
-          publicDir: "dist/client",
-          serverDir: "dist/server",
-        },
-      },
+    : { preset: "cloudflare-module" },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
