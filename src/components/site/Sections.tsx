@@ -1008,16 +1008,19 @@ export function MyWorks() {
 
 export function Testimonials() {
   const { testimonials } = useContent();
-  const items = testimonials.items;
-  const [localItems, setLocalItems] = useState(() => {
-    try {
-      const stored = JSON.parse(localStorage.getItem("testimonials") || "null");
-      return Array.isArray(stored) ? stored : [];
-    } catch {
-      return [];
-    }
-  });
+  const [localItems, setLocalItems] = useState<typeof testimonials.items>([]);
   const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    try {
+      const stored = JSON.parse(window.localStorage.getItem("testimonials") || "null");
+      if (Array.isArray(stored)) setLocalItems(stored);
+    } catch {
+      // Ignore unavailable or invalid browser storage.
+    }
+  }, []);
+
+  const items = [...localItems, ...testimonials.items];
   const size = Math.max(1, Math.ceil(items.length / 3));
   const rows = [items.slice(0, size), items.slice(size, size * 2), items.slice(size * 2)];
   return (
@@ -1060,7 +1063,7 @@ export function Testimonials() {
                   ...(idx % 2 === 1 ? { animationDirection: "reverse" as const } : {}),
                 }}
               >
-                {[...row, ...row, ...(localItems.length ? localItems : [])].map((t, i) => (
+                {[...row, ...row].map((t, i) => (
                   <article
                     key={`${t.id}-${i}`}
                     className="luxe-card flex w-[300px] max-w-[85vw] shrink-0 flex-col p-5"
