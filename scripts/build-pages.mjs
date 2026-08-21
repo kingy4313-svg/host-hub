@@ -44,6 +44,9 @@ async function rewriteBundledAssetUrls(directory) {
     const rewritten = source.replace(
       /(?<!\/host-hub)(?<!src)\/assets\//g,
       `${githubPagesBase}/assets/`,
+    ).replace(
+      /(["'`])assets\//g,
+      `$1${githubPagesBase}/assets/`,
     );
     if (rewritten !== source) await writeFile(path, rewritten, "utf8");
   }
