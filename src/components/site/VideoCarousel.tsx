@@ -289,6 +289,9 @@ export function VideoCarousel({ items }: { items: CarouselItem[] }) {
                     type={item.mediaType}
                     alt={item.label ?? ""}
                     className="absolute inset-0 h-full w-full object-cover"
+                    loading={index === 0 ? "eager" : "lazy"}
+                    {...(index === 0 ? { priority: true, fetchPriority: "high" as const } : {})}
+                    sizes="(max-width: 640px) 82vw, (max-width: 1024px) 300px, 33vw"
                   />
                 )}
               </div>

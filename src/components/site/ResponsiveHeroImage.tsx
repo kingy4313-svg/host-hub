@@ -36,10 +36,10 @@ export function ResponsiveHeroImage({
   return (
     <picture>
       {/* Desktop: 1920x1080 (16:9) - load on screens >= 768px */}
-      <source media="(min-width: 768px)" srcSet={effectiveDesktopUrl} type="image/jpeg" />
+      <source media="(min-width: 768px)" srcSet={effectiveDesktopUrl} />
       
       {/* Mobile: 1080x1920 (9:16) - load on screens < 768px */}
-      <source media="(max-width: 767px)" srcSet={effectiveMobileUrl} type="image/jpeg" />
+      <source media="(max-width: 767px)" srcSet={effectiveMobileUrl} />
       
       {/* Fallback for browsers that don't support picture element */}
       <img
@@ -48,6 +48,7 @@ export function ResponsiveHeroImage({
         alt={alt}
         className={`${className ?? ""} block`}
         style={style}
+        loading="eager"
         decoding="async"
         fetchPriority="high"
         onError={() => setFailed(true)}

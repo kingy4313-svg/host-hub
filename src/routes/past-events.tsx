@@ -36,7 +36,7 @@ function GalleryCard({ item, index }: { item: PastEventItem; index: number }) {
   const [loaded, setLoaded] = useState(false);
   const mediaUrl = item.mediaUrl?.trim() ?? "";
   const isVideo = Boolean(mediaUrl) && (item.mediaType === "video" || /\.(mp4|webm|mov|m4v)(\?|$)/i.test(mediaUrl));
-  const priority = index < 4;
+  const priority = index === 0;
 
   return (
     <article className="overflow-hidden rounded-2xl border border-border luxe-card bg-card">
@@ -52,7 +52,8 @@ function GalleryCard({ item, index }: { item: PastEventItem; index: number }) {
               alt={item.caption || item.label || "Past event"}
               className={`h-full w-full object-contain block transition-opacity duration-500 ${loaded || isVideo ? "opacity-100" : "opacity-0"}`}
               loading={priority ? "eager" : "lazy"}
-              {...(priority ? { priority: true, fetchPriority: "high" as const } : {})}
+              fetchPriority={priority ? "high" : "low"}
+              {...(priority ? { priority: true } : {})}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               preload="metadata"
               {...(item.thumbnailUrl ? { poster: item.thumbnailUrl } : {})}
