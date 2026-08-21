@@ -1038,9 +1038,6 @@ export function Testimonials() {
         {testimonials.subtext ? (
           <p className="mt-4 text-center text-sm text-muted-foreground">{testimonials.subtext}</p>
         ) : null}
-        {testimonials.showHoverNote ? (
-          <p className="mt-2 text-center text-xs text-gold">{testimonials.hoverNote}</p>
-        ) : null}
       </ScrollReveal>
       {testimonials.buttonText ? (
         <div className="mt-6 text-center">
