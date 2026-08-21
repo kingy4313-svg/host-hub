@@ -30,9 +30,10 @@ if (!response.ok) {
 await rm(dist, { recursive: true, force: true });
 await mkdir(dist, { recursive: true });
 await cp(join(root, ".output", "public"), dist, { recursive: true });
+await cp(join(root, "src", "assets"), join(dist, "src", "assets"), { recursive: true });
 
 const html = (await response.text()).replace(
-  /(["'(])\/(assets\/|favicon\.ico)/g,
+  /(["'(])\/(assets\/|src\/assets\/|favicon\.ico)/g,
   `$1${githubPagesBase}/$2`,
 );
 await writeFile(join(dist, "index.html"), html, "utf8");
