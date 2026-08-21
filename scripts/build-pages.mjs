@@ -9,6 +9,7 @@ const githubPagesBase = "/host-hub";
 
 const build = spawnSync(process.execPath, [join(root, "scripts", "build.mjs")], {
   cwd: root,
+  env: { ...process.env, VITE_STATIC_SITE: "true" },
   stdio: "inherit",
 });
 

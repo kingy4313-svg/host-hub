@@ -6,10 +6,12 @@ import {
 import { ContentProvider, ThemeStyle } from "@/components/site/ContentContext";
 import { getPublishedContent } from "@/lib/content.functions";
 
+const isStaticSite = import.meta.env.VITE_STATIC_SITE === "true";
+
 export const Route = createFileRoute("/")({
   loader: () => getPublishedContent(),
-  staleTime: 0,
-  shouldReload: true,
+  staleTime: isStaticSite ? Infinity : 0,
+  shouldReload: !isStaticSite,
   head: ({ loaderData }) => ({
     meta: [
       { title: loaderData?.settings.seo.title ?? "Sayanti Banerjee — Anchor, Actor & Influencer" },
