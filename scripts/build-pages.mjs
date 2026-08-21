@@ -5,6 +5,7 @@ import { join } from "node:path";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
 const dist = join(root, "dist");
+const githubPagesBase = "/host-hub";
 
 const build = spawnSync(process.execPath, [join(root, "scripts", "build.mjs")], {
   cwd: root,
@@ -30,7 +31,10 @@ await rm(dist, { recursive: true, force: true });
 await mkdir(dist, { recursive: true });
 await cp(join(root, ".output", "public"), dist, { recursive: true });
 
-const html = await response.text();
+const html = (await response.text()).replace(
+  /(["'(])\/(assets\/|favicon\.ico)/g,
+  `$1${githubPagesBase}/$2`,
+);
 await writeFile(join(dist, "index.html"), html, "utf8");
 await writeFile(join(dist, "404.html"), html, "utf8");
 await writeFile(join(dist, ".nojekyll"), "", "utf8");
