@@ -85,7 +85,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "Sayanti Banerjee — Anchor, Actor & Influencer" },
       { property: "og:description", content: "Premium event anchoring across India & abroad." },
       { property: "og:type", content: "website" },
+      {
+        property: "og:image",
+        content: "https://kingy4313-svg.github.io/host-hub/src/assets/hero-anchor.jpg",
+      },
+      { property: "og:image:alt", content: "Sayanti Banerjee, event anchor" },
       { name: "twitter:card", content: "summary_large_image" },
+      {
+        name: "twitter:image",
+        content: "https://kingy4313-svg.github.io/host-hub/src/assets/hero-anchor.jpg",
+      },
     ],
     links: [
       {

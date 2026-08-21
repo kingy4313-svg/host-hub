@@ -19,7 +19,16 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: loaderData?.settings.seo.title ?? "Sayanti Banerjee — Anchor, Actor & Influencer" },
       { property: "og:description", content: loaderData?.settings.seo.description ?? "Premium event anchoring across India & abroad." },
       { property: "og:type", content: "profile" },
+      {
+        property: "og:image",
+        content: "https://kingy4313-svg.github.io/host-hub/src/assets/hero-anchor.jpg",
+      },
+      { property: "og:image:alt", content: "Sayanti Banerjee, event anchor" },
       { name: "twitter:card", content: "summary_large_image" },
+      {
+        name: "twitter:image",
+        content: "https://kingy4313-svg.github.io/host-hub/src/assets/hero-anchor.jpg",
+      },
     ],
   }),
   component: Index,
