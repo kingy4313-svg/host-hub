@@ -1294,14 +1294,12 @@ export function FloatingCall() {
   const { settings } = useContent();
   if (!settings.floatingCall.enabled) return null;
   return (
-    <CallOptions
-      primary={settings.phone}
-      alternate={settings.alternatePhone}
-      primaryHref={telHref(settings.floatingCall.phone)}
-      ariaLabel="Call now"
+    <a
+      href={telHref(settings.floatingCall.phone || settings.phone)}
+      aria-label="Call now"
       className="btn-gold fixed bottom-6 right-6 z-50 flex size-14 items-center justify-center rounded-full"
     >
       <Phone className="size-6" />
-    </CallOptions>
+    </a>
   );
 }
