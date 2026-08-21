@@ -1,4 +1,4 @@
-import { cp, mkdir, rm, writeFile } from "node:fs/promises";
+import { cp, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { join } from "node:path";
@@ -31,6 +31,25 @@ await rm(dist, { recursive: true, force: true });
 await mkdir(dist, { recursive: true });
 await cp(join(root, ".output", "public"), dist, { recursive: true });
 await cp(join(root, "src", "assets"), join(dist, "src", "assets"), { recursive: true });
+
+async function rewriteBundledAssetUrls(directory) {
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    const path = join(directory, entry.name);
+    if (entry.isDirectory()) {
+      await rewriteBundledAssetUrls(path);
+      continue;
+    }
+    if (!/\.(css|js)$/.test(entry.name)) continue;
+    const source = await readFile(path, "utf8");
+    const rewritten = source.replace(
+      /(?<!\/host-hub)(?<!src)\/assets\//g,
+      `${githubPagesBase}/assets/`,
+    );
+    if (rewritten !== source) await writeFile(path, rewritten, "utf8");
+  }
+}
+
+await rewriteBundledAssetUrls(dist);
 
 const html = (await response.text()).replace(
   /(["'(])\/(assets\/|src\/assets\/|favicon\.ico)/g,
