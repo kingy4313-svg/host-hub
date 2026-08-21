@@ -98,10 +98,11 @@ function AdminPage() {
   async function save() {
     setSaving(true);
     try {
-      console.log("admin.save: saving content (preview to console)", content);
-      const res = await saveDraft({ data: { content, section: section.label } });
-      console.log("admin.save: saveDraft response", res);
-      if (!draftOnly) await publishContent({ data: { content } });
+      if (draftOnly) {
+        await saveDraft({ data: { content, section: section.label } });
+      } else {
+        await publishContent({ data: { content, label: `Published ${section.label}` } });
+      }
       toast.success(draftOnly ? "Draft saved" : "Saved — live on the site");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Save failed");
@@ -113,10 +114,7 @@ function AdminPage() {
   async function publish() {
     setSaving(true);
     try {
-      console.log("admin.publish: publishing content", content);
-      const res = await saveDraft({ data: { content, section: section.label } });
-      console.log("admin.publish: saveDraft response", res);
-      await publishContent({ data: { content } });
+      await publishContent({ data: { content, label: `Published ${section.label}` } });
       toast.success("Published live on the site");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Publish failed");

@@ -42,10 +42,11 @@ export const getPublishedContent = createServerFn({ method: "GET" }).handler(asy
 });
 
 async function assertAdmin(context: { supabase: any; userId: string }) {
-  const { data } = await context.supabase.rpc("has_role", {
+  const { data, error } = await context.supabase.rpc("has_role", {
     _user_id: context.userId,
     _role: "admin",
   });
+  if (error) throw new Error(`Could not verify admin access: ${error.message}`);
   if (!data) throw new Error("Forbidden: admin access required");
 }
 
@@ -53,9 +54,10 @@ export const getAdminContent = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await assertAdmin(context as any);
-    const { data } = await (context as any).supabase
+    const { data, error } = await (context as any).supabase
       .from("site_content")
       .select("id, data, updated_at");
+    if (error) throw new Error(error.message);
     const rows: { id: string; data: unknown; updated_at: string }[] = data ?? [];
     const draft = rows.find((r) => r.id === "draft");
     const published = rows.find((r) => r.id === "published");
@@ -69,7 +71,7 @@ export const getAdminContent = createServerFn({ method: "GET" })
 
 export const saveDraft = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { content: SiteContent; section?: string }) => input)
+  .validator((input: { content: SiteContent; section?: string }) => input)
   .handler(async ({ data, context }) => {
     const ctx = context as any;
     await assertAdmin(ctx);
@@ -83,18 +85,19 @@ export const saveDraft = createServerFn({ method: "POST" })
       updated_by: ctx.userId,
     });
     if (error) throw new Error(error.message);
-    await ctx.supabase.from("activity_log").insert({
+    const { error: activityError } = await ctx.supabase.from("activity_log").insert({
       action: "save_draft",
       section: data.section ?? null,
       actor_email: ctx.claims?.email ?? null,
       created_by: ctx.userId,
     });
+    if (activityError) throw new Error(activityError.message);
     return { ok: true };
   });
 
 export const publishContent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { content: SiteContent; label?: string }) => input)
+  .validator((input: { content: SiteContent; label?: string }) => input)
   .handler(async ({ data, context }) => {
     const ctx = context as any;
     await assertAdmin(ctx);
@@ -140,7 +143,7 @@ export const listVersions = createServerFn({ method: "GET" })
 
 export const restoreVersion = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { id: string }) => input)
+  .validator((input: { id: string }) => input)
   .handler(async ({ data, context }) => {
     const ctx = context as any;
     await assertAdmin(ctx);
