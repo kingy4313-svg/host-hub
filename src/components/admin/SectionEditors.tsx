@@ -106,6 +106,17 @@ function SettingsEditor({ content, patch }: EditorProps) {
 
 function ContactInfoEditor({ content, patch }: EditorProps) {
   const s = content.settings;
+  const instagram = s.socials.find((social) => social.platform.toLowerCase() === "instagram");
+
+  const updateInstagram = (url: string) => {
+    const socials = instagram
+      ? s.socials.map((social) =>
+          social.id === instagram.id ? { ...social, url, platform: "Instagram" } : social,
+        )
+      : [...s.socials, { id: newId("s"), platform: "Instagram", url }];
+    patch("settings", { socials });
+  };
+
   return (
     <div className="space-y-4">
       <p className="text-sm text-muted-foreground">
@@ -128,6 +139,12 @@ function ContactInfoEditor({ content, patch }: EditorProps) {
         value={s.alternatePhone ?? ""}
         onChange={(v) => patch("settings", { alternatePhone: v })}
         placeholder="Optional second contact number"
+      />
+      <TextField
+        label="Instagram link"
+        value={instagram?.url ?? ""}
+        onChange={updateInstagram}
+        placeholder="https://instagram.com/your-profile"
       />
       <SwitchField
         label="Show floating call button"
