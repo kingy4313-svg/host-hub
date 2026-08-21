@@ -1,5 +1,11 @@
 {
   "buildCommand": "npm run build:pages",
   "outputDirectory": "dist",
-  "framework": null
+  "framework": null,
+  "rewrites": [
+    {
+      "source": "/((?!assets/|favicon\\.ico$|robots\\.txt$).*)",
+      "destination": "/index.html"
+    }
+  ]
 }
