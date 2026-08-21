@@ -221,7 +221,7 @@ export function VideoCarousel({ items }: { items: CarouselItem[] }) {
             <div
               key={item.id}
               data-slide-index={index}
-              className="relative w-[82vw] max-w-[300px] shrink-0 snap-center lg:w-[calc((100%-2rem)/3)] lg:max-w-none"
+              className="relative w-[82vw] max-w-[300px] shrink-0 snap-center rounded-2xl border border-gold/45 bg-black/20 p-3 shadow-[0_0_18px_rgba(212,169,71,0.08)] lg:w-[calc((100%-2rem)/3)] lg:max-w-none"
             >
               {item.label ? (
                 <p className="mb-3 font-display text-sm font-bold uppercase tracking-[0.18em] text-foreground">
