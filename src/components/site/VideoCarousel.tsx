@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, Pause, Play, Volume2, VolumeX } from "lucide-react";
-import { detectVideo, VideoPlayer } from "./VideoPlayer";
+import { detectVideo, getVideoPoster, VideoPlayer } from "./VideoPlayer";
 import { Media } from "./Media";
 
 export type CarouselItem = {
@@ -240,6 +240,7 @@ export function VideoCarousel({ items }: { items: CarouselItem[] }) {
                         videoRefs.current[index] = node;
                       }}
                       src={item.mediaUrl}
+                      poster={getVideoPoster(item.mediaUrl)}
                       className="absolute inset-0 h-full w-full object-cover"
                       loop
                       playsInline

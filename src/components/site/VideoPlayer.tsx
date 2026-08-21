@@ -9,6 +9,11 @@ const VIMEO = /vimeo\.com\/(?:video\/)?(\d+)/i;
 const IG = /instagram\.com\/(p|reel|reels|tv)\/([\w-]+)/i;
 const FILE = /\.(mp4|webm|ogv|ogg|mov|m4v)(\?|#|$)/i;
 
+export function getVideoPoster(url: string): string | undefined {
+  if (!url.includes("ik.imagekit.io/") || !FILE.test(url)) return undefined;
+  return url.replace(/(\.(?:mp4|webm|ogv|ogg|mov|m4v))(\?|#|$)/i, "$1/ik-thumbnail.jpg$2");
+}
+
 export function detectVideo(url: string): { kind: VideoKind; id?: string } {
   const u = (url || "").trim();
   if (!u) return { kind: "unknown" };
@@ -155,6 +160,7 @@ export function VideoPlayer({
   const [state, setState] = useState<"loading" | "ready" | "error">("loading");
   const { kind, id } = detectVideo(url);
   const aspectClass = ratio ?? "aspect-video";
+  const videoPoster = poster ?? getVideoPoster(url);
 
   const handleMouseEnter = () => {
     if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
@@ -242,7 +248,7 @@ export function VideoPlayer({
             controls
             playsInline
             preload="metadata"
-            {...(poster ? { poster } : {})}
+            {...(videoPoster ? { poster: videoPoster } : {})}
             {...(autoPlay ? { autoPlay: true, muted: true } : {})}
             onLoadedMetadata={() => setState("ready")}
             onCanPlay={() => setState("ready")}

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties, type LegacyRef } from "react";
-import { detectVideo } from "./VideoPlayer";
+import { detectVideo, getVideoPoster } from "./VideoPlayer";
 import { isVideoUrl } from "@/lib/media";
 
 export type MediaProps = {
@@ -91,7 +91,7 @@ export function Media({
         loop={autoPlay ? true : undefined}
         autoPlay={autoPlay ? true : undefined}
         controls={controls}
-        poster={poster}
+        poster={poster ?? getVideoPoster(url)}
         onError={handleError}
       />
     );
@@ -99,10 +99,12 @@ export function Media({
 
   return shouldLoad ? (
     <img
-      ref={((node: HTMLImageElement | null) => {
-        (ref as React.MutableRefObject<HTMLElement | null>).current = node;
-        if (node?.complete && node.naturalWidth > 0) onLoad?.();
-      }) as React.LegacyRef<HTMLImageElement>}
+      ref={
+        ((node: HTMLImageElement | null) => {
+          (ref as React.MutableRefObject<HTMLElement | null>).current = node;
+          if (node?.complete && node.naturalWidth > 0) onLoad?.();
+        }) as React.LegacyRef<HTMLImageElement>
+      }
       src={url}
       alt={alt}
       className={`${className ?? ""} block`}
