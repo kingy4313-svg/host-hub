@@ -879,9 +879,9 @@ export function PastEvents() {
       </ScrollReveal>
       {pastEvents.buttonText ? (
         internal ? (
-          <Link to={href} className="btn-gold mt-12 inline-block rounded-md px-8 py-3 font-display">
+          <a href={href} className="btn-gold mt-12 inline-block rounded-md px-8 py-3 font-display">
             {pastEvents.buttonText}
-          </Link>
+          </a>
         ) : (
           <a href={href} className="btn-gold mt-12 inline-block rounded-md px-8 py-3 font-display">
             {pastEvents.buttonText}
