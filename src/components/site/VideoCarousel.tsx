@@ -26,6 +26,8 @@ export function VideoCarousel({ items }: { items: CarouselItem[] }) {
 
   const postFrameCommand = useCallback((frame: HTMLIFrameElement, cmd: "play" | "pause") => {
     const isVimeo = frame.src.includes("vimeo.com");
+    const isYouTube = frame.src.includes("youtube.com") || frame.src.includes("youtu.be");
+    if (!isVimeo && !isYouTube) return;
     frame.contentWindow?.postMessage(
       JSON.stringify(
         isVimeo
@@ -52,11 +54,15 @@ export function VideoCarousel({ items }: { items: CarouselItem[] }) {
       }
     });
 
-    track.querySelectorAll<HTMLIFrameElement>("iframe").forEach((frame) => {
-      const slideEl = frame.closest<HTMLElement>("[data-slide-index]");
-      const index = slideEl ? Number(slideEl.dataset["slideIndex"]) : -1;
-      postFrameCommand(frame, index === playingIndex ? "play" : "pause");
-    });
+    track
+      .querySelectorAll<HTMLIFrameElement>(
+        'iframe[src*="youtube.com"], iframe[src*="youtu.be"], iframe[src*="vimeo.com"]',
+      )
+      .forEach((frame) => {
+        const slideEl = frame.closest<HTMLElement>("[data-slide-index]");
+        const index = slideEl ? Number(slideEl.dataset["slideIndex"]) : -1;
+        postFrameCommand(frame, index === playingIndex ? "play" : "pause");
+      });
   }, [playingIndex, muted, postFrameCommand]);
 
   // Horizontal intersection observer decides which slide is "in focus."
