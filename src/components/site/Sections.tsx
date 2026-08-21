@@ -11,6 +11,7 @@ import {
   MessageCircle,
   Mail,
   Phone,
+  Instagram,
   X,
 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
@@ -1112,6 +1113,9 @@ export function ContactCta() {
   const whatsapp = contact.whatsappHref || settings.whatsapp;
   const email = contact.emailHref || mailto(settings.email);
   const call = contact.callHref || telHref(settings.phone);
+  const instagram = settings.socials.find(
+    (social) => social.platform.toLowerCase() === "instagram",
+  )?.url;
   return (
     <section id="contact" className="relative overflow-hidden px-6 py-24 text-center">
       <span className="absolute left-[8%] top-1/3 size-1.5 rounded-full bg-gold" />
@@ -1151,6 +1155,16 @@ export function ContactCta() {
         >
           <Phone className="size-4" /> {contact.callText}
         </CallOptions>
+        {instagram ? (
+          <a
+            href={instagram}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 rounded-md border border-gold/50 px-7 py-3 font-display text-gold"
+          >
+            <Instagram className="size-4" /> Instagram
+          </a>
+        ) : null}
       </div>
       <div className="luxe-card mx-auto mt-14 max-w-2xl p-6">
         <p className="font-display fluid-body text-muted-foreground">{contact.boxText}</p>
