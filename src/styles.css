@@ -1,0 +1,528 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-gold-deep: var(--gold-deep);
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  --radius: 0.75rem;
+  --background: oklch(0.06 0 0);
+  --foreground: oklch(0.98 0 0);
+  --card: oklch(0.11 0.012 260);
+  --card-foreground: oklch(0.98 0 0);
+  --popover: oklch(0.11 0.012 260);
+  --popover-foreground: oklch(0.98 0 0);
+  --primary: oklch(0.78 0.13 88);
+  --primary-foreground: oklch(0.12 0.01 80);
+  --secondary: oklch(0.16 0.01 260);
+  --secondary-foreground: oklch(0.98 0 0);
+  --muted: oklch(0.18 0.01 260);
+  --muted-foreground: oklch(0.72 0.015 250);
+  --accent: oklch(0.2 0.02 90);
+  --accent-foreground: oklch(0.98 0 0);
+  --destructive: oklch(0.6 0.22 27);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.28 0.02 90 / 45%);
+  --input: oklch(0.28 0.02 90 / 45%);
+  --ring: oklch(0.78 0.13 88);
+  --gold: oklch(0.78 0.13 88);
+  --gold-soft: oklch(0.88 0.09 92);
+  --gold-deep: oklch(0.62 0.12 78);
+  --gradient-gold: linear-gradient(135deg, var(--gold-deep), var(--gold-soft) 55%, var(--gold-deep));
+  --shadow-gold: 0 12px 40px -12px oklch(0.78 0.13 88 / 45%);
+  
+  /* ============== Typography Settings (Admin-Controlled) ============== */
+  /* Hero Heading */
+  --typo-hero-fs-desktop: 48px;
+  --typo-hero-color-desktop: #FFFFFF;
+  --typo-hero-fw-desktop: 900;
+  --typo-hero-ta-desktop: center;
+  --typo-hero-fs-mobile: 24px;
+  --typo-hero-color-mobile: #FFFFFF;
+  --typo-hero-fw-mobile: 900;
+  --typo-hero-ta-mobile: center;
+
+  /* Why People Book Me */
+  --typo-whybook-fs-desktop: 36px;
+  --typo-whybook-color-desktop: #FFFFFF;
+  --typo-whybook-fw-desktop: 700;
+  --typo-whybook-ta-desktop: center;
+  --typo-whybook-fs-mobile: 20px;
+  --typo-whybook-color-mobile: #FFFFFF;
+  --typo-whybook-fw-mobile: 700;
+  --typo-whybook-ta-mobile: center;
+
+  /* Featured Moments */
+  --typo-featured-fs-desktop: 36px;
+  --typo-featured-color-desktop: #FFFFFF;
+  --typo-featured-fw-desktop: 700;
+  --typo-featured-ta-desktop: center;
+  --typo-featured-fs-mobile: 20px;
+  --typo-featured-color-mobile: #FFFFFF;
+  --typo-featured-fw-mobile: 700;
+  --typo-featured-ta-mobile: center;
+
+  /* Events I Specialize In */
+  --typo-events-fs-desktop: 36px;
+  --typo-events-color-desktop: #FFFFFF;
+  --typo-events-fw-desktop: 700;
+  --typo-events-ta-desktop: center;
+  --typo-events-fs-mobile: 20px;
+  --typo-events-color-mobile: #FFFFFF;
+  --typo-events-fw-mobile: 700;
+  --typo-events-ta-mobile: center;
+
+  /* Past Events */
+  --typo-pastevents-fs-desktop: 36px;
+  --typo-pastevents-color-desktop: #FFFFFF;
+  --typo-pastevents-fw-desktop: 700;
+  --typo-pastevents-ta-desktop: center;
+  --typo-pastevents-fs-mobile: 20px;
+  --typo-pastevents-color-mobile: #FFFFFF;
+  --typo-pastevents-fw-mobile: 700;
+  --typo-pastevents-ta-mobile: center;
+
+  /* My Works */
+  --typo-works-fs-desktop: 36px;
+  --typo-works-color-desktop: #FFFFFF;
+  --typo-works-fw-desktop: 700;
+  --typo-works-ta-desktop: center;
+  --typo-works-fs-mobile: 20px;
+  --typo-works-color-mobile: #FFFFFF;
+  --typo-works-fw-mobile: 700;
+  --typo-works-ta-mobile: center;
+
+  /* Testimonials */
+  --typo-testimonials-fs-desktop: 36px;
+  --typo-testimonials-color-desktop: #FFFFFF;
+  --typo-testimonials-fw-desktop: 700;
+  --typo-testimonials-ta-desktop: center;
+  --typo-testimonials-fs-mobile: 20px;
+  --typo-testimonials-color-mobile: #FFFFFF;
+  --typo-testimonials-fw-mobile: 700;
+  --typo-testimonials-ta-mobile: center;
+
+  /* Contact CTA */
+  --typo-contact-fs-desktop: 40px;
+  --typo-contact-color-desktop: #FFFFFF;
+  --typo-contact-fw-desktop: 700;
+  --typo-contact-ta-desktop: center;
+  --typo-contact-fs-mobile: 22px;
+  --typo-contact-color-mobile: #FFFFFF;
+  --typo-contact-fw-mobile: 700;
+  --typo-contact-ta-mobile: center;
+}
+
+@media (max-width: 768px) {
+  :root {
+    /* Switch to mobile values */
+    --typo-hero-fs: var(--typo-hero-fs-mobile);
+    --typo-hero-color: var(--typo-hero-color-mobile);
+    --typo-hero-fw: var(--typo-hero-fw-mobile);
+    --typo-hero-ta: var(--typo-hero-ta-mobile);
+
+    --typo-whybook-fs: var(--typo-whybook-fs-mobile);
+    --typo-whybook-color: var(--typo-whybook-color-mobile);
+    --typo-whybook-fw: var(--typo-whybook-fw-mobile);
+    --typo-whybook-ta: var(--typo-whybook-ta-mobile);
+
+    --typo-featured-fs: var(--typo-featured-fs-mobile);
+    --typo-featured-color: var(--typo-featured-color-mobile);
+    --typo-featured-fw: var(--typo-featured-fw-mobile);
+    --typo-featured-ta: var(--typo-featured-ta-mobile);
+
+    --typo-events-fs: var(--typo-events-fs-mobile);
+    --typo-events-color: var(--typo-events-color-mobile);
+    --typo-events-fw: var(--typo-events-fw-mobile);
+    --typo-events-ta: var(--typo-events-ta-mobile);
+
+    --typo-pastevents-fs: var(--typo-pastevents-fs-mobile);
+    --typo-pastevents-color: var(--typo-pastevents-color-mobile);
+    --typo-pastevents-fw: var(--typo-pastevents-fw-mobile);
+    --typo-pastevents-ta: var(--typo-pastevents-ta-mobile);
+
+    --typo-works-fs: var(--typo-works-fs-mobile);
+    --typo-works-color: var(--typo-works-color-mobile);
+    --typo-works-fw: var(--typo-works-fw-mobile);
+    --typo-works-ta: var(--typo-works-ta-mobile);
+
+    --typo-testimonials-fs: var(--typo-testimonials-fs-mobile);
+    --typo-testimonials-color: var(--typo-testimonials-color-mobile);
+    --typo-testimonials-fw: var(--typo-testimonials-fw-mobile);
+    --typo-testimonials-ta: var(--typo-testimonials-ta-mobile);
+
+    --typo-contact-fs: var(--typo-contact-fs-mobile);
+    --typo-contact-color: var(--typo-contact-color-mobile);
+    --typo-contact-fw: var(--typo-contact-fw-mobile);
+    --typo-contact-ta: var(--typo-contact-ta-mobile);
+  }
+}
+
+@media (min-width: 769px) {
+  :root {
+    /* Use desktop values for screens larger than mobile breakpoint */
+    --typo-hero-fs: var(--typo-hero-fs-desktop);
+    --typo-hero-color: var(--typo-hero-color-desktop);
+    --typo-hero-fw: var(--typo-hero-fw-desktop);
+    --typo-hero-ta: var(--typo-hero-ta-desktop);
+
+    --typo-whybook-fs: var(--typo-whybook-fs-desktop);
+    --typo-whybook-color: var(--typo-whybook-color-desktop);
+    --typo-whybook-fw: var(--typo-whybook-fw-desktop);
+    --typo-whybook-ta: var(--typo-whybook-ta-desktop);
+
+    --typo-featured-fs: var(--typo-featured-fs-desktop);
+    --typo-featured-color: var(--typo-featured-color-desktop);
+    --typo-featured-fw: var(--typo-featured-fw-desktop);
+    --typo-featured-ta: var(--typo-featured-ta-desktop);
+
+    --typo-events-fs: var(--typo-events-fs-desktop);
+    --typo-events-color: var(--typo-events-color-desktop);
+    --typo-events-fw: var(--typo-events-fw-desktop);
+    --typo-events-ta: var(--typo-events-ta-desktop);
+
+    --typo-pastevents-fs: var(--typo-pastevents-fs-desktop);
+    --typo-pastevents-color: var(--typo-pastevents-color-desktop);
+    --typo-pastevents-fw: var(--typo-pastevents-fw-desktop);
+    --typo-pastevents-ta: var(--typo-pastevents-ta-desktop);
+
+    --typo-works-fs: var(--typo-works-fs-desktop);
+    --typo-works-color: var(--typo-works-color-desktop);
+    --typo-works-fw: var(--typo-works-fw-desktop);
+    --typo-works-ta: var(--typo-works-ta-desktop);
+
+    --typo-testimonials-fs: var(--typo-testimonials-fs-desktop);
+    --typo-testimonials-color: var(--typo-testimonials-color-desktop);
+    --typo-testimonials-fw: var(--typo-testimonials-fw-desktop);
+    --typo-testimonials-ta: var(--typo-testimonials-ta-desktop);
+
+    --typo-contact-fs: var(--typo-contact-fs-desktop);
+    --typo-contact-color: var(--typo-contact-color-desktop);
+    --typo-contact-fw: var(--typo-contact-fw-desktop);
+    --typo-contact-ta: var(--typo-contact-ta-desktop);
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-display {
+    font-family: var(--font-display);
+  }
+}
+
+@utility text-gold-gradient {
+  background: var(--gradient-gold);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility btn-gold {
+  background: var(--gradient-gold);
+  color: var(--primary-foreground);
+  box-shadow: var(--shadow-gold);
+  font-weight: 600;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  &:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+  }
+}
+
+@utility gold-divider {
+  display: block;
+  height: 3px;
+  width: 6rem;
+  margin-inline: auto;
+  background: var(--gradient-gold);
+  border-radius: 999px;
+}
+
+@utility luxe-card {
+  background: linear-gradient(160deg, oklch(0.13 0.015 260), oklch(0.08 0.008 260));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+}
+
+@utility marquee-track {
+  animation: marquee-scroll 45s linear infinite;
+  &:hover {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------- hover glow interactions */
+
+@utility logo-glow {
+  transition:
+    filter 0.3s ease-in-out,
+    transform 0.3s ease-in-out;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      filter: drop-shadow(0 0 10px rgba(201, 162, 75, 0.8)) drop-shadow(0 0 22px rgba(201, 162, 75, 0.5));
+      transform: scale(1.05);
+    }
+  }
+}
+
+@utility icon-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--gold) 50%, transparent);
+  transition:
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      box-shadow: 0 0 15px rgba(201, 162, 75, 0.6);
+      transform: scale(1.08);
+    }
+  }
+}
+
+@utility icon-badge-filled {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  background: var(--gradient-gold);
+  transition:
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      box-shadow: 0 0 18px rgba(201, 162, 75, 0.55);
+      transform: scale(1.1);
+    }
+  }
+}
+
+@utility icon-grid-label {
+  transition: color 0.25s ease;
+}
+
+@utility service-tile {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover .icon-grid-label {
+      color: var(--gold);
+    }
+  }
+}
+
+/* ------------------------------------------------- section headings (one line) */
+
+@utility section-heading {
+  display: block;
+  width: 100%;
+  max-width: none;
+  text-align: center;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+
+@utility section-h1 {
+  font-size: clamp(1.375rem, 2.8vw, 3.75rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+@utility section-h2 {
+  font-size: clamp(1.125rem, 2.3vw, 3rem);
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+}
+
+/* ------------------------------------------- fluid typography (admin text) */
+
+@utility fluid-hero-ghost-1 {
+  font-size: clamp(2.75rem, 13vw, 10.5rem);
+  line-height: 1;
+}
+
+@utility fluid-hero-ghost-2 {
+  font-size: clamp(2.25rem, 11vw, 9rem);
+  line-height: 1;
+}
+
+@utility fluid-hero-1 {
+  font-size: clamp(1.85rem, 7.5vw, 6rem);
+  line-height: 1.08;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+@utility fluid-hero-2 {
+  font-size: clamp(1.5rem, 6vw, 5rem);
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+@utility fluid-h1 {
+  font-size: clamp(1.65rem, 1rem + 3.2vw, 3.75rem);
+  line-height: 1.15;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+
+@utility fluid-h2 {
+  font-size: clamp(1.5rem, 0.9rem + 2.6vw, 3rem);
+  line-height: 1.18;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+
+@utility fluid-h3 {
+  font-size: clamp(1.1rem, 0.85rem + 0.9vw, 1.6rem);
+  line-height: 1.25;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+
+@utility fluid-lead {
+  font-size: clamp(0.98rem, 0.85rem + 0.55vw, 1.3rem);
+  line-height: 1.65;
+  overflow-wrap: break-word;
+  text-wrap: pretty;
+}
+
+@utility fluid-body {
+  font-size: clamp(0.9rem, 0.82rem + 0.35vw, 1.05rem);
+  line-height: 1.7;
+  overflow-wrap: break-word;
+  text-wrap: pretty;
+}
+
+@utility fluid-small {
+  font-size: clamp(0.8rem, 0.75rem + 0.2vw, 0.95rem);
+  line-height: 1.6;
+  overflow-wrap: break-word;
+}
+
+@utility fluid-btn-label {
+  font-size: clamp(0.78rem, 0.72rem + 0.25vw, 0.95rem);
+  line-height: 1.3;
+  overflow-wrap: break-word;
+}
+
+
+/* ------------------------------------------------- admin dashboard (light surface) */
+
+.admin-surface,
+.admin-surface-popover {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.21 0.02 260);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.21 0.02 260);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.21 0.02 260);
+  --primary: oklch(0.55 0.19 258);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.96 0.01 260);
+  --secondary-foreground: oklch(0.24 0.02 260);
+  --muted: oklch(0.96 0.01 260);
+  --muted-foreground: oklch(0.5 0.02 260);
+  --accent: oklch(0.95 0.02 258);
+  --accent-foreground: oklch(0.24 0.02 260);
+  --destructive: oklch(0.58 0.22 27);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.9 0.01 260);
+  --input: oklch(0.88 0.01 260);
+  --ring: oklch(0.55 0.19 258);
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.admin-surface input,
+.admin-surface textarea,
+.admin-surface select,
+.admin-surface-popover input,
+.admin-surface-popover textarea,
+.admin-surface-popover select {
+  color: var(--foreground);
+  background-color: var(--background);
+}
+
+.admin-surface input[type="color"] {
+  padding: 2px;
+  background-color: var(--background);
+}
+
+.admin-surface h1,
+.admin-surface h2,
+.admin-surface h3,
+.admin-surface h4,
+.admin-surface-popover h1,
+.admin-surface-popover h2,
+.admin-surface-popover h3,
+.admin-surface-popover h4 {
+  font-family: var(--font-sans);
+}
