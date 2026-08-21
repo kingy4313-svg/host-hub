@@ -14,9 +14,15 @@ export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
     meta: [
       { title: "Content Dashboard | Anchor Sayanti Admin" },
-      { name: "description", content: "Manage every section of the Anchor Sayanti website from one dashboard." },
+      {
+        name: "description",
+        content: "Manage every section of the Anchor Sayanti website from one dashboard.",
+      },
       { property: "og:title", content: "Content Dashboard | Anchor Sayanti Admin" },
-      { property: "og:description", content: "Manage every section of the Anchor Sayanti website from one dashboard." },
+      {
+        property: "og:description",
+        content: "Manage every section of the Anchor Sayanti website from one dashboard.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },
@@ -29,7 +35,10 @@ function Nav({ active, onSelect }: { active: string; onSelect: (key: string) => 
   return (
     <nav className="space-y-1">
       {ADMIN_SECTIONS.map((s) => {
-        const Icon = (Lucide as unknown as Record<string, React.ComponentType<{ className?: string }>>)[s.icon] ?? Lucide.Circle;
+        const Icon =
+          (Lucide as unknown as Record<string, React.ComponentType<{ className?: string }>>)[
+            s.icon
+          ] ?? Lucide.Circle;
         return (
           <button
             key={s.key}
@@ -76,10 +85,15 @@ function AdminPage() {
     };
   }, []);
 
-  const section = useMemo(() => ADMIN_SECTIONS.find((s) => s.key === active) ?? ADMIN_SECTIONS[0]!, [active]);
+  const section = useMemo(
+    () => ADMIN_SECTIONS.find((s) => s.key === active) ?? ADMIN_SECTIONS[0]!,
+    [active],
+  );
 
-  const patch: <K extends keyof SiteContent>(key: K, value: Partial<SiteContent[K]>) => void = (key, value) =>
-    setContent((prev) => ({ ...prev, [key]: { ...prev[key], ...value } }));
+  const patch: <K extends keyof SiteContent>(key: K, value: Partial<SiteContent[K]>) => void = (
+    key,
+    value,
+  ) => setContent((prev) => ({ ...prev, [key]: { ...prev[key], ...value } }));
 
   async function save() {
     setSaving(true);
@@ -114,11 +128,22 @@ function AdminPage() {
   async function logout() {
     await queryClient.cancelQueries();
     queryClient.clear();
-    await supabase.auth.signOut();
-    void navigate({ to: "/login", replace: true });
+    try {
+      await supabase.auth.signOut();
+    } finally {
+      void navigate({ to: "/", replace: true });
+    }
   }
 
-  const sidebar = <Nav active={active} onSelect={(k) => { setActive(k); setMobileOpen(false); }} />;
+  const sidebar = (
+    <Nav
+      active={active}
+      onSelect={(k) => {
+        setActive(k);
+        setMobileOpen(false);
+      }}
+    />
+  );
 
   return (
     <div className="admin-surface min-h-screen bg-white text-neutral-900">
@@ -144,11 +169,16 @@ function AdminPage() {
         <div className="ml-auto flex items-center gap-2">
           <div className="hidden flex-col gap-1 text-xs text-neutral-600 sm:flex">
             <label className="inline-flex items-center gap-2">
-              <input type="checkbox" checked={draftOnly} onChange={(e) => setDraftOnly(e.target.checked)} />
+              <input
+                type="checkbox"
+                checked={draftOnly}
+                onChange={(e) => setDraftOnly(e.target.checked)}
+              />
               Save as draft only
             </label>
             <p className="text-[11px] text-neutral-500">
-              When checked, changes are saved in draft only and will not update the live site until you save with this box unchecked.
+              When checked, changes are saved in draft only and will not update the live site until
+              you save with this box unchecked.
             </p>
           </div>
           <Button
@@ -182,7 +212,9 @@ function AdminPage() {
             <div className="mx-auto max-w-3xl space-y-6">
               <div>
                 <h2 className="text-lg font-semibold">{section.label}</h2>
-                <p className="text-sm text-neutral-500">Edits appear on the live site as soon as you save.</p>
+                <p className="text-sm text-neutral-500">
+                  Edits appear on the live site as soon as you save.
+                </p>
               </div>
 
               <section.Editor content={content} patch={patch} />
