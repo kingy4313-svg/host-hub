@@ -212,7 +212,8 @@ export function VideoPlayer({
             src={src}
             title={title || "Video"}
             loading="lazy"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
             onLoad={() => setState("ready")}
             className="absolute inset-0 h-full w-full"
           />
