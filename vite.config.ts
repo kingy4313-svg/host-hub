@@ -10,10 +10,13 @@ const isNetlify =
   process.env.NITRO_PRESET === "netlify" ||
   process.env.NETLIFY === "true" ||
   Boolean(process.env.CONTEXT);
+const isVercel = process.env.NITRO_PRESET === "vercel" || process.env.VERCEL === "1";
 
 export default defineConfig({
   nitro: isNetlify
     ? { preset: "netlify" }
+    : isVercel
+      ? { preset: "vercel" }
     : { preset: "cloudflare-module" },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).

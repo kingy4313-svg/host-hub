@@ -1,11 +1,9 @@
 {
-  "buildCommand": "npm run build:pages",
-  "outputDirectory": "dist",
+  "buildCommand": "npm run build",
   "framework": null,
-  "rewrites": [
-    {
-      "source": "/((?!assets/|favicon\\.ico$|robots\\.txt$).*)",
-      "destination": "/index.html"
+  "build": {
+    "env": {
+      "NITRO_PRESET": "vercel"
     }
-  ]
+  }
 }
